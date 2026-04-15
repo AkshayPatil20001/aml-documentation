@@ -1,0 +1,191 @@
+
+<h2 class="sr-only">50 Azure Data Engineering Interview Questions — Beginner to Intermediate</h2>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--color-text-primary)}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;padding:1rem 0 1.25rem}
+.filter-btn{font-size:13px;padding:5px 14px;border-radius:20px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+.filter-btn.active{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.5rem}
+.stat{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem;text-align:center}
+.stat-n{font-size:22px;font-weight:500;display:block}
+.stat-l{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.section{margin-bottom:1.5rem}
+.sec-hdr{font-size:13px;font-weight:500;color:var(--color-text-secondary);letter-spacing:.04em;text-transform:uppercase;padding:0 0 .5rem;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:.75rem}
+.qcard{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:.6rem;overflow:hidden}
+.qcard.hidden{display:none}
+.qhead{display:flex;align-items:flex-start;gap:10px;padding:.85rem 1rem;cursor:pointer;user-select:none}
+.qnum{font-size:11px;font-weight:500;min-width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.qnum.beg{background:#E6F1FB;color:#0C447C}
+.qnum.int{background:#FAEEDA;color:#633806}
+.qtxt{font-size:14px;line-height:1.5;flex:1;color:var(--color-text-primary)}
+.badge{font-size:11px;padding:3px 9px;border-radius:10px;white-space:nowrap;margin-left:auto;flex-shrink:0}
+.badge.beg{background:#E6F1FB;color:#185FA5}
+.badge.int{background:#FAEEDA;color:#854F0B}
+.chevron{font-size:12px;color:var(--color-text-tertiary);margin-left:6px;transition:transform .2s;flex-shrink:0;margin-top:3px}
+.qbody{display:none;padding:.75rem 1rem 1rem 1rem;border-top:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+.qbody.open{display:block}
+.ans-label{font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.04em}
+.ans-txt{font-size:13.5px;line-height:1.65;color:var(--color-text-primary)}
+.tip-tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:6px;background:#E1F5EE;color:#085041;margin-top:.6rem}
+.topic-tag{font-size:11px;padding:2px 8px;border-radius:6px;background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-tertiary);margin-left:6px}
+.open-chev{transform:rotate(180deg)}
+.progress{height:4px;background:var(--color-border-tertiary);border-radius:2px;margin-bottom:1.25rem;overflow:hidden}
+.progress-fill{height:100%;background:#378ADD;border-radius:2px;transition:width .3s}
+.prog-txt{font-size:12px;color:var(--color-text-secondary);margin-bottom:.4rem}
+</style>
+
+<div class="toolbar">
+  <button class="filter-btn active" onclick="filter('all')">All 50</button>
+  <button class="filter-btn" onclick="filter('beg')">Beginner (28)</button>
+  <button class="filter-btn" onclick="filter('int')">Intermediate (22)</button>
+  <button class="filter-btn" onclick="filter('cloud')">Cloud Basics</button>
+  <button class="filter-btn" onclick="filter('storage')">Storage</button>
+  <button class="filter-btn" onclick="filter('adf')">ADF</button>
+  <button class="filter-btn" onclick="filter('databricks')">Databricks</button>
+  <button class="filter-btn" onclick="filter('eventhubs')">Event Hubs</button>
+  <button class="filter-btn" onclick="filter('synapse')">Synapse</button>
+</div>
+
+<div class="stats">
+  <div class="stat"><span class="stat-n" id="s-total">50</span><div class="stat-l">Total questions</div></div>
+  <div class="stat"><span class="stat-n" id="s-viewed">0</span><div class="stat-l">Viewed</div></div>
+  <div class="stat"><span class="stat-n" style="color:#185FA5" id="s-beg">28</span><div class="stat-l">Beginner</div></div>
+  <div class="stat"><span class="stat-n" style="color:#854F0B" id="s-int">22</span><div class="stat-l">Intermediate</div></div>
+</div>
+
+<div class="prog-txt" id="prog-txt">0 of 50 answers viewed</div>
+<div class="progress"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+
+<div id="questions-container"></div>
+
+<script>
+const Q = [
+  {n:1,l:'beg',t:'cloud',q:'What is cloud computing? Explain in simple terms.',a:'Cloud computing means getting computing resources — like storage, CPU, RAM, software — over the internet, on-demand, without owning physical hardware. You pay only for what you use (Pay As You Go). Example: instead of buying a server, you rent one from Azure for the hours you need it.'},
+  {n:2,l:'beg',t:'cloud',q:'What is the difference between IaaS, PaaS, and SaaS?',a:'IaaS (Infrastructure as a Service): Azure gives you hardware — you manage OS, apps, data. Example: Virtual Machine. PaaS (Platform as a Service): Azure manages hardware + OS — you manage apps and data. Example: Azure SQL Database. SaaS (Software as a Service): Azure manages everything — you just log in and use. Example: Microsoft Fabric, Microsoft 365.',tip:'Most asked cloud fundamentals question. Always give an Azure example for each.'},
+  {n:3,l:'beg',t:'cloud',q:'What does "Pay As You Go" mean in Azure?',a:'Pay As You Go is a pricing model where you pay only for the cloud resources you actually consume, and only for the duration you use them. Like renting a car by the hour — if you stop using it, you stop being charged. You are never forced to pay for idle capacity unless you choose reserved pricing.'},
+  {n:4,l:'beg',t:'cloud',q:'What is a Data Center in cloud terminology?',a:'A Data Center is a large facility housing thousands of physical servers (powerful computers) that run 24/7. Cloud providers like Azure own and operate data centers across the world. When you create an Azure resource (like a VM), Azure allocates space on a real server inside one of these data centers.'},
+  {n:5,l:'beg',t:'cloud',q:'What is an Azure Region and Availability Zone?',a:'Region: A geographic area (e.g., South India, East US) that contains one or more data centers. Availability Zone (AZ): Physically separate data centers within the same region, each with independent power/cooling/networking. Having multiple zones protects against zone-level failures. Azure recommends using Zone Redundant options for production workloads.'},
+  {n:6,l:'beg',t:'cloud',q:'What is a Tenant in Azure?',a:'A Tenant represents your organization in Azure Active Directory (now Microsoft Entra ID). It is the top level of Azure hierarchy, identified by your domain (e.g., @yourcompany.com). Each organization that signs up for Azure gets one tenant. All subscriptions, users, and resources belong under this tenant.'},
+  {n:7,l:'beg',t:'cloud',q:'What is an Azure Subscription and why do we need it?',a:'A Subscription is a logical container used to manage billing and access control separately for different departments or projects within one organization. Example: An IT department and a Finance department each have their own subscriptions so their Azure bills are tracked separately. One tenant can have multiple subscriptions.'},
+  {n:8,l:'beg',t:'cloud',q:'What is a Resource Group in Azure?',a:'A Resource Group is like a folder that holds related Azure resources for a project. For example, all resources for a data pipeline project — Data Factory, Storage Account, SQL Database — go into one Resource Group. Deleting the Resource Group deletes all resources inside it. It is mandatory; you cannot create a resource without a Resource Group.'},
+  {n:9,l:'beg',t:'cloud',q:'What is the correct Azure hierarchy from top to bottom?',a:'Tenant (organization owner) → Subscription (billing/access boundary per department) → Resource Group (project folder) → Resource (individual Azure service like VM, SQL DB, Data Factory).',tip:'Draw this hierarchy on a whiteboard if asked. Very commonly tested.'},
+  {n:10,l:'beg',t:'cloud',q:'What is Microsoft Entra ID? What was it called before?',a:'Microsoft Entra ID is Azure\'s identity and access management service — previously known as Azure Active Directory (Azure AD). It manages users, groups, service principals, roles, and external identities for your organization. It is the admin portal for controlling who can access what in Azure.'},
+  {n:11,l:'beg',t:'storage',q:'What are the three types of data formats, and which Azure service handles each?',a:'Structured data (fixed schema, rows/columns): Azure SQL Database. Semi-structured data (flexible schema, JSON/key-value): Azure Cosmos DB or Azure Table Storage. Unstructured data (no schema, files of any type): Azure Blob Storage / Azure Data Lake Storage Gen2.'},
+  {n:12,l:'beg',t:'storage',q:'What is Azure SQL Database and what type of service is it?',a:'Azure SQL Database is a fully managed cloud relational database service based on Microsoft SQL Server. It is a PaaS (Platform as a Service) — Azure manages the OS, hardware, backups, and patches; you manage your databases, tables, and queries using standard T-SQL.'},
+  {n:13,l:'beg',t:'storage',q:'What is the difference between Azure SQL Virtual Machine, SQL Managed Instance, and Azure SQL Database?',a:'SQL Virtual Machine (IaaS): 100% OS access, exact lift-and-shift from on-prem SQL Server. SQL Managed Instance (PaaS): ~99% SQL Server compatibility, best for most cloud migrations. Azure SQL Database (PaaS): No OS access needed, fully managed, best for new cloud-native applications.',tip:'This is asked in almost every Azure data engineering interview.'},
+  {n:14,l:'beg',t:'storage',q:'What is Azure Cosmos DB and what does NoSQL mean?',a:'Cosmos DB is Azure\'s globally distributed, multi-model NoSQL database for semi-structured data. NoSQL stands for "Not Only SQL" — it means the database is not limited to relational/tabular data. It supports flexible schemas where different records can have different fields.'},
+  {n:15,l:'beg',t:'storage',q:'What are the different APIs available in Azure Cosmos DB?',a:'1. NoSQL (Core): JSON documents, queryable with SQL syntax. 2. MongoDB: JSON document model, MongoDB-compatible. 3. Cassandra: Column family model. 4. Gremlin: Graph database (nodes + edges). 5. Table: Key-value pairs (like Azure Table Storage). 6. PostgreSQL: Distributed relational data.'},
+  {n:16,l:'beg',t:'storage',q:'What is Azure Storage Account? What 4 services does it provide?',a:'Azure Storage Account is a single umbrella resource that gives access to: 1. Containers (Blob Storage / Data Lake) — files of any type. 2. File Shares — shared network drive. 3. Queues — async message storage. 4. Tables — key-value NoSQL storage. All under one account.'},
+  {n:17,l:'beg',t:'storage',q:'What is Azure Blob Storage and what does BLOB stand for?',a:'BLOB stands for Binary Large Object. Azure Blob Storage stores files of any type (images, videos, CSVs, PDFs, logs) without needing a schema. It is the foundation of Azure Data Lake. Data is stored in Containers which hold Blobs (the actual files).'},
+  {n:18,l:'beg',t:'storage',q:'What is Azure Data Lake Storage Gen2 (ADLS Gen2)?',a:'ADLS Gen2 is Azure Blob Storage with Hierarchical Namespace enabled. This adds true folder hierarchy (nested directories), fine-grained ACLs on files/folders, and performance optimizations for big data tools like Databricks, ADF, and Synapse. It is the standard storage layer for data lakes in Azure.',tip:'Always say "enable Hierarchical Namespace" when asked how to create a Data Lake in Azure.'},
+  {n:19,l:'beg',t:'storage',q:'What is the difference between Blob Storage and ADLS Gen2?',a:'Both are the same underlying storage service. The difference: ADLS Gen2 has Hierarchical Namespace enabled, which adds folder support, fine-grained ACLs, and big-data performance optimizations. Without HNS, you have flat blob storage. With HNS, you have a true data lake.'},
+  {n:20,l:'beg',t:'storage',q:'What are the three access tiers in Azure Blob Storage?',a:'Hot: Frequent access (daily/weekly). Cheapest for read operations, most expensive for storage. Cool: Infrequent access (monthly). Lower storage cost. Cold (Archive): Rarely accessed. Cheapest storage cost but re-hydration can take hours to days before data is readable.',tip:'Cost question: Hot = cheap reads, Cold = cheap storage. Never use Cold if you might need urgent access.'},
+  {n:21,l:'beg',t:'cloud',q:'What are the 4 data redundancy options in Azure Storage?',a:'LRS (Locally Redundant Storage): 3 copies in one data center — cheapest. ZRS (Zone Redundant Storage): 3 copies across 3 availability zones in same region. GRS (Geo Redundant Storage): 3+3 copies across 2 different regions. GZRS (Geo Zone Redundant Storage): Zone distribution in both primary and secondary regions — most expensive and most secure.',tip:'Know the cost order: LRS < ZRS < GRS < GZRS. Also know what failure each protects against.'},
+  {n:22,l:'beg',t:'cloud',q:'What does "Availability Sets" mean in Azure storage context?',a:'Availability Sets is another name for LRS (Locally Redundant Storage). It refers to keeping 3 copies of data distributed across different server racks within a single data center, protecting against individual rack or hardware failures.'},
+  {n:23,l:'beg',t:'adf',q:'What is Azure Data Factory and what does ETL stand for?',a:'Azure Data Factory (ADF) is Azure\'s cloud-based ETL and data integration service. ETL stands for Extract, Transform, Load — the process of pulling data from a source, transforming it (cleaning, aggregating), and loading it to a destination. ADF does this via visual, low-code pipelines.'},
+  {n:24,l:'beg',t:'adf',q:'What is a Pipeline in Azure Data Factory?',a:'A Pipeline is a logical grouping of Activities that together perform a data task. Example: a pipeline called "Daily Sales Load" might contain a Copy Activity to extract from SQL, a Data Flow to clean it, and another Copy Activity to load it to Data Lake — all scheduled to run daily at midnight.'},
+  {n:25,l:'beg',t:'adf',q:'What is a Linked Service in Azure Data Factory?',a:'A Linked Service is a connection string/configuration that tells ADF how to connect to an external data store (like Azure SQL DB, ADLS Gen2, Snowflake, REST API, etc.). Think of it as the key that unlocks access to a data source. You cannot access any data without first creating a Linked Service for it.',tip:'Linked Service = Connection. Dataset = specific data within that connection. Memorize this distinction.'},
+  {n:26,l:'beg',t:'adf',q:'What is a Dataset in Azure Data Factory?',a:'A Dataset points to the specific data you want to work with inside a Linked Service. If the Linked Service is your connection to a Storage Account (the building), the Dataset is the specific file or folder inside it (the room). Example: A dataset pointing to "raw/sales/2024/*.csv" within the storage account.'},
+  {n:27,l:'beg',t:'adf',q:'What is the Copy Activity in ADF and when do you use it?',a:'Copy Activity is the most important and widely used ADF activity. It copies data from a source dataset to a sink (destination) dataset. Used for migrating data between any two supported data stores — SQL to Data Lake, files to Cosmos DB, on-prem to cloud, etc. Supports 90+ connectors.'},
+  {n:28,l:'beg',t:'eventhubs',q:'What is Azure Event Hubs and when would you use it?',a:'Azure Event Hubs is a fully managed real-time event streaming and ingestion service. Use it when you have high-velocity, continuous data sources (IoT sensors, application logs, social media feeds, financial tickers) that produce millions of events per second. It temporarily buffers these events until consumers (like Stream Analytics or Databricks) process them.'},
+  {n:29,l:'int',t:'cloud',q:'What is the difference between GRS and GZRS? When would you choose each?',a:'GRS: Replicates LRS (3 copies in 1 data center) to a secondary region. No zone separation. Choose when you need cross-region protection but zone failure is acceptable. GZRS: Replicates across 3 zones in primary region AND 3 zones in secondary region. Choose for mission-critical data needing both zone + geo redundancy. GZRS costs more but offers the highest protection.',tip:'Interviewers love cost vs protection trade-off questions. Always mention cost difference.'},
+  {n:30,l:'int',t:'storage',q:'What is a Partition Key and Row Key in Azure Table Storage?',a:'Partition Key: Determines which logical partition an entity goes to. Azure distributes data across machines based on this key. Row Key: Primary key within a partition — must be unique within its partition. Composite Primary Key: Partition Key + Row Key combined must be unique across the entire table. This combination is what Azure uses to uniquely identify every entity.'},
+  {n:31,l:'int',t:'storage',q:'What is HTAP and how does it relate to Cosmos DB?',a:'HTAP stands for Hybrid Transactional Analytical Processing — using the same data store for both real-time transactional writes (by applications) and analytical queries (by data engineers). Cosmos DB supports HTAP via its Analytical Store feature (Synapse Link), which creates a columnar copy of your operational data automatically for analytics without impacting app performance.'},
+  {n:32,l:'int',t:'adf',q:'What is the difference between a Trigger and a Debug run in ADF?',a:'Debug Run: Manually executes a pipeline for testing — runs immediately, shows live output in the canvas, does not require publishing. Trigger: Automates pipeline execution — can be Schedule (cron-based), Tumbling Window, Event-based (file arrives in storage), or Manual. Debug is for development, Triggers are for production automation.'},
+  {n:33,l:'int',t:'adf',q:'What is an Integration Runtime in Azure Data Factory?',a:'Integration Runtime (IR) is the compute engine that powers ADF activities. Three types: Azure IR (cloud-to-cloud operations, fully managed), Self-hosted IR (connect to on-prem data sources behind a firewall), Azure-SSIS IR (run legacy SSIS packages in the cloud). For most cloud data engineering, Azure IR is used automatically.'},
+  {n:34,l:'int',t:'adf',q:'What is an ARM Template in ADF and why is it important?',a:'ARM (Azure Resource Manager) Template is the underlying JSON code that represents your ADF pipeline configuration. It is important for CI/CD — you export the ARM template from your dev environment and import/deploy it to staging and production environments. This enables version-controlled, repeatable pipeline deployments via Azure DevOps or GitHub Actions.'},
+  {n:35,l:'int',t:'adf',q:'What is the difference between a Data Flow and a Copy Activity in ADF?',a:'Copy Activity: Designed for data movement — copies data from source to sink with minimal transformation. Very efficient for large-scale migration. Data Flow: Designed for data transformation — provides a visual, no-code transformation canvas with filters, joins, aggregations, derived columns, pivots, etc. Runs on Spark internally. Use Copy for migration, Data Flow for complex transformations.'},
+  {n:36,l:'int',t:'databricks',q:'What is Apache Spark and why does Azure Databricks use it?',a:'Apache Spark is an open-source, distributed computing framework for big data processing. It distributes data and computation across a cluster of machines, enabling processing of terabytes of data efficiently. Databricks uses Spark as its core engine because a single machine cannot handle big data volumes. Databricks adds a managed layer on top — auto-provisioning, auto-scaling, and collaborative notebooks.'},
+  {n:37,l:'int',t:'databricks',q:'What is Delta Lake and why is it important in Databricks?',a:'Delta Lake is an open-source storage layer that adds ACID transactions, schema enforcement, and time-travel capabilities to your data lake. Without Delta Lake, data lakes are just dumb file systems — no guarantees about data consistency. With Delta Lake, your data lake behaves like a reliable database. It is the foundation of the Medallion Architecture (Bronze/Silver/Gold).'},
+  {n:38,l:'int',t:'databricks',q:'What is the Medallion Architecture?',a:'Medallion Architecture organizes data in a data lake into three zones: Bronze (raw, unprocessed data as ingested — source of truth), Silver (cleaned, deduplicated, validated data), Gold (aggregated, business-ready data for reporting and analytics). Each layer adds quality. Built on Delta Lake tables in ADLS Gen2.',tip:'This is very commonly asked. If you have hands-on project experience with it, mention it.'},
+  {n:39,l:'int',t:'databricks',q:'What is MLflow in Azure Databricks?',a:'MLflow is an open-source platform integrated into Databricks for managing the ML lifecycle. It tracks experiments (logs parameters, metrics, and model artifacts), enables model versioning, and supports model deployment. In Databricks, it is built-in — every training run can be automatically logged to the MLflow experiment tracking server.'},
+  {n:40,l:'int',t:'eventhubs',q:'How is Azure Event Hubs similar to Apache Kafka? What is the key difference?',a:'Both are distributed event streaming platforms that temporarily buffer messages/events and support consumer groups. Azure Event Hubs even provides a Kafka-compatible endpoint so Kafka clients work without code changes. Key difference: Kafka requires you to manage all infrastructure (brokers, ZooKeeper, scaling). Event Hubs is fully managed by Azure — zero ops overhead.'},
+  {n:41,l:'int',t:'eventhubs',q:'What is a Partition in Azure Event Hubs? Why does it matter?',a:'A Partition is a sub-division of an Event Hub for parallel processing. Each consumer reads from its assigned partition(s) independently. More partitions = higher throughput = more parallel consumers. Once set at creation, partition count cannot be increased (in most tiers). Key decision: for 10 consumers processing in parallel, you need at least 10 partitions.'},
+  {n:42,l:'int',t:'eventhubs',q:'What is Azure Stream Analytics and how does it integrate with Event Hubs?',a:'Azure Stream Analytics is a real-time analytics service that processes streaming data using SQL-like queries with time-windowing functions. It acts as the consumer of Event Hubs data. The typical pattern: Event Hubs (ingestion) → Stream Analytics (real-time processing/filtering/aggregation) → Cosmos DB / SQL DB / Power BI (output).'},
+  {n:43,l:'int',t:'synapse',q:'What is Azure Synapse Analytics? Give the simple formula.',a:'Azure Synapse Analytics = Azure Data Factory + Apache Spark Notebooks + SQL Data Warehouse, all unified in one studio. It is an integrated analytics platform. You get pipeline orchestration, big data processing, and data warehousing in a single environment without needing separate resources.',tip:'The formula (ADF + Spark + SQL DW = Synapse) is very commonly quoted in interviews.'},
+  {n:44,l:'int',t:'synapse',q:'What is the difference between Dedicated SQL Pool and Serverless SQL Pool in Synapse?',a:'Dedicated SQL Pool (formerly SQL Data Warehouse): Pre-provisioned compute (DWUs). Always running, billed even when idle (must pause to stop billing). Best for frequent, complex analytical queries on structured data. Serverless SQL Pool: No provisioning needed. Pay only per TB of data scanned. Best for ad-hoc exploration of Data Lake files (CSV, Parquet, JSON). Use dedicated for regular BI, serverless for exploration.'},
+  {n:45,l:'int',t:'synapse',q:'What was the Dedicated SQL Pool called before Synapse Analytics?',a:'It was called SQL Data Warehouse (Azure SQL DW). Microsoft rebranded and integrated it into Azure Synapse Analytics as "Dedicated SQL Pool". It uses Massively Parallel Processing (MPP) architecture where queries are distributed across compute nodes for high performance on large datasets.'},
+  {n:46,l:'int',t:'databricks',q:'What is the difference between Azure Databricks and Synapse Spark?',a:'Both use Apache Spark. Databricks is owned by Databricks Inc. (not Microsoft), has richer features (Delta Lake, Unity Catalog, MLflow, AutoML), and is more widely adopted in the job market. Synapse Spark is Microsoft-native, simpler, and convenient if already using Synapse. For heavy Spark workloads and ML, Databricks is preferred. For Synapse-first architectures, Synapse Spark is natural.'},
+  {n:47,l:'int',t:'adf',q:'How do you move ADF pipelines from Development to Production? What is CI/CD in ADF context?',a:'ADF integrates with Git (Azure DevOps or GitHub). Developers work in the dev ADF instance, code is versioned in Git. To deploy to production: export the ARM template from dev, and deploy it to production via Azure DevOps release pipeline or GitHub Actions. This enables code review, version history, rollback, and automated deployments.'},
+  {n:48,l:'int',t:'storage',q:'What are the three ways to store unstructured data in Azure?',a:'Block storage (Disk): Azure Managed Disks — stores data in blocks like a hard drive, attached to VMs. Blob storage (Object): Azure Blob Storage / ADLS Gen2 — stores files as objects in containers, accessed via HTTP endpoints. File storage (Share): Azure File Share — stores data as files in a shared network folder accessible via SMB protocol.'},
+  {n:49,l:'int',t:'synapse',q:'What is Synapse Link and what problem does it solve?',a:'Synapse Link (also called Cosmos DB Analytical Store) is a zero-ETL integration between Cosmos DB and Synapse Analytics. It automatically syncs your operational Cosmos DB data to a columnar analytical store in near-real-time. This solves the problem of running heavy analytical queries on your production Cosmos DB (which would hurt app performance). With Synapse Link, analytics happen on the copy, not the source.'},
+  {n:50,l:'int',t:'cloud',q:'What is Microsoft Fabric and how does it differ from Synapse Analytics?',a:'Microsoft Fabric is an all-in-one SaaS analytics platform from Microsoft that includes data integration, data engineering, data warehousing, data science, real-time analytics, and Power BI — all in one unified experience. Unlike Synapse (which is PaaS and requires you to manage compute), Fabric is fully SaaS — Microsoft manages all infrastructure. Fabric is positioned as the future of Microsoft\'s data platform.'},
+];
+
+let viewed = new Set();
+let currentFilter = 'all';
+
+function filter(f) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  renderQuestions();
+}
+
+function toggle(n) {
+  const body = document.getElementById('body-'+n);
+  const chev = document.getElementById('chev-'+n);
+  const open = body.classList.toggle('open');
+  chev.classList.toggle('open-chev', open);
+  if (open) { viewed.add(n); updateProgress(); }
+}
+
+function updateProgress() {
+  const v = viewed.size;
+  document.getElementById('s-viewed').textContent = v;
+  document.getElementById('prog-fill').style.width = Math.round(v/50*100)+'%';
+  document.getElementById('prog-txt').textContent = v+' of 50 answers viewed';
+}
+
+function renderQuestions() {
+  const c = document.getElementById('questions-container');
+  c.innerHTML = '';
+  const topicMap = {cloud:'Cloud & Azure Fundamentals', storage:'Storage & Databases', adf:'Azure Data Factory', databricks:'Azure Databricks', eventhubs:'Event Hubs & Streaming', synapse:'Synapse Analytics'};
+  const topicOrder = ['cloud','storage','adf','databricks','eventhubs','synapse'];
+  let filtered = Q.filter(q => {
+    if (currentFilter === 'beg') return q.l === 'beg';
+    if (currentFilter === 'int') return q.l === 'int';
+    if (['cloud','storage','adf','databricks','eventhubs','synapse'].includes(currentFilter)) return q.t === currentFilter;
+    return true;
+  });
+
+  let visible = 0;
+  topicOrder.forEach(topic => {
+    const qs = filtered.filter(q => q.t === topic);
+    if (!qs.length) return;
+    visible += qs.length;
+    const sec = document.createElement('div');
+    sec.className = 'section';
+    sec.innerHTML = '<div class="sec-hdr">'+topicMap[topic]+'</div>';
+    qs.forEach(q => {
+      const card = document.createElement('div');
+      card.className = 'qcard';
+      card.id = 'card-'+q.n;
+      const tipHtml = q.tip ? '<div class="tip-tag">Interview tip: '+q.tip+'</div>' : '';
+      card.innerHTML = `<div class="qhead" onclick="toggle(${q.n})">
+        <div class="qnum ${q.l}">${q.n}</div>
+        <div class="qtxt">${q.q}</div>
+        <span class="badge ${q.l}">${q.l==='beg'?'Beginner':'Intermediate'}</span>
+        <span class="chevron" id="chev-${q.n}">▾</span>
+      </div>
+      <div class="qbody" id="body-${q.n}">
+        <div class="ans-label">Answer</div>
+        <div class="ans-txt">${q.a}</div>
+        ${tipHtml}
+      </div>`;
+      sec.appendChild(card);
+    });
+    c.appendChild(sec);
+  });
+
+  document.getElementById('s-total').textContent = visible;
+  const bCnt = filtered.filter(q=>q.l==='beg').length;
+  const iCnt = filtered.filter(q=>q.l==='int').length;
+  document.getElementById('s-beg').textContent = bCnt;
+  document.getElementById('s-int').textContent = iCnt;
+}
+
+renderQuestions();
+</script>

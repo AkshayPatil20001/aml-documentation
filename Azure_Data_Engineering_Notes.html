@@ -311,8 +311,8 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:3rem;tex
   <h1>Azure Data Engineering<br/>Complete Study Guide</h1>
   <p>Your one-stop, beginner-friendly companion for mastering all Azure data services — with real-world analogies, step-by-step guides, diagrams, and working code examples.</p>
   <div class="stats">
-    <div><div class="stat-n">11</div><div class="stat-l">Chapters</div></div>
-    <div><div class="stat-n">3+</div><div class="stat-l">Hours of Content</div></div>
+    <div><div class="stat-n">14</div><div class="stat-l">Chapters</div></div>
+    <div><div class="stat-n">50</div><div class="stat-l">Interview Q&amp;As</div></div>
     <div><div class="stat-n">10+</div><div class="stat-l">Azure Services</div></div>
     <div><div class="stat-n">2025</div><div class="stat-l">Curriculum</div></div>
   </div>
@@ -335,6 +335,9 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:3rem;tex
   <a class="map-card" href="#ch9"><div class="mi">🧱</div><div class="mn">Chapter 09</div><div class="mt">Azure Databricks</div></a>
   <a class="map-card" href="#ch10"><div class="mi">🔬</div><div class="mn">Chapter 10</div><div class="mt">Azure Synapse Analytics</div></a>
   <a class="map-card" href="#ch11"><div class="mi">🚀</div><div class="mn">Chapter 11</div><div class="mt">Career Roadmap</div></a>
+  <a class="map-card" href="#ch12"><div class="mi">🔐</div><div class="mn">Chapter 12</div><div class="mt">Security &amp; Key Vault</div></a>
+  <a class="map-card" href="#ch13" style="border-color:rgba(245,158,11,.5);background:rgba(245,158,11,.06);"><div class="mi">🎤</div><div class="mn">Chapter 13</div><div class="mt">50 Interview Q&amp;As ⭐</div></a>
+  <a class="map-card" href="#ch14"><div class="mi">📋</div><div class="mn">Chapter 14</div><div class="mt">Cheat Sheet</div></a>
 </div>
 
 <!-- ═══════════════════════════════════════════
@@ -2097,221 +2100,852 @@ db_password = secret.value
 </section>
 
 <!-- ══════════════════════════════════════════════
-     BONUS CHAPTER 13 — INTERVIEW Q&A
+     BONUS CHAPTER 13 — INTERVIEW Q&A (50 Questions)
 ══════════════════════════════════════════════ -->
 <section class="ch fi" id="ch13">
   <div class="ch-head">
     <div class="ch-num n-orange">13</div>
-    <div class="ch-title"><h2>🎤 Interview Questions & Answers — Chapter-wise</h2><p class="sub">Real interview questions asked at top companies — answered clearly</p></div>
+    <div class="ch-title"><h2>🎤 Interview Questions &amp; Answers — 50 Questions</h2><p class="sub">Real interview questions asked at top companies — with detailed, diagram-rich answers</p></div>
   </div>
-  <div class="tags"><span class="tag to">Interview Prep</span><span class="tag tb">Q&amp;A</span><span class="tag tc">DP-203</span><span class="tag tg">Scenario-Based</span></div>
+  <div class="tags"><span class="tag to">Interview Prep</span><span class="tag tb">50 Q&amp;A</span><span class="tag tc">DP-203</span><span class="tag tg">Beginner</span><span class="tag tp">Intermediate</span><span class="tag tr">Scenario-Based</span></div>
 
   <div class="ibox ib-blue">
     <div class="ib-icon">🎯</div>
     <div class="ib-body">
       <h4>How to Use This Section</h4>
-      <p>These are real questions asked at companies like TCS, Infosys, Capgemini, Wipro, Microsoft, and startups in Azure data engineering interviews. For each question — first try answering yourself, then check the answer. Focus on the <strong>why</strong>, not just the <strong>what</strong>.</p>
+      <p>50 real questions asked at companies like TCS, Infosys, Capgemini, Wipro, Microsoft, and startups. For each question — first think about the answer yourself, then click to reveal. Filter by topic or difficulty. Track your progress with the bar below. Focus on the <strong>why</strong>, not just the <strong>what</strong>.</p>
     </div>
   </div>
 
-  <div class="divider"><span>☁️ Cloud & Fundamentals</span></div>
+  <!-- FILTER BAR -->
+  <div style="display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.5rem;padding:1.2rem;background:var(--card);border:1px solid var(--border);border-radius:14px;">
+    <div style="width:100%;font-size:.72rem;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.3rem;">Filter by topic or difficulty</div>
+    <button onclick="iqFilter('all',this)" id="iqf-all" class="btn1" style="padding:.4rem 1rem;font-size:.75rem;">All 50</button>
+    <button onclick="iqFilter('beg',this)" id="iqf-beg" class="btn2" style="padding:.4rem 1rem;font-size:.75rem;">🟢 Beginner (28)</button>
+    <button onclick="iqFilter('int',this)" id="iqf-int" class="btn2" style="padding:.4rem 1rem;font-size:.75rem;">🔵 Intermediate (22)</button>
+    <button onclick="iqFilter('cloud',this)" id="iqf-cloud" class="btn2" style="padding:.4rem 1rem;font-size:.75rem;">☁️ Cloud Basics</button>
+    <button onclick="iqFilter('storage',this)" id="iqf-storage" class="btn2" style="padding:.4rem 1rem;font-size:.75rem;">🗄️ Storage</button>
+    <button onclick="iqFilter('adf',this)" id="iqf-adf" class="btn2" style="padding:.4rem 1rem;font-size:.75rem;">🔄 ADF</button>
+    <button onclick="iqFilter('databricks',this)" id="iqf-databricks" class="btn2" style="padding:.4rem 1rem;font-size:.75rem;">🧱 Databricks</button>
+    <button onclick="iqFilter('eventhubs',this)" id="iqf-eventhubs" class="btn2" style="padding:.4rem 1rem;font-size:.75rem;">⚡ Event Hubs</button>
+    <button onclick="iqFilter('synapse',this)" id="iqf-synapse" class="btn2" style="padding:.4rem 1rem;font-size:.75rem;">🔬 Synapse</button>
+  </div>
 
-  <div class="acc">
-    <button class="acc-h" onclick="acc(this)"><h4>Q1. What is the difference between IaaS, PaaS, and SaaS? Give Azure examples.</h4><span class="acc-icon">▼</span></button>
-    <div class="acc-b">
-      <p><strong>IaaS (Infrastructure as a Service):</strong> You rent virtualized hardware. You manage OS, runtime, and app. You have full control but full responsibility. <em>Azure Example: Azure Virtual Machines.</em></p>
-      <br/><p><strong>PaaS (Platform as a Service):</strong> Azure manages infrastructure AND the platform (OS, runtime, middleware). You only manage your app and data. Lower maintenance overhead. <em>Azure Example: Azure SQL Database, Azure Data Factory, Databricks.</em></p>
-      <br/><p><strong>SaaS (Software as a Service):</strong> The complete application is delivered over the internet. You just configure and use it. <em>Azure Example: Power BI Service, Microsoft 365.</em></p>
-      <br/><p><strong>Key point:</strong> As a Data Engineer, you primarily use PaaS services — ADF, Databricks, Synapse, SQL DB, Cosmos DB. You never manage VMs or servers.</p>
+  <!-- PROGRESS STATS -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1rem;">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.85rem;text-align:center;"><div style="font-size:1.8rem;font-weight:900;color:var(--cyan);" id="iq-total">50</div><div style="font-size:.68rem;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;">Total</div></div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.85rem;text-align:center;"><div style="font-size:1.8rem;font-weight:900;color:var(--green);" id="iq-viewed">0</div><div style="font-size:.68rem;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;">Viewed</div></div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.85rem;text-align:center;"><div style="font-size:1.8rem;font-weight:900;color:#60a5fa;">28</div><div style="font-size:.68rem;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;">Beginner</div></div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.85rem;text-align:center;"><div style="font-size:1.8rem;font-weight:900;color:var(--orange);">22</div><div style="font-size:.68rem;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;">Intermediate</div></div>
+  </div>
+  <div style="font-size:.8rem;color:var(--t3);margin-bottom:.4rem;" id="iq-prog-txt">0 of 50 answers revealed</div>
+  <div style="height:4px;background:var(--border);border-radius:2px;margin-bottom:2rem;overflow:hidden;"><div id="iq-prog-bar" style="height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:2px;width:0%;transition:width .4s;"></div></div>
+
+  <!-- ═══ CLOUD & AZURE FUNDAMENTALS ═══ -->
+  <div class="iq-section" data-topic="cloud">
+  <div class="divider"><span>☁️ Cloud &amp; Azure Fundamentals (Q1–Q10)</span></div>
+
+  <div class="acc iq-card" data-level="beg" data-topic="cloud">
+    <button class="acc-h" onclick="iqAcc(this,1)"><h4>Q1. What is cloud computing? Explain in simple terms. <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-1">
+      <p>Cloud computing means getting computing resources — like storage, CPU, RAM, software — <strong>over the internet, on-demand, without owning physical hardware</strong>. You pay only for what you use (Pay As You Go).</p>
+      <br/><div class="analogy"><div class="label">💡 Electricity Grid Analogy</div><p>Before electricity grids, every factory had to build its own power plant. Cloud computing is like an electricity grid — instead of building your own data centers (power plants), you just "plug in" to Azure's infrastructure and pay for what you use. No upfront cost, no maintenance, infinite scale.</p></div>
+      <div class="compare">
+        <div class="compare-card left" style="border-color:rgba(239,68,68,.4);"><h3 style="color:var(--red);">🏢 On-Premise (Old Way)</h3><ul>
+          <li><span class="cross">✗</span> Buy servers upfront — huge CapEx</li>
+          <li><span class="cross">✗</span> Hire staff to maintain hardware 24/7</li>
+          <li><span class="cross">✗</span> Fixed capacity — waste if underutilized</li>
+          <li><span class="cross">✗</span> Months to procure new hardware</li>
+        </ul></div>
+        <div class="compare-card right" style="border-color:rgba(0,120,212,.4);"><h3 style="color:var(--blue);">☁️ Cloud (Azure)</h3><ul>
+          <li><span class="tick">✓</span> Pay only for what you use (PAYG)</li>
+          <li><span class="tick">✓</span> Microsoft maintains all hardware</li>
+          <li><span class="tick">✓</span> Scale up or down in seconds</li>
+          <li><span class="tick">✓</span> Provision new resources in minutes</li>
+        </ul></div>
+      </div>
+      <div class="ibox ib-green"><div class="ib-icon">🎯</div><div class="ib-body"><h4>Interview Tip</h4><p>Always mention the business value: "Cloud reduces CapEx to OpEx, removes infrastructure management, and enables teams to focus on value-adding work rather than hardware maintenance."</p></div></div>
     </div>
   </div>
 
-  <div class="acc">
-    <button class="acc-h" onclick="acc(this)"><h4>Q2. What is LRS, ZRS, and GRS? When would you choose each?</h4><span class="acc-icon">▼</span></button>
-    <div class="acc-b">
-      <p><strong>LRS (Locally Redundant Storage):</strong> 3 copies within one data center. Cheapest. Survives hardware failure but NOT a data center outage. Use only for dev/test or easily reproducible data (e.g., raw downloads that can be re-pulled).</p>
-      <br/><p><strong>ZRS (Zone Redundant Storage):</strong> 3 copies across 3 availability zones in the same region. Survives a full zone/building failure. Use for production apps needing HA within a region.</p>
-      <br/><p><strong>GRS (Geo Redundant Storage):</strong> 3 copies in primary region + 3 copies async-replicated to a paired secondary region (e.g., East US → West US). Survives an entire regional outage. Default Azure selection and recommended for any business-critical data.</p>
-      <br/><p><strong>Interview tip:</strong> "In production I always use GRS for critical data. LRS only for ephemeral/temp storage to save costs."</p>
+  <div class="acc iq-card" data-level="beg" data-topic="cloud">
+    <button class="acc-h" onclick="iqAcc(this,2)"><h4>Q2. What is the difference between IaaS, PaaS, and SaaS? Give Azure examples. <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner ⭐</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-2">
+      <div class="analogy"><div class="label">🍕 Pizza Analogy</div><p><strong>Making at home (On-Premise)</strong> — you do everything.<br/><strong>Take &amp; Bake (IaaS)</strong> — Azure gives hardware; you manage OS, apps, data.<br/><strong>Delivery (PaaS)</strong> — Azure manages hardware + OS; you manage apps and data.<br/><strong>Restaurant (SaaS)</strong> — you just use it. Azure manages everything.</p></div>
+      <div class="tw"><table><thead><tr><th>Model</th><th>You Manage</th><th>Azure Manages</th><th>Azure Examples</th></tr></thead><tbody>
+        <tr><td><strong style="color:var(--blue);">IaaS</strong></td><td>OS, Runtime, App, Data</td><td>Hardware, Network, Storage</td><td>Virtual Machines, Virtual Network</td></tr>
+        <tr><td><strong style="color:var(--cyan);">PaaS</strong></td><td>App &amp; Data only</td><td>Everything below app layer</td><td>SQL DB, ADF, Databricks, Cosmos DB</td></tr>
+        <tr><td><strong style="color:var(--green);">SaaS</strong></td><td>Configuration &amp; usage</td><td>Everything including the app</td><td>Power BI Service, Microsoft 365, Teams</td></tr>
+      </tbody></table></div>
+      <div class="ibox ib-green"><div class="ib-icon">🎯</div><div class="ib-body"><h4>Key Point for Interview</h4><p>As a Data Engineer, you primarily use <strong>PaaS services</strong> — ADF, Databricks, Synapse, SQL DB, Cosmos DB. You never manage VMs or servers. Always give Azure examples for each tier.</p></div></div>
     </div>
   </div>
 
-  <div class="divider"><span>🗄️ Azure SQL Database</span></div>
-
-  <div class="acc">
-    <button class="acc-h" onclick="acc(this)"><h4>Q3. What is the difference between Azure SQL Database and SQL on Azure VM?</h4><span class="acc-icon">▼</span></button>
-    <div class="acc-b">
-      <p><strong>Azure SQL Database (PaaS):</strong> Fully managed. Azure patches, backs up, monitors, scales the database automatically. You manage only schema and data. Built-in HA, 99.99% SLA. No OS access. Best for new, cloud-native applications.</p>
-      <br/><p><strong>SQL on Azure VM (IaaS):</strong> SQL Server installed on a Virtual Machine. You manage the OS, SQL Server installation, patching, and backups. Full control including SA-level access. Best for lift-and-shift migrations from on-premise that need specific SQL Server features not available in SQL DB.</p>
-      <br/><p><strong>Key difference:</strong> Management responsibility. Data engineers typically prefer SQL DB (PaaS) — less operational overhead, focus on queries not server management.</p>
+  <div class="acc iq-card" data-level="beg" data-topic="cloud">
+    <button class="acc-h" onclick="iqAcc(this,3)"><h4>Q3. What does "Pay As You Go" mean in Azure? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-3">
+      <p>Pay As You Go (PAYG) is a pricing model where <strong>you pay only for the cloud resources you actually consume, only for the duration you use them</strong>. Like renting a car by the hour — if you stop using it, you stop being charged.</p>
+      <br/>
+      <div class="flow" style="flex-wrap:wrap;gap:.8rem;justify-content:center;">
+        <div class="fn fn-blue">💻 Use a resource<br/><small>For 3 hours</small></div>
+        <div class="fa">→</div>
+        <div class="fn fn-cyan">📊 Azure measures<br/><small>CPU + RAM + Storage</small></div>
+        <div class="fa">→</div>
+        <div class="fn fn-green">💳 Pay only<br/><small>For 3 hours used</small></div>
+      </div>
+      <br/><div class="ibox ib-orange"><div class="ib-icon">⚡</div><div class="ib-body"><h4>PAYG vs Reserved Instances</h4><p>PAYG costs more per hour but zero commitment. <strong>Reserved Instances</strong> = commit 1–3 years → save 40–70%. Use PAYG for dev/test; Reserved for stable production workloads.</p></div></div>
     </div>
   </div>
 
-  <div class="acc">
-    <button class="acc-h" onclick="acc(this)"><h4>Q4. What is Serverless compute tier in Azure SQL Database?</h4><span class="acc-icon">▼</span></button>
-    <div class="acc-b">
-      <p>Serverless is a compute tier where compute auto-scales based on workload and <strong>automatically pauses when the database is idle</strong> (configurable delay, e.g., 60 minutes). You pay only for compute seconds when queries are actually running — billing stops completely during pause.</p>
-      <br/><p><strong>When to use:</strong> Development databases, applications with unpredictable or intermittent usage patterns. A database used only during business hours can pause overnight and on weekends — reducing cost by up to 70%.</p>
-      <br/><p><strong>Trade-off:</strong> First query after auto-pause has a "cold start" latency of ~10–60 seconds while compute provisions. Not suitable for latency-sensitive production apps. Use General Purpose or Business Critical tier for always-on production.</p>
+  <div class="acc iq-card" data-level="beg" data-topic="cloud">
+    <button class="acc-h" onclick="iqAcc(this,4)"><h4>Q4. What is a Data Center in cloud terminology? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-4">
+      <p>A Data Center is a <strong>large facility housing thousands of physical servers</strong> that run 24/7. When you create an Azure resource (like a VM or SQL Database), Azure allocates space on a real server inside one of these data centers. You never see or touch the server.</p>
+      <br/><div class="kp"><h3>📌 Azure Data Center Key Facts</h3><ul>
+        <li>Azure operates <strong>60+ regions</strong> globally — each region has 1+ data centers</li>
+        <li>Each data center has redundant power, cooling, and networking (no single point of failure)</li>
+        <li>Physically secured: biometric access, 24/7 guards, cameras — no public access</li>
+        <li>Azure data centers are ISO 27001, SOC 2, and GDPR certified</li>
+        <li>Choosing a region close to your users = lower network latency (faster response)</li>
+      </ul></div>
     </div>
   </div>
 
-  <div class="divider"><span>🌌 Azure Cosmos DB</span></div>
-
-  <div class="acc">
-    <button class="acc-h" onclick="acc(this)"><h4>Q5. How is Cosmos DB different from Azure SQL Database? When would you pick one over the other?</h4><span class="acc-icon">▼</span></button>
-    <div class="acc-b">
-      <p><strong>Azure SQL DB:</strong> Relational, fixed schema, ACID transactions, T-SQL, best for structured transactional data (orders, employees, inventory).</p>
-      <br/><p><strong>Cosmos DB:</strong> NoSQL, schema-flexible, JSON documents/key-value/graph, globally distributed, millisecond latency at any scale, best for semi-structured app data (user profiles, product catalogs, IoT events, session data).</p>
-      <br/><p><strong>Choose SQL DB when:</strong> Data is highly structured, relationships between entities matter (joins needed), strong consistency and ACID required (e.g., financial transactions).</p>
-      <br/><p><strong>Choose Cosmos DB when:</strong> Data structure varies per document, global distribution needed, single-digit ms latency regardless of scale, schema evolves frequently (e.g., e-commerce product catalog with different attributes per category).</p>
+  <div class="acc iq-card" data-level="beg" data-topic="cloud">
+    <button class="acc-h" onclick="iqAcc(this,5)"><h4>Q5. What is an Azure Region and Availability Zone? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-5">
+      <p><strong>Region:</strong> A geographic area (e.g., South India, East US) containing one or more data centers. Azure has 60+ regions globally.</p>
+      <br/><p><strong>Availability Zone (AZ):</strong> Physically separate data centers within the same region, each with independent power/cooling/networking. If one zone suffers a power outage or flood, others keep running.</p>
+      <br/>
+      <div class="diagram"><div class="diagram-title">🌍 Region and Availability Zone Structure</div>
+        <div style="text-align:center;">
+          <div class="fn fn-blue" style="margin:0 auto 1rem;max-width:260px;">🌏 East US (Region)<br/><small>A geographic area containing 3 zones</small></div>
+          <div style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;">
+            <div class="fn fn-orange">🏢 Zone 1<br/><small>Data Center A<br/>Independent power/cooling</small></div>
+            <div class="fn fn-orange">🏢 Zone 2<br/><small>Data Center B<br/>Independent power/cooling</small></div>
+            <div class="fn fn-orange">🏢 Zone 3<br/><small>Data Center C<br/>Independent power/cooling</small></div>
+          </div>
+          <p style="font-size:.78rem;color:var(--t3);margin-top:1rem;">If Zone 1 fails (fire/flood) → Zone 2 &amp; 3 continue serving your app without interruption</p>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="acc">
-    <button class="acc-h" onclick="acc(this)"><h4>Q6. What is a partition key in Cosmos DB and why is it important?</h4><span class="acc-icon">▼</span></button>
-    <div class="acc-b">
-      <p>The partition key is a property in your documents that Cosmos DB uses to <strong>physically distribute data across partitions</strong>. All documents with the same partition key value go to the same logical partition.</p>
-      <br/><p><strong>Why it matters:</strong> Most queries should filter by partition key — this allows Cosmos DB to query only one partition (partition key query) instead of scanning all partitions (cross-partition query). Cross-partition queries are slower and cost more RUs.</p>
-      <br/><p><strong>Good partition key:</strong> Has high cardinality (many unique values), distributes data evenly, and is included in most queries. Example: <code style="color:var(--cyan);">/userId</code> for a social app, <code style="color:var(--cyan);">/country</code> for a global app.</p>
-      <br/><p><strong>Bad partition key:</strong> A boolean (only 2 values — all data in 2 partitions), a status field with few values, or a field never used in queries.</p>
+  <div class="acc iq-card" data-level="beg" data-topic="cloud">
+    <button class="acc-h" onclick="iqAcc(this,6)"><h4>Q6. What is a Tenant in Azure? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-6">
+      <p>A <strong>Tenant represents your organization in Azure Active Directory (now Microsoft Entra ID)</strong>. It is the top level of the Azure hierarchy, identified by your domain (e.g., @yourcompany.com). Each organization that signs up for Azure gets exactly one tenant. All subscriptions, users, and resources belong under this tenant.</p>
+      <br/><div class="kp"><h3>📌 Tenant Key Facts</h3><ul>
+        <li>Every Azure account has exactly one tenant (one Microsoft Entra ID directory)</li>
+        <li>A tenant can have multiple subscriptions under it (e.g., Dev, Staging, Production subscriptions)</li>
+        <li>Users from other companies are "guests" in your tenant (B2B collaboration)</li>
+        <li>Tenant ID is a GUID — e.g., <code style="color:var(--cyan);">550e8400-e29b-41d4-a716-446655440000</code></li>
+      </ul></div>
     </div>
   </div>
 
-  <div class="divider"><span>🏔️ Azure Data Lake</span></div>
-
-  <div class="acc">
-    <button class="acc-h" onclick="acc(this)"><h4>Q7. What is the difference between ADLS Gen1 and Gen2? Why was Gen2 introduced?</h4><span class="acc-icon">▼</span></button>
-    <div class="acc-b">
-      <p><strong>ADLS Gen1</strong> was a standalone data lake service with Hadoop-compatible file system (HDFS). It was separate from Azure Blob Storage, had its own management, and was more expensive.</p>
-      <br/><p><strong>ADLS Gen2</strong> is built on top of Azure Blob Storage with the <strong>Hierarchical Namespace (HNS) feature enabled</strong>. This gives Blob Storage true folder-like semantics — atomic rename/delete of directories, POSIX ACLs, and much faster big data operations.</p>
-      <br/><p><strong>Why Gen2 wins:</strong> Same Blob Storage pricing (cheaper), unified management, better performance, POSIX ACLs for fine-grained access, native integration with ADF, Databricks, and Synapse. ADLS Gen1 was retired in Feb 2024 — all new workloads use Gen2.</p>
+  <div class="acc iq-card" data-level="beg" data-topic="cloud">
+    <button class="acc-h" onclick="iqAcc(this,7)"><h4>Q7. What is an Azure Subscription and why do we need it? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-7">
+      <p>A <strong>Subscription is a logical container used to manage billing and access control</strong> separately for different departments or projects. One tenant can have multiple subscriptions.</p>
+      <br/><p><strong>Example:</strong> An IT department and a Finance department each have their own subscriptions so their Azure bills are tracked separately. The IT team can't spend Finance's budget and vice versa.</p>
+      <br/>
+      <div class="layer-stack">
+        <div class="layer l1"><span class="li">🏢</span><span class="layer-label">Tenant (Organization root — Microsoft Entra ID)</span><span class="layer-badge">@mycompany.com</span></div>
+        <div class="layer l2"><span class="li">💳</span><span class="layer-label">Subscription 1 — IT Department</span><span class="layer-badge">Billing Unit</span></div>
+        <div class="layer l2"><span class="li">💳</span><span class="layer-label">Subscription 2 — Finance Department</span><span class="layer-badge">Billing Unit</span></div>
+        <div class="layer l3"><span class="li">📁</span><span class="layer-label">Resource Groups → Resources inside each subscription</span><span class="layer-badge">Isolated</span></div>
+      </div>
     </div>
   </div>
 
-  <div class="acc">
-    <button class="acc-h" onclick="acc(this)"><h4>Q8. Explain the Medallion Architecture (Bronze-Silver-Gold). Why use it?</h4><span class="acc-icon">▼</span></button>
-    <div class="acc-b">
-      <p>Medallion Architecture is a data design pattern that organizes data into three quality layers in the Data Lake:</p>
-      <br/><p><strong>🥉 Bronze (Raw):</strong> Exact copy of source data, no transformation. Append-only. Preserves original data forever. Allows reprocessing from scratch if logic changes.</p>
-      <br/><p><strong>🥈 Silver (Cleaned):</strong> Validated, standardized, deduplicated, correctly typed data. Empty values handled. Business rules applied. Stored as Parquet or Delta. Queryable by data scientists and analysts.</p>
-      <br/><p><strong>🥇 Gold (Aggregated):</strong> Business-level aggregations, KPIs, dimensional models. Optimized for reporting tools. Served to Power BI and data consumers.</p>
-      <br/><p><strong>Why use it:</strong> Each layer serves a different audience and purpose. If a transformation bug is found, you can reprocess from Bronze without re-ingesting from source. Data quality improves at each layer. Teams can work independently on different layers.</p>
+  <div class="acc iq-card" data-level="beg" data-topic="cloud">
+    <button class="acc-h" onclick="iqAcc(this,8)"><h4>Q8. What is a Resource Group in Azure? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-8">
+      <p>A <strong>Resource Group is like a project folder that holds related Azure resources</strong>. For example, all resources for a data pipeline — Data Factory, Storage Account, SQL Database — go into one Resource Group. It's mandatory — you cannot create any resource without a Resource Group.</p>
+      <br/>
+      <div class="ibox ib-orange"><div class="ib-icon">🗑️</div><div class="ib-body"><h4>The Delete-All Superpower</h4><p>Deleting a Resource Group deletes ALL resources inside it in one click — no leftover resources and no forgotten billing. This is why organizing resources into groups is essential for labs, projects, and cost management.</p></div></div>
+      <div class="kp"><h3>📌 Resource Group Rules</h3><ul>
+        <li>Resources from different regions can live in the same Resource Group</li>
+        <li>One resource belongs to only one Resource Group (but can be moved)</li>
+        <li>Apply tags and policies at Resource Group level — all resources inside inherit them</li>
+        <li>Resource Groups don't affect billing directly — subscriptions do</li>
+      </ul></div>
     </div>
   </div>
 
-  <div class="divider"><span>⚡ Azure Event Hubs</span></div>
-
-  <div class="acc">
-    <button class="acc-h" onclick="acc(this)"><h4>Q9. What are partitions in Event Hubs? How do they affect throughput?</h4><span class="acc-icon">▼</span></button>
-    <div class="acc-b">
-      <p>Each Event Hub is divided into N partitions (1–32). Each partition is an ordered, immutable log of events. Events are distributed across partitions by a partition key or round-robin.</p>
-      <br/><p><strong>How they affect throughput:</strong> Each partition can handle up to 1 MB/s ingress and 2 MB/s egress (with Standard tier). Multiple consumers read different partitions in parallel. So: <strong>3 partitions = 3 MB/s max ingress + 3 consumer readers working in parallel</strong>.</p>
-      <br/><p><strong>Important:</strong> Partition count is set at hub creation and CANNOT be changed later. Plan capacity upfront. For production, 4–8 partitions is common. More partitions = more parallelism but also higher minimum cost.</p>
+  <div class="acc iq-card" data-level="beg" data-topic="cloud">
+    <button class="acc-h" onclick="iqAcc(this,9)"><h4>Q9. What is the correct Azure hierarchy from top to bottom? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner ⭐ Must Know</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-9">
+      <p><strong>Memorize this hierarchy — it appears in almost every Azure interview, sometimes as a whiteboard question:</strong></p>
+      <br/>
+      <div class="diagram"><div class="diagram-title">🗂️ Azure Complete Hierarchy — Draw This in Interviews</div>
+        <div class="vflow" style="align-items:center;">
+          <div class="vfn fn-blue">🏢 Tenant (Microsoft Entra ID — Organization Level)<br/><small>@yourcompany.com — Identity and access management boundary</small></div>
+          <div class="vfa">▼</div>
+          <div class="vfn fn-cyan">💳 Subscription (Billing + Access Boundary)<br/><small>IT Dept / Finance Dept / Dev / Production — separate billing per subscription</small></div>
+          <div class="vfa">▼</div>
+          <div class="vfn fn-green">📁 Resource Group (Project Container)<br/><small>my-data-pipeline-rg — logical folder for related resources</small></div>
+          <div class="vfa">▼</div>
+          <div class="vfn fn-orange">⚙️ Resource (Individual Azure Service)<br/><small>SQL Database, Data Factory, Databricks, Data Lake, Event Hub, Key Vault...</small></div>
+        </div>
+      </div>
+      <div class="ibox ib-blue"><div class="ib-icon">🎯</div><div class="ib-body"><h4>Interview Formula</h4><p>"Tenant → Subscription → Resource Group → Resource. Tenant is the org identity boundary, Subscription is the billing unit separated per department, Resource Group is the project folder, and Resource is any individual Azure service you create."</p></div></div>
     </div>
   </div>
 
-  <div class="acc">
-    <button class="acc-h" onclick="acc(this)"><h4>Q10. Event Hubs vs Azure Service Bus — when to use which?</h4><span class="acc-icon">▼</span></button>
-    <div class="acc-b">
-      <p><strong>Event Hubs</strong> — Use for high-volume event streaming and telemetry: IoT sensor data, clickstream, app logs. Many producers, many consumers. Events retained by time (not delivery acknowledgement). Kafka-compatible. Best for: data pipelines, analytics, monitoring.</p>
-      <br/><p><strong>Azure Service Bus</strong> — Use for enterprise message brokering between services. Point-to-point queues or publish-subscribe topics. Messages deleted only after consumer explicitly acknowledges receipt. Supports dead-letter queues, message ordering, transactions, duplicate detection. Best for: microservices communication, order processing, reliable task queuing.</p>
-      <br/><p><strong>Simple rule:</strong> Event Hubs = "I want to stream and analyze lots of data." Service Bus = "I need reliable, guaranteed delivery of messages between specific services."</p>
+  <div class="acc iq-card" data-level="beg" data-topic="cloud">
+    <button class="acc-h" onclick="iqAcc(this,10)"><h4>Q10. What is Microsoft Entra ID? What was it called before? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-10">
+      <p><strong>Microsoft Entra ID</strong> (previously called <strong>Azure Active Directory / Azure AD</strong>) is Azure's identity and access management service. It manages users, groups, service principals, roles, and external identities for your organization. Every login, every permission, every service-to-service auth flows through Entra ID.</p>
+      <br/><div class="kp"><h3>📌 Entra ID Key Functions</h3><ul>
+        <li><strong>User management:</strong> Create users, assign roles, reset passwords, bulk operations</li>
+        <li><strong>Service Principals:</strong> Identity for applications/scripts to authenticate to Azure</li>
+        <li><strong>Managed Identities:</strong> Auto-managed identities for Azure services — no passwords needed!</li>
+        <li><strong>Conditional Access:</strong> Block logins from unknown locations, require MFA</li>
+        <li><strong>SSO:</strong> Single Sign-On across Microsoft 365, Azure, and third-party SaaS apps</li>
+      </ul></div>
+    </div>
+  </div>
+  </div><!-- /cloud section -->
+
+  <!-- ═══ STORAGE & DATABASES ═══ -->
+  <div class="iq-section" data-topic="storage">
+  <div class="divider"><span>🗄️ Storage &amp; Databases (Q11–Q22)</span></div>
+
+  <div class="acc iq-card" data-level="beg" data-topic="storage">
+    <button class="acc-h" onclick="iqAcc(this,11)"><h4>Q11. What are the three types of data formats, and which Azure service handles each? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-11">
+      <div class="tw"><table><thead><tr><th>Data Type</th><th>Description</th><th>Azure Service</th><th>Example</th></tr></thead><tbody>
+        <tr><td><strong style="color:var(--blue);">Structured</strong></td><td>Fixed schema — rows &amp; columns, every column typed</td><td>Azure SQL Database</td><td>Employee table, Orders, Transactions</td></tr>
+        <tr><td><strong style="color:var(--cyan);">Semi-Structured</strong></td><td>Flexible schema — JSON, key-value, nested</td><td>Cosmos DB / Table Storage</td><td>User profiles, Product catalogs, IoT events</td></tr>
+        <tr><td><strong style="color:var(--orange);">Unstructured</strong></td><td>No schema — any file format, any size</td><td>Azure Blob Storage / ADLS Gen2</td><td>Images, Videos, CSVs, PDFs, Logs</td></tr>
+      </tbody></table></div>
+      <div class="ibox ib-green"><div class="ib-icon">💡</div><div class="ib-body"><h4>Data Engineer's World</h4><p>All three types appear in every project. Raw data lands in ADLS (unstructured) → cleaned into Delta tables (structured) → app-facing data in Cosmos DB (semi-structured). Know all three for interviews!</p></div></div>
     </div>
   </div>
 
-  <div class="divider"><span>🔄 Azure Data Factory</span></div>
-
-  <div class="acc">
-    <button class="acc-h" onclick="acc(this)"><h4>Q11. How would you implement an incremental load in ADF?</h4><span class="acc-icon">▼</span></button>
-    <div class="acc-b">
-      <p>Incremental load copies only new or changed records since the last run — instead of copying the full dataset every time. Here's the pattern:</p>
-      <br/><ol style="padding-left:1.4rem;font-size:.875rem;color:var(--t2);line-height:1.9;">
-        <li><strong>Watermark table:</strong> Create a small SQL table in your database to store the last load timestamp/ID: <code style="color:var(--cyan);">CREATE TABLE watermark (table_name VARCHAR(50), last_value DATETIME)</code></li>
-        <li><strong>Lookup Activity:</strong> Before Copy — read the current watermark value from the watermark table.</li>
-        <li><strong>Copy Activity:</strong> Use the watermark as a filter in the source query: <code style="color:var(--cyan);">SELECT * FROM orders WHERE updated_at > '@{activity('GetWatermark').output.firstRow.last_value}'</code></li>
-        <li><strong>Stored Procedure Activity:</strong> After Copy — update the watermark table with the max timestamp from the current batch.</li>
-        <li><strong>Schedule Trigger:</strong> Run this pipeline every hour/day to get incremental data continuously.</li>
-      </ol>
+  <div class="acc iq-card" data-level="beg" data-topic="storage">
+    <button class="acc-h" onclick="iqAcc(this,12)"><h4>Q12. What is Azure SQL Database and what type of service is it? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-12">
+      <p>Azure SQL Database is a <strong>fully managed cloud relational database service (PaaS)</strong> based on Microsoft SQL Server. Azure manages the OS, hardware, backups, and patches. You manage databases, tables, and queries using standard T-SQL.</p>
+      <br/><div class="grid">
+        <div class="card"><div class="ci">🔧</div><h3>No Server to Manage</h3><p>Azure handles OS patching, hardware failures, backups (every 5-12 mins), and high availability. You focus 100% on SQL.</p></div>
+        <div class="card"><div class="ci">⚡</div><h3>Serverless Tier</h3><p>Auto-pause when idle → pay only for active queries. Up to 70% cost savings for dev/test or intermittent workloads.</p></div>
+        <div class="card"><div class="ci">🌐</div><h3>Geo-Replication</h3><p>Up to 4 readable secondary replicas in any Azure region. Failover Groups for automatic regional failover.</p></div>
+        <div class="card"><div class="ci">🛡️</div><h3>Security Built-In</h3><p>TDE (encryption at rest). TLS (in transit). Firewall by default blocks all. Microsoft Defender for SQL threat detection.</p></div>
+      </div>
     </div>
   </div>
 
-  <div class="acc">
-    <button class="acc-h" onclick="acc(this)"><h4>Q12. What is the difference between Azure IR and Self-Hosted IR in ADF?</h4><span class="acc-icon">▼</span></button>
-    <div class="acc-b">
-      <p><strong>Azure Integration Runtime (Azure IR):</strong> Fully managed, auto-scaling compute provided by Microsoft for cloud-to-cloud data movement and transformations. No setup needed — just select it in your Linked Service. Auto-selects the region closest to your data source for optimal performance. Cannot access on-premise resources or private endpoints directly.</p>
-      <br/><p><strong>Self-Hosted Integration Runtime (SHIR):</strong> Software you install on a Windows machine inside your corporate network (behind the firewall). Acts as a bridge between your private on-premise SQL Server/Oracle/SAP and ADF in the cloud. Uses outbound HTTPS connection only — no inbound firewall rules needed. Can also access VNet-integrated resources in Azure.</p>
-      <br/><p><strong>When to use SHIR:</strong> Any on-premise data source, private database servers, custom connectors, or resources not accessible from the public internet.</p>
+  <div class="acc iq-card" data-level="beg" data-topic="storage">
+    <button class="acc-h" onclick="iqAcc(this,13)"><h4>Q13. What is the difference between Azure SQL VM, SQL Managed Instance, and Azure SQL Database? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner ⭐ Asked Everywhere</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-13">
+      <div class="tw"><table><thead><tr><th>Option</th><th>Model</th><th>OS Access</th><th>SQL Compat.</th><th>Best For</th></tr></thead><tbody>
+        <tr><td><strong style="color:var(--red);">SQL on VM</strong></td><td>IaaS</td><td>✅ Full RDP/SSH</td><td>100%</td><td>True lift-and-shift, need SQL Agent, CLR, legacy features</td></tr>
+        <tr><td><strong style="color:var(--orange);">SQL Managed Instance</strong></td><td>PaaS</td><td>❌ No OS</td><td>~99%</td><td>Migrating most on-prem SQL Server apps with minimal code changes</td></tr>
+        <tr><td><strong style="color:var(--green);">Azure SQL Database</strong></td><td>PaaS</td><td>❌ No OS</td><td>~90%</td><td>New cloud-native apps, serverless, maximum PaaS benefits</td></tr>
+      </tbody></table></div>
+      <div class="ibox ib-orange"><div class="ib-icon">🎯</div><div class="ib-body"><h4>Interview Rule of Thumb</h4><p>"New apps → SQL Database (full PaaS). Migrating existing → SQL Managed Instance (near-100% compat). Need every SQL Server feature → SQL VM (full control = full responsibility)."</p></div></div>
     </div>
   </div>
 
-  <div class="divider"><span>🧱 Azure Databricks</span></div>
-
-  <div class="acc">
-    <button class="acc-h" onclick="acc(this)"><h4>Q13. What is Delta Lake and how is it different from plain Parquet?</h4><span class="acc-icon">▼</span></button>
-    <div class="acc-b">
-      <p><strong>Plain Parquet:</strong> Columnar file format — great for analytics but no ACID guarantees. Cannot do UPDATE or DELETE on Parquet files. No version history. Two concurrent writers can corrupt data. No way to enforce schema on new writes.</p>
-      <br/><p><strong>Delta Lake:</strong> Parquet files + a transaction log (<code style="color:var(--cyan);">_delta_log</code> folder). The transaction log records every operation atomically. This gives Delta tables:</p>
-      <ul style="padding-left:1.4rem;font-size:.875rem;color:var(--t2);line-height:1.8;margin-top:.5rem;">
-        <li><strong>ACID Transactions:</strong> Concurrent readers and writers don't corrupt data</li>
-        <li><strong>Time Travel:</strong> Query any historical version by version number or timestamp</li>
-        <li><strong>MERGE/UPSERT:</strong> Update or insert records in a single statement — impossible with Parquet</li>
-        <li><strong>Schema Enforcement:</strong> Rejects writes that break the schema</li>
-        <li><strong>Schema Evolution:</strong> Safely add new columns to existing tables</li>
-        <li><strong>Audit History:</strong> Full record of who did what and when</li>
-      </ul>
+  <div class="acc iq-card" data-level="beg" data-topic="storage">
+    <button class="acc-h" onclick="iqAcc(this,14)"><h4>Q14. What is Azure Cosmos DB and what does NoSQL mean? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-14">
+      <p>Cosmos DB is <strong>Azure's globally distributed, multi-model NoSQL database</strong>. NoSQL = "Not Only SQL" — not limited to relational/tabular data. Documents can have completely different fields (flexible schema).</p>
+      <br/>
+      <div class="compare">
+        <div class="compare-card left"><h3 style="color:var(--blue);">🗄️ SQL Database (Rigid)</h3><ul>
+          <li><span class="tick">✓</span> Fixed schema — all rows have same columns</li>
+          <li><span class="tick">✓</span> ACID transactions guaranteed</li>
+          <li><span class="cross">✗</span> Schema changes are expensive</li>
+          <li><span class="cross">✗</span> Can't easily store nested/variable data</li>
+        </ul></div>
+        <div class="compare-card right"><h3 style="color:var(--green);">🌌 Cosmos DB (Flexible)</h3><ul>
+          <li><span class="tick">✓</span> Flexible schema — each document can differ</li>
+          <li><span class="tick">✓</span> Single-digit ms latency globally</li>
+          <li><span class="tick">✓</span> Nested JSON, arrays, diverse structures</li>
+          <li><span class="tick">✓</span> 6 APIs: NoSQL, MongoDB, Cassandra, Gremlin, Table, PostgreSQL</li>
+        </ul></div>
+      </div>
     </div>
   </div>
 
-  <div class="acc">
-    <button class="acc-h" onclick="acc(this)"><h4>Q14. What is lazy evaluation in Apache Spark? Why does it matter?</h4><span class="acc-icon">▼</span></button>
-    <div class="acc-b">
-      <p><strong>Lazy evaluation</strong> means Spark doesn't execute DataFrame transformations immediately when you call them. Instead, it builds a logical plan (DAG — Directed Acyclic Graph) of all the transformations. Execution only happens when you call an <strong>action</strong> (like <code style="color:var(--cyan);">.count()</code>, <code style="color:var(--cyan);">.show()</code>, <code style="color:var(--cyan);">.write()</code>).</p>
-      <br/><p><strong>Why it matters — Optimization:</strong> Spark's Catalyst optimizer can see the entire transformation chain before executing. It can reorder operations, push filters earlier (partition pruning), eliminate unnecessary steps, and choose the best join strategy. Results in significantly faster execution than if each step ran immediately.</p>
-      <br/><p><strong>Practical example:</strong> If you filter early in the chain, Spark's optimizer will push that filter to the scan — reading much less data. With eager evaluation, you'd read all data first, then filter.</p>
+  <div class="acc iq-card" data-level="beg" data-topic="storage">
+    <button class="acc-h" onclick="iqAcc(this,15)"><h4>Q15. What are the different APIs available in Azure Cosmos DB? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-15">
+      <div class="tw"><table><thead><tr><th>API</th><th>Model</th><th>Best For</th></tr></thead><tbody>
+        <tr><td><strong style="color:var(--blue);">NoSQL (Core) ⭐</strong></td><td>JSON Documents — SQL query syntax</td><td>New apps, default choice — query JSON with familiar SQL!</td></tr>
+        <tr><td><strong style="color:var(--green);">MongoDB</strong></td><td>BSON Documents — MongoDB protocol</td><td>Migrating existing MongoDB apps zero code change</td></tr>
+        <tr><td><strong style="color:var(--orange);">Cassandra</strong></td><td>Wide Column — CQL</td><td>Time-series, IoT, high-write workloads</td></tr>
+        <tr><td><strong style="color:var(--purple);">Gremlin</strong></td><td>Graph (nodes + edges)</td><td>Social networks, fraud detection, recommendations</td></tr>
+        <tr><td><strong style="color:var(--cyan);">Table</strong></td><td>Key-Value — OData/REST</td><td>Simple key lookups (upgraded Azure Table Storage)</td></tr>
+        <tr><td><strong style="color:var(--pink);">PostgreSQL</strong></td><td>Distributed Relational — SQL</td><td>Relational data that's outgrown single PostgreSQL server</td></tr>
+      </tbody></table></div>
     </div>
   </div>
 
-  <div class="divider"><span>🔬 Azure Synapse Analytics</span></div>
-
-  <div class="acc">
-    <button class="acc-h" onclick="acc(this)"><h4>Q15. What are distribution strategies in Dedicated SQL Pool? When to use Hash vs Round-Robin vs Replicated?</h4><span class="acc-icon">▼</span></button>
-    <div class="acc-b">
-      <p>Dedicated SQL Pool distributes table data across 60 compute nodes. The distribution strategy determines how rows are spread across these nodes.</p>
-      <br/><p><strong>Hash Distribution:</strong> Rows are distributed based on a hash of a specific column value. Rows with the same column value always go to the same node. Best for large fact tables that are frequently joined — joining two hash-distributed tables on the same key avoids data movement (all matching rows are on the same node). <em>Rule: Use on the column most used in JOIN conditions.</em></p>
-      <br/><p><strong>Round-Robin:</strong> Rows distributed evenly in a round-robin fashion regardless of values. Simplest, no data skew, but joins require data movement (shuffle). Best for staging/temp tables where data is loaded then immediately transformed.</p>
-      <br/><p><strong>Replicated:</strong> Full copy of the table on every compute node. No data movement needed for any join. Best for small dimension tables (under 2 GB) that are frequently joined with fact tables.</p>
+  <div class="acc iq-card" data-level="beg" data-topic="storage">
+    <button class="acc-h" onclick="iqAcc(this,16)"><h4>Q16. What is Azure Storage Account? What 4 services does it provide? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-16">
+      <p>Azure Storage Account is a <strong>single umbrella resource that gives access to 4 storage services</strong> under one globally unique account name.</p>
+      <br/><div class="grid">
+        <div class="card"><div class="ci">📦</div><h3>Containers (Blob)</h3><p>Files of any type — CSV, JSON, images, logs. Foundation of Data Lake. With Hierarchical Namespace → ADLS Gen2.</p></div>
+        <div class="card"><div class="ci">🗂️</div><h3>File Shares</h3><p>SMB-compatible cloud file share. Mount as a network drive (Z:\). Lift on-prem file servers to cloud.</p></div>
+        <div class="card"><div class="ci">📨</div><h3>Queues</h3><p>Simple FIFO message storage (max 64KB). Decouple application components. Trigger downstream processes.</p></div>
+        <div class="card"><div class="ci">📋</div><h3>Tables</h3><p>NoSQL key-value storage. Cheaper than Cosmos DB. Good for config data and simple lookups at low cost.</p></div>
+      </div>
     </div>
   </div>
 
-  <div class="acc">
-    <button class="acc-h" onclick="acc(this)"><h4>Q16. How does Serverless SQL Pool differ from Dedicated SQL Pool in Synapse?</h4><span class="acc-icon">▼</span></button>
-    <div class="acc-b">
-      <p><strong>Serverless SQL Pool:</strong> Queries data directly in Azure Data Lake using OPENROWSET — data stays in the lake, nothing loaded. Pay per TB scanned (~$5/TB). Auto-scales, no infrastructure to manage. Best for ad-hoc exploration, lakehouse pattern, infrequent queries on large datasets.</p>
-      <br/><p><strong>Dedicated SQL Pool:</strong> Data is physically loaded into a provisioned warehouse (DWH). Pre-allocated compute (DWUs). Consistent, high performance for repeated queries used by BI tools. Pay per DWU-hour regardless of query volume. <strong>Remember to PAUSE when not in use</strong> — billing continues even when idle.</p>
-      <br/><p><strong>Exam tip:</strong> Serverless = query in place (schema-on-read). Dedicated = load then query (schema-on-write). Most modern architectures use both: Serverless for exploration, Dedicated for Power BI production dashboards.</p>
+  <div class="acc iq-card" data-level="beg" data-topic="storage">
+    <button class="acc-h" onclick="iqAcc(this,17)"><h4>Q17. What is Azure Blob Storage and what does BLOB stand for? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-17">
+      <p><strong>BLOB = Binary Large Object.</strong> Azure Blob Storage stores files of any type (images, videos, CSVs, PDFs, logs) without needing a schema. It is the foundation of Azure Data Lake.</p>
+      <br/><div class="kp"><h3>📌 Three Types of Blobs</h3><ul>
+        <li><strong>Block Blobs:</strong> Most common. For text and binary files — CSV, JSON, images, videos, logs. Optimized for large sequential reads/writes. Up to 4.77TB per blob.</li>
+        <li><strong>Append Blobs:</strong> Optimized for append-only operations. Perfect for log files where you continuously add new entries. No overwrite support.</li>
+        <li><strong>Page Blobs:</strong> Optimized for random read/write access. Used by Azure VM disks (Managed Disks use page blobs under the hood).</li>
+      </ul></div>
     </div>
   </div>
 
-  <div class="divider"><span>🔐 Security</span></div>
-
-  <div class="acc">
-    <button class="acc-h" onclick="acc(this)"><h4>Q17. What is Managed Identity and why should you use it instead of Service Principal with client secret?</h4><span class="acc-icon">▼</span></button>
-    <div class="acc-b">
-      <p><strong>Service Principal with client secret:</strong> You create an app registration in Azure AD, generate a client secret (password), and store it somewhere (Key Vault or config). You must manually rotate secrets before expiry, manage secret storage, and handle credential leakage risks.</p>
-      <br/><p><strong>Managed Identity:</strong> Azure automatically creates and manages an identity for your service (ADF, Databricks, App Service). No password, no secret to manage, no rotation needed. Azure handles credential lifecycle completely. You simply grant RBAC roles to the identity.</p>
-      <br/><p><strong>Why Managed Identity wins:</strong> Zero credential management overhead. No risk of accidentally committing secrets to Git. Works seamlessly within Azure's RBAC system. Passes security audits easily. Use Managed Identity for all Azure-to-Azure connections. Use Service Principal only for non-Azure systems or automated pipelines outside Azure.</p>
+  <div class="acc iq-card" data-level="beg" data-topic="storage">
+    <button class="acc-h" onclick="iqAcc(this,18)"><h4>Q18. What is Azure Data Lake Storage Gen2 (ADLS Gen2)? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner ⭐ Critical</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-18">
+      <div class="formula"><span>Azure Blob Storage</span> &nbsp;+&nbsp; <span>Hierarchical Namespace (HNS) enabled</span> &nbsp;= <span class="eq">Azure Data Lake Storage Gen2</span></div>
+      <br/>
+      <div class="ibox ib-orange"><div class="ib-icon">🔑</div><div class="ib-body"><h4>The Magic Checkbox</h4><p>When creating a Storage Account, check <strong>"Enable hierarchical namespace"</strong> — this instantly converts it into ADLS Gen2. That single checkbox is the entire difference between plain Blob Storage and a full enterprise Data Lake.</p></div></div>
+      <div class="compare">
+        <div class="compare-card left" style="border-color:rgba(245,158,11,.4);"><h3 style="color:var(--orange);">📦 Blob Storage (HNS OFF)</h3><ul>
+          <li><span class="cross">✗</span> Flat namespace (fake folders via / in name)</li>
+          <li><span class="cross">✗</span> Rename folder = copy+delete (O(n) slow)</li>
+          <li><span class="cross">✗</span> No POSIX ACLs — no file-level permissions</li>
+        </ul></div>
+        <div class="compare-card right" style="border-color:rgba(0,180,216,.4);"><h3 style="color:var(--cyan);">🏔️ ADLS Gen2 (HNS ON)</h3><ul>
+          <li><span class="tick">✓</span> True directory hierarchy like a filesystem</li>
+          <li><span class="tick">✓</span> Rename/delete folder = atomic O(1) instant</li>
+          <li><span class="tick">✓</span> POSIX ACLs — per-file &amp; per-folder permissions</li>
+          <li><span class="tick">✓</span> 10–60x faster for Databricks/Synapse operations</li>
+        </ul></div>
+      </div>
     </div>
   </div>
 
-  <div class="acc">
-    <button class="acc-h" onclick="acc(this)"><h4>Q18. What is the difference between RBAC and Key Vault Access Policies?</h4><span class="acc-icon">▼</span></button>
-    <div class="acc-b">
-      <p><strong>Key Vault Access Policies (Legacy):</strong> Per-vault permission model. Grant an identity (user/SP/MI) access to ALL secrets, ALL keys, or ALL certificates in the vault with specific operations (Get, List, Set, Delete). Binary — you either have access to all secrets or none. Cannot grant access to a specific secret only.</p>
-      <br/><p><strong>Azure RBAC for Key Vault (Recommended):</strong> Uses standard Azure RBAC roles at different scopes. You can grant "Key Vault Secrets User" role to an identity at the vault level (all secrets) OR at an individual secret level (one specific secret only). Integrated with Azure Policy, PIM, and all standard Azure governance tooling.</p>
-      <br/><p><strong>Recommendation:</strong> Always use Azure RBAC for Key Vault in new deployments. It provides least-privilege access (principle of minimal permission) and is consistent with all other Azure resource access control.</p>
+  <div class="acc iq-card" data-level="beg" data-topic="storage">
+    <button class="acc-h" onclick="iqAcc(this,19)"><h4>Q19. What is the difference between Blob Storage and ADLS Gen2? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-19">
+      <p>Both are the same underlying storage service. <strong>The difference is one checkbox: Hierarchical Namespace (HNS).</strong> Without HNS: flat blob storage. With HNS: true filesystem with real directory operations, POSIX ACLs, and optimized big-data performance.</p>
+      <br/><p><strong>Always enable HNS for any data engineering project</strong> — it enables the folder structure needed for the Medallion Architecture, fine-grained access control, and dramatically better performance with Databricks and Synapse.</p>
     </div>
   </div>
+
+  <div class="acc iq-card" data-level="beg" data-topic="storage">
+    <button class="acc-h" onclick="iqAcc(this,20)"><h4>Q20. What are the access tiers in Azure Blob Storage? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-20">
+      <div class="tw"><table><thead><tr><th>Tier</th><th>Access Pattern</th><th>Storage Cost</th><th>Access Cost</th><th>Use Case</th></tr></thead><tbody>
+        <tr><td><strong style="color:var(--blue);">🔥 Hot</strong></td><td>Frequent (daily)</td><td>Highest</td><td>Lowest</td><td>Active pipeline data, frequently queried files</td></tr>
+        <tr><td><strong style="color:var(--cyan);">🌊 Cool</strong></td><td>Infrequent (monthly)</td><td>Lower</td><td>Medium</td><td>Backup files, logs accessed occasionally</td></tr>
+        <tr><td><strong style="color:var(--purple);">🧊 Cold</strong></td><td>Rarely (quarterly)</td><td>Low</td><td>High</td><td>Compliance archives, historical datasets</td></tr>
+        <tr><td><strong style="color:var(--t3);">🗄️ Archive</strong></td><td>Almost never (yearly)</td><td>Lowest</td><td>Very High + hours to re-hydrate</td><td>Long-term regulatory storage</td></tr>
+      </tbody></table></div>
+      <div class="ibox ib-orange"><div class="ib-icon">💰</div><div class="ib-body"><h4>Cost Formula to Remember</h4><p><strong>Hot = cheap reads, expensive storage.</strong> <strong>Archive = cheapest storage, very expensive + SLOW reads</strong> (re-hydration takes hours). Never use Archive if you might need urgent access.</p></div></div>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="beg" data-topic="storage">
+    <button class="acc-h" onclick="iqAcc(this,21)"><h4>Q21. What are the 4 data redundancy options in Azure Storage? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner ⭐ Critical</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-21">
+      <div class="tw"><table><thead><tr><th>Type</th><th>Copies</th><th>Scope</th><th>Survives</th><th>Cost</th><th>Use Case</th></tr></thead><tbody>
+        <tr><td><strong style="color:var(--blue);">LRS</strong></td><td>3</td><td>Single data center</td><td>Hardware failure</td><td>💲 Lowest</td><td>Dev/Test only</td></tr>
+        <tr><td><strong style="color:var(--orange);">ZRS</strong></td><td>3</td><td>3 zones, same region</td><td>Zone failure</td><td>💲💲 Medium</td><td>Production needing HA in region</td></tr>
+        <tr><td><strong style="color:var(--cyan);">GRS</strong></td><td>6</td><td>2 paired regions</td><td>Region outage</td><td>💲💲💲 High</td><td>Business-critical data</td></tr>
+        <tr><td><strong style="color:var(--purple);">GZRS</strong></td><td>6</td><td>3 zones + 2 regions</td><td>Zone + Region failure</td><td>💲💲💲💲 Highest</td><td>Maximum protection — banking, healthcare</td></tr>
+      </tbody></table></div>
+      <div class="ibox ib-green"><div class="ib-icon">🎯</div><div class="ib-body"><h4>Interview Answer</h4><p>"In production I always use GRS for critical data — it replicates across two paired Azure regions, so even if the entire East US region fails, West US has your data. LRS is acceptable only for dev/test or easily reproducible data."</p></div></div>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="beg" data-topic="storage">
+    <button class="acc-h" onclick="iqAcc(this,22)"><h4>Q22. What does "Availability Sets" mean in Azure storage context? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-22">
+      <p>In the Azure Storage context, "Availability Sets" is another name for <strong>LRS (Locally Redundant Storage)</strong> — 3 copies of data distributed across different server racks within a single data center. It protects against individual rack or hardware failures, but NOT against a full data center going down.</p>
+      <br/><div class="ibox ib-blue"><div class="ib-icon">📌</div><div class="ib-body"><h4>Quick Memory Aid</h4><p>LRS = same building, different racks. ZRS = same city, different buildings. GRS = different cities 500+ km apart. GZRS = different buildings in both cities.</p></div></div>
+    </div>
+  </div>
+  </div><!-- /storage section -->
+
+  <!-- ═══ AZURE DATA FACTORY ═══ -->
+  <div class="iq-section" data-topic="adf">
+  <div class="divider"><span>🔄 Azure Data Factory (Q23–Q27, Q32–Q35, Q47)</span></div>
+
+  <div class="acc iq-card" data-level="beg" data-topic="adf">
+    <button class="acc-h" onclick="iqAcc(this,23)"><h4>Q23. What is Azure Data Factory and what does ETL stand for? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-23">
+      <p><strong>ETL = Extract, Transform, Load</strong>. Azure Data Factory (ADF) is Azure's cloud-based ETL and data integration service. It connects to 90+ data sources, moves data, triggers Databricks notebooks, runs SQL procedures, and schedules all of this — through a visual drag-and-drop interface.</p>
+      <br/>
+      <div class="diagram"><div class="diagram-title">🔄 ETL Process with ADF</div>
+        <div class="flow" style="flex-wrap:wrap;gap:.8rem;justify-content:center;">
+          <div class="fn fn-blue">📤 Extract<br/><small>SQL DB, REST API<br/>Files, SAP, Oracle</small></div>
+          <div class="fa">→</div>
+          <div class="fn fn-cyan">⚙️ Transform<br/><small>Filter, Join<br/>Aggregate, Cleanse</small></div>
+          <div class="fa">→</div>
+          <div class="fn fn-green">📥 Load<br/><small>ADLS, Synapse<br/>Cosmos DB, SQL DB</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="beg" data-topic="adf">
+    <button class="acc-h" onclick="iqAcc(this,24)"><h4>Q24. What is a Pipeline in Azure Data Factory? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-24">
+      <p>A <strong>Pipeline is a logical grouping of Activities that together perform a data task</strong>. Example: a pipeline "Daily Sales Load" might have Lookup (get watermark) → Copy (extract from SQL) → Data Flow (clean) → Copy (load to lake) — all scheduled nightly.</p>
+      <br/><div class="kp"><h3>📌 ADF Building Blocks Hierarchy</h3><ul>
+        <li><strong>Linked Service</strong> → Connection to external data store (the key to the vault)</li>
+        <li><strong>Dataset</strong> → Specific data location within a Linked Service (the specific room)</li>
+        <li><strong>Activity</strong> → Single step: Copy, Notebook, SQL Procedure, Wait, Web Call</li>
+        <li><strong>Pipeline</strong> → Logical group of activities forming a complete data workflow</li>
+        <li><strong>Trigger</strong> → When to run: Schedule, Event, Manual, Tumbling Window</li>
+      </ul></div>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="beg" data-topic="adf">
+    <button class="acc-h" onclick="iqAcc(this,25)"><h4>Q25. What is a Linked Service in ADF? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner ⭐ Critical</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-25">
+      <p>A <strong>Linked Service is a connection string/configuration that tells ADF how to connect to an external data store</strong>. You cannot access any data without first creating a Linked Service for it.</p>
+      <br/>
+      <div class="formula"><span>Linked Service</span> = <span class="eq">Connection (the building key)</span> &nbsp;&nbsp; <span>Dataset</span> = <span class="eq">Specific data inside (the room number)</span></div>
+      <br/>
+      <div class="kp"><h3>📌 Common Linked Service Types</h3><ul>
+        <li>Azure SQL Database — server URL + database name + auth (managed identity recommended)</li>
+        <li>Azure Data Lake Storage Gen2 — storage account URL + auth method</li>
+        <li>Azure Databricks — workspace URL + cluster config + access token</li>
+        <li>REST API — base URL + authentication type (anonymous / OAuth / basic)</li>
+        <li>On-Premise SQL Server via Self-Hosted IR — connection string + SHIR bridge</li>
+      </ul></div>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="beg" data-topic="adf">
+    <button class="acc-h" onclick="iqAcc(this,26)"><h4>Q26. What is a Dataset in ADF? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-26">
+      <p>A <strong>Dataset points to the specific data within a Linked Service</strong>. If the Linked Service is your connection to a Storage Account (the building), the Dataset is the specific file or folder inside it — e.g., pointing to <code style="color:var(--cyan);">raw/sales/2024/*.csv</code>. Datasets are used as Source or Sink in Copy Activities.</p>
+      <br/><div class="ibox ib-purple"><div class="ib-icon">💡</div><div class="ib-body"><h4>Pro Tip: Parametrize Datasets</h4><p>In production, make datasets parametrized — the folder name is a pipeline parameter at runtime. One dataset definition supports many different tables or files, making pipelines dynamic and reusable without duplication.</p></div></div>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="beg" data-topic="adf">
+    <button class="acc-h" onclick="iqAcc(this,27)"><h4>Q27. What is the Copy Activity in ADF and when do you use it? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-27">
+      <p>Copy Activity is the <strong>most important ADF activity</strong>. It copies data from a source dataset to a sink (destination) dataset. It supports <strong>90+ connectors</strong> and handles format conversion, compression, schema mapping, and column type casting automatically.</p>
+      <br/><div class="ibox ib-orange"><div class="ib-icon">⚠️</div><div class="ib-body"><h4>Copy Activity vs Data Flow — Critical Distinction</h4><p><strong>Copy Activity</strong> = data movement (source → sink, minimal transform). Highly efficient for large-scale migration. <strong>Data Flow</strong> = complex transformation (filter, join, aggregate, pivot) running on Spark internally. Use Copy for migration, Data Flow for complex transformation logic.</p></div></div>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="int" data-topic="adf">
+    <button class="acc-h" onclick="iqAcc(this,32)"><h4>Q32. What is the difference between a Trigger and a Debug run in ADF? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(245,158,11,.15);color:var(--orange);font-weight:700;margin-left:.5rem;">Intermediate</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-32">
+      <div class="compare">
+        <div class="compare-card left" style="border-color:rgba(0,120,212,.4);"><h3 style="color:var(--blue);">🐛 Debug Run</h3><ul>
+          <li><span class="tick">✓</span> Manually triggered — runs immediately</li>
+          <li><span class="tick">✓</span> Shows live output in the canvas</li>
+          <li><span class="tick">✓</span> Does NOT require publishing first</li>
+          <li><span class="cross">✗</span> Not for production automation</li>
+        </ul></div>
+        <div class="compare-card right" style="border-color:rgba(16,185,129,.4);"><h3 style="color:var(--green);">⏰ Trigger Types</h3><ul>
+          <li><span class="tick">✓</span> <strong>Schedule:</strong> CRON-based daily/hourly runs</li>
+          <li><span class="tick">✓</span> <strong>Tumbling Window:</strong> Time-window stateful runs</li>
+          <li><span class="tick">✓</span> <strong>Storage Event:</strong> New file arrives in ADLS</li>
+          <li><span class="tick">✓</span> <strong>Custom Event:</strong> Azure Event Grid event</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="int" data-topic="adf">
+    <button class="acc-h" onclick="iqAcc(this,33)"><h4>Q33. What is an Integration Runtime in ADF? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(245,158,11,.15);color:var(--orange);font-weight:700;margin-left:.5rem;">Intermediate ⭐ Critical</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-33">
+      <p>Integration Runtime (IR) is the <strong>compute engine that powers ADF activities</strong>. Three types:</p>
+      <br/><div class="tw"><table><thead><tr><th>IR Type</th><th>Location</th><th>Use Case</th></tr></thead><tbody>
+        <tr><td><strong style="color:var(--blue);">Azure IR</strong></td><td>Azure cloud (fully managed, auto-scale)</td><td>Cloud-to-cloud pipelines: SQL DB → ADLS, REST API → Cosmos DB. Zero setup.</td></tr>
+        <tr><td><strong style="color:var(--orange);">Self-Hosted IR</strong></td><td>Your on-prem Windows machine</td><td>Connect to on-premise SQL Server/Oracle/SAP behind corporate firewall. Outbound HTTPS only — no inbound firewall rules needed.</td></tr>
+        <tr><td><strong style="color:var(--purple);">Azure-SSIS IR</strong></td><td>Azure (provisioned)</td><td>Run legacy SSIS packages in the cloud without rewriting — lift-and-shift SSIS workloads.</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="int" data-topic="adf">
+    <button class="acc-h" onclick="iqAcc(this,34)"><h4>Q34. What is an ARM Template in ADF and why is it important? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(245,158,11,.15);color:var(--orange);font-weight:700;margin-left:.5rem;">Intermediate</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-34">
+      <p><strong>ARM (Azure Resource Manager) Template</strong> is the underlying JSON code that represents your ADF pipeline configuration. It's important for CI/CD — export from dev, deploy to staging and production via Azure DevOps or GitHub Actions. Enables version control, rollback, team collaboration on pipelines.</p>
+      <br/>
+      <div class="diagram"><div class="diagram-title">🚀 ADF CI/CD Pipeline</div>
+        <div class="flow" style="flex-wrap:wrap;gap:.8rem;justify-content:center;">
+          <div class="fn fn-blue">👨‍💻 Dev ADF<br/><small>Linked to Git</small></div>
+          <div class="fa">→</div>
+          <div class="fn fn-cyan">📦 Git Repo<br/><small>ARM Templates versioned</small></div>
+          <div class="fa">→</div>
+          <div class="fn fn-orange">🤖 Azure DevOps<br/><small>Auto-deploy pipeline</small></div>
+          <div class="fa">→</div>
+          <div class="fn fn-green">🏭 Prod ADF<br/><small>Deployed safely</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="int" data-topic="adf">
+    <button class="acc-h" onclick="iqAcc(this,35)"><h4>Q35. What is the difference between a Data Flow and a Copy Activity in ADF? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(245,158,11,.15);color:var(--orange);font-weight:700;margin-left:.5rem;">Intermediate</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-35">
+      <div class="tw"><table><thead><tr><th>Feature</th><th>Copy Activity</th><th>Data Flow</th></tr></thead><tbody>
+        <tr><td>Purpose</td><td>Data movement — fast &amp; efficient</td><td>Data transformation — visual, no-code</td></tr>
+        <tr><td>Transformation</td><td>Minimal (column mapping, type cast)</td><td>Rich: filter, join, aggregate, pivot, derive</td></tr>
+        <tr><td>Engine</td><td>ADF native (non-Spark)</td><td>Apache Spark internally</td></tr>
+        <tr><td>Startup time</td><td>Near-instant</td><td>Minutes (cluster warm-up)</td></tr>
+        <tr><td>Best For</td><td>Migrating data between systems</td><td>Complex transformation logic in pipelines</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="int" data-topic="adf">
+    <button class="acc-h" onclick="iqAcc(this,47)"><h4>Q47. How do you move ADF pipelines from Development to Production? CI/CD in ADF? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(245,158,11,.15);color:var(--orange);font-weight:700;margin-left:.5rem;">Intermediate</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-47">
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Connect ADF to Git</h4><p>ADF Studio → Manage → Git Configuration → Connect to Azure DevOps Repos or GitHub. Choose collaboration branch (main) and publish branch (adf_publish).</p></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Develop in Feature Branches</h4><p>Developers create feature branches, build pipelines, submit Pull Requests — just like application code. Code review happens on pipeline JSON.</p></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Publish to Generate ARM Templates</h4><p>Click "Publish All" → ADF generates ARM Templates in the adf_publish branch. These JSON files represent your entire ADF configuration as code.</p></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-content"><h4>Deploy via Azure DevOps</h4><p>A release pipeline picks up ARM templates from adf_publish and deploys them to staging and production ADF instances with environment-specific parameter overrides.</p></div></div>
+      </div>
+    </div>
+  </div>
+  </div><!-- /adf section -->
+
+  <!-- ═══ AZURE DATABRICKS ═══ -->
+  <div class="iq-section" data-topic="databricks">
+  <div class="divider"><span>🧱 Azure Databricks (Q36–Q39, Q46)</span></div>
+
+  <div class="acc iq-card" data-level="int" data-topic="databricks">
+    <button class="acc-h" onclick="iqAcc(this,36)"><h4>Q36. What is Apache Spark and why does Databricks use it? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(245,158,11,.15);color:var(--orange);font-weight:700;margin-left:.5rem;">Intermediate</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-36">
+      <p><strong>Apache Spark</strong> is an open-source, distributed computing framework. It distributes data and computation across a cluster of machines, enabling processing of terabytes of data efficiently — up to 100x faster than Hadoop MapReduce for in-memory operations.</p>
+      <br/><div class="analogy"><div class="label">🏭 Factory Analogy</div><p>Processing 1 billion rows on a single laptop = one worker doing all the work = 24 hours. Databricks Spark cluster = 100 workers splitting the work in parallel = 15 minutes. Spark is the coordination system that automatically divides and assigns work to each worker node.</p></div>
+      <div class="diagram"><div class="diagram-title">⚙️ Databricks Cluster Architecture</div>
+        <div style="display:flex;gap:2rem;flex-wrap:wrap;justify-content:center;align-items:flex-start;">
+          <div class="fn fn-blue" style="padding:1rem;">🧠 Driver Node<br/><small>Your notebook code<br/>Spark Context, DAG planner<br/>Catalyst Query Optimizer</small></div>
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3rem;color:var(--t3);">⬆<br/>tasks<br/>⬇<br/>results</div>
+          <div style="display:flex;flex-direction:column;gap:.4rem;">
+            <div class="fn fn-cyan" style="font-size:.78rem;">⚡ Worker 1 — processes Partition 0..N/3</div>
+            <div class="fn fn-cyan" style="font-size:.78rem;">⚡ Worker 2 — processes Partition N/3..2N/3</div>
+            <div class="fn fn-cyan" style="font-size:.78rem;">⚡ Worker 3 — processes Partition 2N/3..N</div>
+            <div class="fn fn-cyan" style="font-size:.78rem;opacity:.6;">⚡ Worker N — autoscale on demand</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="int" data-topic="databricks">
+    <button class="acc-h" onclick="iqAcc(this,37)"><h4>Q37. What is Delta Lake and why is it important? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(245,158,11,.15);color:var(--orange);font-weight:700;margin-left:.5rem;">Intermediate ⭐ Very Frequently Asked</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-37">
+      <div class="formula"><span>Parquet Files</span> &nbsp;+&nbsp; <span>_delta_log transaction log</span> &nbsp;= <span class="eq">Delta Lake Table</span></div>
+      <br/><p>Delta Lake adds ACID transactions, schema enforcement, and time-travel to your data lake. Without Delta Lake, data lakes are just dumb file systems — no guarantees about data consistency. Plain Parquet cannot do UPDATE, DELETE, or concurrent writes safely.</p>
+      <br/>
+      <div class="grid">
+        <div class="card"><div class="ci">⏰</div><h3>Time Travel</h3><p>Query any historical version: <code style="color:var(--cyan);">spark.read.format("delta").option("versionAsOf", 5).load("/path")</code> — perfect for debugging or auditing data lineage.</p></div>
+        <div class="card"><div class="ci">🔀</div><h3>MERGE / UPSERT</h3><p>Update existing + insert new in one atomic operation. Critical for CDC (Change Data Capture) and incremental loads. Impossible with plain Parquet.</p></div>
+        <div class="card"><div class="ci">🔒</div><h3>ACID Transactions</h3><p>Multiple concurrent readers and writers work safely without corrupting data — like a real database, but on a data lake at petabyte scale.</p></div>
+        <div class="card"><div class="ci">📋</div><h3>Schema Enforcement</h3><p>Rejects writes that don't match the table schema by default. No more silent corruption from unexpected columns or wrong data types.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="int" data-topic="databricks">
+    <button class="acc-h" onclick="iqAcc(this,38)"><h4>Q38. What is the Medallion Architecture? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(245,158,11,.15);color:var(--orange);font-weight:700;margin-left:.5rem;">Intermediate ⭐ Very Frequently Asked</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-38">
+      <p>Medallion Architecture organizes your data lake into <strong>three quality zones</strong> — each adding more value than the previous:</p>
+      <br/>
+      <div class="diagram"><div class="diagram-title">🏅 Bronze → Silver → Gold — Industry Standard Pattern</div>
+        <div class="flow" style="align-items:stretch;gap:1.5rem;flex-wrap:wrap;">
+          <div style="flex:1;min-width:160px;background:rgba(180,80,0,.1);border:1px solid rgba(180,80,0,.4);border-radius:12px;padding:1.2rem;text-align:center;">
+            <div style="font-size:2rem;margin-bottom:.5rem;">🥉</div><div style="font-weight:800;color:#f97316;margin-bottom:.5rem;">BRONZE (Raw)</div>
+            <div style="font-size:.78rem;color:var(--t2);line-height:1.7;">Raw as-is data<br/>No transformation<br/>CSV, JSON, XML<br/>Append-only<br/><em>Source of truth</em></div>
+          </div>
+          <div style="display:flex;align-items:center;font-size:1.5rem;color:var(--t3);">→</div>
+          <div style="flex:1;min-width:160px;background:rgba(150,150,150,.1);border:1px solid rgba(200,200,200,.25);border-radius:12px;padding:1.2rem;text-align:center;">
+            <div style="font-size:2rem;margin-bottom:.5rem;">🥈</div><div style="font-weight:800;color:#94a3b8;margin-bottom:.5rem;">SILVER (Clean)</div>
+            <div style="font-size:.78rem;color:var(--t2);line-height:1.7;">Cleaned &amp; validated<br/>Deduped, types fixed<br/>Parquet / Delta<br/>Data scientists use<br/><em>Reliable, queryable</em></div>
+          </div>
+          <div style="display:flex;align-items:center;font-size:1.5rem;color:var(--t3);">→</div>
+          <div style="flex:1;min-width:160px;background:rgba(180,150,0,.1);border:1px solid rgba(240,200,0,.3);border-radius:12px;padding:1.2rem;text-align:center;">
+            <div style="font-size:2rem;margin-bottom:.5rem;">🥇</div><div style="font-weight:800;color:#fbbf24;margin-bottom:.5rem;">GOLD (Business)</div>
+            <div style="font-size:.78rem;color:var(--t2);line-height:1.7;">Aggregated KPIs<br/>Star schema / Facts<br/>Delta tables<br/>Served to Power BI<br/><em>Decision-making</em></div>
+          </div>
+        </div>
+      </div>
+      <div class="ibox ib-green"><div class="ib-icon">🎯</div><div class="ib-body"><h4>Why It Matters</h4><p>If a transformation bug is found, you reprocess from Bronze without re-ingesting from the source system. Each layer serves different audiences with appropriate data quality. Teams work independently on different layers.</p></div></div>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="int" data-topic="databricks">
+    <button class="acc-h" onclick="iqAcc(this,39)"><h4>Q39. What is MLflow in Azure Databricks? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(245,158,11,.15);color:var(--orange);font-weight:700;margin-left:.5rem;">Intermediate</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-39">
+      <p><strong>MLflow</strong> is an open-source platform built into Databricks for managing the complete ML lifecycle.</p>
+      <br/><div class="kp"><h3>📌 MLflow Core Components</h3><ul>
+        <li><strong>MLflow Tracking:</strong> Logs parameters (hyperparameters), metrics (accuracy, F1 score), and artifacts (model files, charts) for every training run. Compare hundreds of runs visually in the experiment dashboard.</li>
+        <li><strong>MLflow Models:</strong> Package ML models in a standard format. Same model deploys to REST API, batch scoring, or PySpark UDF without rewriting deployment code.</li>
+        <li><strong>MLflow Model Registry:</strong> Centralized model versioning — Staging → Production lifecycle. Request approvals before promoting models to production. Track model lineage.</li>
+        <li><strong>MLflow Projects:</strong> Package ML code in a reproducible format with environment specs (conda.yaml) so any team member can reproduce results exactly.</li>
+      </ul></div>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="int" data-topic="databricks">
+    <button class="acc-h" onclick="iqAcc(this,46)"><h4>Q46. What is the difference between Azure Databricks and Synapse Spark? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(245,158,11,.15);color:var(--orange);font-weight:700;margin-left:.5rem;">Intermediate</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-46">
+      <div class="compare">
+        <div class="compare-card left" style="border-color:rgba(124,58,237,.4);"><h3 style="color:var(--purple);">🧱 Azure Databricks</h3><ul>
+          <li><span class="tick">✓</span> Owned by Databricks Inc. (not Microsoft)</li>
+          <li><span class="tick">✓</span> Richer: Delta Lake, Unity Catalog, MLflow, AutoML</li>
+          <li><span class="tick">✓</span> More widely adopted in job market</li>
+          <li><span class="cross">✗</span> Separate workspace from Synapse</li>
+          <li><em>Choose for: heavy Spark, ML workloads</em></li>
+        </ul></div>
+        <div class="compare-card right" style="border-color:rgba(16,185,129,.4);"><h3 style="color:var(--green);">🔬 Synapse Spark</h3><ul>
+          <li><span class="tick">✓</span> Microsoft-native, inside Synapse Studio</li>
+          <li><span class="tick">✓</span> Tight integration with Dedicated SQL Pool</li>
+          <li><span class="tick">✓</span> Convenient for Synapse-first architectures</li>
+          <li><span class="cross">✗</span> Fewer advanced ML features than Databricks</li>
+          <li><em>Choose for: Synapse-first org setups</em></li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+  </div><!-- /databricks section -->
+
+  <!-- ═══ EVENT HUBS ═══ -->
+  <div class="iq-section" data-topic="eventhubs">
+  <div class="divider"><span>⚡ Event Hubs &amp; Streaming (Q28–Q31, Q40–Q42)</span></div>
+
+  <div class="acc iq-card" data-level="beg" data-topic="eventhubs">
+    <button class="acc-h" onclick="iqAcc(this,28)"><h4>Q28. What is Azure Event Hubs and when would you use it? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,120,212,.15);color:var(--blue);font-weight:700;margin-left:.5rem;">Beginner</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-28">
+      <p><strong>Azure Event Hubs</strong> is a fully managed real-time event streaming service. Use it when you have high-velocity, continuous data sources — IoT sensors, application logs, financial tickers — that produce millions of events per second.</p>
+      <br/>
+      <div class="diagram"><div class="diagram-title">🌊 Event Hubs Complete Data Flow</div>
+        <div class="flow" style="gap:.75rem;flex-wrap:wrap;justify-content:center;">
+          <div style="text-align:center;"><div style="font-size:.72rem;color:var(--t3);margin-bottom:.4rem;">PRODUCERS</div>
+            <div style="display:flex;flex-direction:column;gap:.3rem;">
+              <div class="fn fn-blue" style="font-size:.72rem;">🌡️ IoT Sensors</div>
+              <div class="fn fn-blue" style="font-size:.72rem;">🌐 Web Apps</div>
+              <div class="fn fn-blue" style="font-size:.72rem;">📱 Mobile Apps</div>
+            </div>
+          </div>
+          <div class="fa" style="font-size:1.5rem;">→</div>
+          <div class="fn fn-cyan" style="min-width:160px;padding:1rem;">⚡ Event Hub<br/><small>Partitions 1..N<br/>Retention: 1–90 days<br/>Kafka-compatible ✓</small></div>
+          <div class="fa" style="font-size:1.5rem;">→</div>
+          <div style="text-align:center;"><div style="font-size:.72rem;color:var(--t3);margin-bottom:.4rem;">CONSUMERS</div>
+            <div style="display:flex;flex-direction:column;gap:.3rem;">
+              <div class="fn fn-green" style="font-size:.72rem;">🧱 Databricks Streaming</div>
+              <div class="fn fn-green" style="font-size:.72rem;">🔬 Stream Analytics</div>
+              <div class="fn fn-green" style="font-size:.72rem;">🏔️ ADLS (Capture)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="int" data-topic="eventhubs">
+    <button class="acc-h" onclick="iqAcc(this,29)"><h4>Q29. What is the difference between GRS and GZRS? (Intermediate cloud Q) <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(245,158,11,.15);color:var(--orange);font-weight:700;margin-left:.5rem;">Intermediate</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-29">
+      <div class="compare">
+        <div class="compare-card left" style="border-color:rgba(0,180,216,.4);"><h3 style="color:var(--cyan);">🌍 GRS</h3><ul>
+          <li>3 LRS copies in primary region (1 data center)</li>
+          <li>+ Async replication to paired secondary region</li>
+          <li>Survives: full region outage</li>
+          <li>Does NOT protect against zone failure in primary</li>
+          <li>Cost: 💲💲💲 — good for most production</li>
+        </ul></div>
+        <div class="compare-card right" style="border-color:rgba(124,58,237,.4);"><h3 style="color:var(--purple);">🌐 GZRS</h3><ul>
+          <li>3 ZRS copies across 3 zones in primary region</li>
+          <li>+ Async replication to paired secondary region</li>
+          <li>Survives: zone failure AND full region outage</li>
+          <li>Maximum protection available in Azure</li>
+          <li>Cost: 💲💲💲💲 — for banking, healthcare critical data</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="int" data-topic="storage">
+    <button class="acc-h" onclick="iqAcc(this,30)"><h4>Q30. What is a Partition Key and Row Key in Azure Table Storage? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(245,158,11,.15);color:var(--orange);font-weight:700;margin-left:.5rem;">Intermediate</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-30">
+      <div class="kp"><h3>📌 Partition Key &amp; Row Key Explained</h3><ul>
+        <li><strong>Partition Key:</strong> Determines which logical partition (physical storage node) an entity goes to. All entities with the same Partition Key are co-located = intra-partition queries are very fast.</li>
+        <li><strong>Row Key:</strong> Primary key within a partition — must be unique within its partition. Combined with Partition Key, it uniquely identifies every entity in the table.</li>
+        <li><strong>Composite Key Rule:</strong> PartitionKey + RowKey together must be globally unique across the entire table.</li>
+        <li><strong>Best Practice:</strong> For a multi-tenant app: PartitionKey = TenantID, RowKey = EntityID. All tenant data is co-located → lightning fast tenant-scoped queries.</li>
+      </ul></div>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="int" data-topic="storage">
+    <button class="acc-h" onclick="iqAcc(this,31)"><h4>Q31. What is HTAP and how does it relate to Cosmos DB? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(245,158,11,.15);color:var(--orange);font-weight:700;margin-left:.5rem;">Intermediate</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-31">
+      <p><strong>HTAP = Hybrid Transactional Analytical Processing</strong> — using the same data source for BOTH real-time transactional writes AND analytical queries without impacting each other.</p>
+      <br/><p>Cosmos DB enables HTAP via <strong>Synapse Link (Analytical Store)</strong>: automatically syncs operational Cosmos DB data to a columnar analytical copy → analytics run on the copy, production app is completely unaffected. Zero ETL pipeline needed. Near-real-time analytics freshness.</p>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="int" data-topic="eventhubs">
+    <button class="acc-h" onclick="iqAcc(this,40)"><h4>Q40. How is Azure Event Hubs similar to Apache Kafka? Key difference? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(245,158,11,.15);color:var(--orange);font-weight:700;margin-left:.5rem;">Intermediate</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-40">
+      <div class="compare">
+        <div class="compare-card left" style="border-color:rgba(0,120,212,.4);"><h3 style="color:var(--blue);">⚡ Azure Event Hubs</h3><ul>
+          <li><span class="tick">✓</span> Fully managed by Azure — zero ops overhead</li>
+          <li><span class="tick">✓</span> Kafka-compatible endpoint built-in</li>
+          <li><span class="tick">✓</span> Auto-scaling throughput units</li>
+          <li><span class="tick">✓</span> ADLS capture, Databricks integration</li>
+        </ul></div>
+        <div class="compare-card right" style="border-color:rgba(245,158,11,.4);"><h3 style="color:var(--orange);">🔄 Apache Kafka (Self-Managed)</h3><ul>
+          <li><span class="tick">✓</span> Open-source, maximum control</li>
+          <li><span class="tick">✓</span> Richer ecosystem, more plugins</li>
+          <li><span class="cross">✗</span> You manage brokers, ZooKeeper, scaling</li>
+          <li><span class="cross">✗</span> Significant operational overhead</li>
+        </ul></div>
+      </div>
+      <div class="ibox ib-green"><div class="ib-icon">🎯</div><div class="ib-body"><h4>Interview Answer</h4><p>"Both are distributed event streaming platforms supporting consumer groups and message retention. Event Hubs provides a Kafka-compatible endpoint — Kafka clients work without code changes. Key difference: Kafka requires you to manage all infrastructure. Event Hubs is fully managed — zero ops overhead."</p></div></div>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="int" data-topic="eventhubs">
+    <button class="acc-h" onclick="iqAcc(this,41)"><h4>Q41. What is a Partition in Azure Event Hubs? Why does it matter? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(245,158,11,.15);color:var(--orange);font-weight:700;margin-left:.5rem;">Intermediate</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-41">
+      <p>A <strong>Partition is a sub-division of an Event Hub for parallel processing</strong>. Each partition is an ordered, immutable log of events. Each consumer reads from its assigned partition independently — more partitions = higher throughput = more parallel consumers.</p>
+      <br/><div class="ibox ib-red"><div class="ib-icon">⚠️</div><div class="ib-body"><h4>Critical: Partition Count Cannot Be Changed Later!</h4><p>Partition count is set at Event Hub creation and CANNOT be increased in most tiers. Plan capacity upfront. For 10 parallel consumers, you need at least 10 partitions. This is a common production bottleneck for teams that started with too few partitions.</p></div></div>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="int" data-topic="eventhubs">
+    <button class="acc-h" onclick="iqAcc(this,42)"><h4>Q42. What is Azure Stream Analytics and how does it integrate with Event Hubs? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(245,158,11,.15);color:var(--orange);font-weight:700;margin-left:.5rem;">Intermediate</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-42">
+      <p><strong>Azure Stream Analytics</strong> is a real-time analytics service that processes streaming data using SQL-like queries with time-windowing functions. It acts as the consumer of Event Hubs data.</p>
+      <br/>
+      <div class="flow" style="flex-wrap:wrap;gap:.8rem;justify-content:center;">
+        <div class="fn fn-blue">⚡ Event Hubs<br/><small>Ingestion layer</small></div>
+        <div class="fa">→</div>
+        <div class="fn fn-cyan">🔬 Stream Analytics<br/><small>SQL queries<br/>Tumbling/Sliding Windows<br/>Real-time aggregations</small></div>
+        <div class="fa">→</div>
+        <div style="display:flex;flex-direction:column;gap:.3rem;">
+          <div class="fn fn-green" style="font-size:.75rem;">🌌 Cosmos DB</div>
+          <div class="fn fn-green" style="font-size:.75rem;">🗄️ SQL Database</div>
+          <div class="fn fn-green" style="font-size:.75rem;">📊 Power BI RT</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div><!-- /eventhubs section -->
+
+  <!-- ═══ SYNAPSE ANALYTICS ═══ -->
+  <div class="iq-section" data-topic="synapse">
+  <div class="divider"><span>🔬 Synapse Analytics (Q43–Q45, Q48–Q50)</span></div>
+
+  <div class="acc iq-card" data-level="int" data-topic="synapse">
+    <button class="acc-h" onclick="iqAcc(this,43)"><h4>Q43. What is Azure Synapse Analytics? Give the simple formula. <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(245,158,11,.15);color:var(--orange);font-weight:700;margin-left:.5rem;">Intermediate ⭐ Classic</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-43">
+      <div class="formula"><span>ADF (Pipelines)</span> &nbsp;+&nbsp; <span>Apache Spark Notebooks</span> &nbsp;+&nbsp; <span>SQL Data Warehouse</span> &nbsp;= <span class="eq">Azure Synapse Analytics</span></div>
+      <br/><p>Azure Synapse Analytics is an <strong>integrated analytics platform</strong> that unifies data integration, big data processing, and data warehousing in a single workspace (Synapse Studio). No separate resources — one workspace for everything.</p>
+      <br/>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;">
+        <div class="fn fn-blue" style="padding:1rem;text-align:center;">🔄 Synapse Pipelines<br/><small>Full ADF capabilities built-in</small></div>
+        <div class="fn fn-purple" style="padding:1rem;text-align:center;">⚡ Apache Spark Pool<br/><small>PySpark notebooks, auto-pause</small></div>
+        <div class="fn fn-cyan" style="padding:1rem;text-align:center;">🔍 Serverless SQL Pool<br/><small>Query Data Lake with T-SQL, pay/TB</small></div>
+        <div class="fn fn-green" style="padding:1rem;text-align:center;">🏋️ Dedicated SQL Pool<br/><small>MPP Data Warehouse (DWUs)</small></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="int" data-topic="synapse">
+    <button class="acc-h" onclick="iqAcc(this,44)"><h4>Q44. What is the difference between Dedicated SQL Pool and Serverless SQL Pool? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(245,158,11,.15);color:var(--orange);font-weight:700;margin-left:.5rem;">Intermediate ⭐ Very Frequently Asked</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-44">
+      <div class="tw"><table><thead><tr><th>Feature</th><th>Serverless SQL Pool</th><th>Dedicated SQL Pool</th></tr></thead><tbody>
+        <tr><td>Billing</td><td>💲 Per TB scanned (~$5/TB)</td><td>💲💲💲 Per DWU-hour (billed even when idle!)</td></tr>
+        <tr><td>Data Location</td><td>Files stay in Data Lake (ADLS)</td><td>Data loaded into warehouse storage</td></tr>
+        <tr><td>Schema</td><td>Schema-on-read (at query time)</td><td>Schema-on-write (defined upfront)</td></tr>
+        <tr><td>Performance</td><td>Good for ad-hoc, exploration</td><td>Optimal for repeated BI dashboard queries</td></tr>
+        <tr><td>Best For</td><td>Lakehouse pattern, infrequent exploration</td><td>Production Power BI dashboards</td></tr>
+      </tbody></table></div>
+      <div class="ibox ib-red"><div class="ib-icon">💰</div><div class="ib-body"><h4>⚠️ Always Pause Dedicated SQL Pool!</h4><p>Dedicated SQL Pool bills per DWU-hour EVEN WHEN IDLE. An idle DW1000c costs ~$2,400/month. <strong>Always pause after use during learning and non-business hours.</strong> Serverless SQL Pool has zero idle cost.</p></div></div>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="int" data-topic="synapse">
+    <button class="acc-h" onclick="iqAcc(this,45)"><h4>Q45. What was the Dedicated SQL Pool called before Synapse Analytics? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(245,158,11,.15);color:var(--orange);font-weight:700;margin-left:.5rem;">Intermediate</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-45">
+      <p>It was called <strong>SQL Data Warehouse (Azure SQL DW)</strong>. Microsoft rebranded and integrated it into Azure Synapse Analytics as "Dedicated SQL Pool."</p>
+      <br/><div class="kp"><h3>📌 Dedicated SQL Pool Architecture — Key Concepts</h3><ul>
+        <li><strong>MPP (Massively Parallel Processing):</strong> Queries split across 60 compute nodes working simultaneously → dramatically faster analytics on large datasets.</li>
+        <li><strong>DWU (Data Warehouse Units):</strong> Combined measure of CPU + RAM + IO per node. Scale from DW100c to DW30000c. Billing stops completely when paused.</li>
+        <li><strong>Distribution Strategies:</strong> Hash (large join tables), Round-Robin (staging tables), Replicated (small &lt;2GB dimension tables).</li>
+        <li><strong>Clustered Columnstore Index:</strong> Default index type. Data stored column-by-column → 5-10x faster analytics + 5-10x storage compression vs row-based storage.</li>
+      </ul></div>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="int" data-topic="synapse">
+    <button class="acc-h" onclick="iqAcc(this,48)"><h4>Q48. What are the three ways to store unstructured data in Azure? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(245,158,11,.15);color:var(--orange);font-weight:700;margin-left:.5rem;">Intermediate</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-48">
+      <div class="tw"><table><thead><tr><th>Storage Type</th><th>Azure Service</th><th>Protocol</th><th>Use Case</th></tr></thead><tbody>
+        <tr><td><strong style="color:var(--blue);">Block (Disk)</strong></td><td>Azure Managed Disks</td><td>Attached to VMs</td><td>VM OS disks, database files — not used in data engineering directly</td></tr>
+        <tr><td><strong style="color:var(--cyan);">Object (Blob)</strong></td><td>Azure Blob Storage / ADLS Gen2</td><td>HTTP/HTTPS REST API</td><td>Data lakes, CSV/Parquet/JSON files, images, logs — primary data engineering storage</td></tr>
+        <tr><td><strong style="color:var(--orange);">File (Share)</strong></td><td>Azure File Share</td><td>SMB / NFS protocol</td><td>Shared config files, lift-and-shift on-prem file servers, mount as Z:\ network drive</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="int" data-topic="synapse">
+    <button class="acc-h" onclick="iqAcc(this,49)"><h4>Q49. What is Synapse Link and what problem does it solve? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(245,158,11,.15);color:var(--orange);font-weight:700;margin-left:.5rem;">Intermediate</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-49">
+      <p><strong>Synapse Link (Cosmos DB Analytical Store)</strong> is a zero-ETL integration between Cosmos DB and Synapse Analytics. It automatically syncs operational Cosmos DB data to a columnar analytical store in near-real-time without impacting app performance.</p>
+      <br/>
+      <div class="flow" style="flex-wrap:wrap;gap:.8rem;justify-content:center;">
+        <div class="fn fn-blue">📱 Application<br/><small>Writes to Cosmos DB<br/>in real-time</small></div>
+        <div class="fa">→</div>
+        <div class="fn fn-cyan">🌌 Cosmos DB<br/><small>Transactional (row store)</small></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:.2rem;"><div style="font-size:.68rem;color:var(--t3);">auto-sync (zero ETL)</div><div class="fa">→</div></div>
+        <div class="fn fn-purple">📊 Analytical Store<br/><small>Columnar copy<br/>No RU impact on app</small></div>
+        <div class="fa">→</div>
+        <div class="fn fn-green">🔬 Synapse<br/><small>T-SQL / Spark queries</small></div>
+      </div>
+      <br/><div class="ibox ib-green"><div class="ib-icon">💡</div><div class="ib-body"><h4>Problem Solved — HTAP without ETL</h4><p>Running heavy analytical queries directly on Cosmos DB consumes all its RU/s and slows down your application. Synapse Link creates a separate columnar analytical copy automatically — analytics run on the copy, production app is completely unaffected.</p></div></div>
+    </div>
+  </div>
+
+  <div class="acc iq-card" data-level="int" data-topic="synapse">
+    <button class="acc-h" onclick="iqAcc(this,50)"><h4>Q50. What is Microsoft Fabric and how does it differ from Synapse Analytics? <span style="float:right;font-size:.68rem;padding:.2rem .6rem;border-radius:100px;background:rgba(245,158,11,.15);color:var(--orange);font-weight:700;margin-left:.5rem;">Intermediate — Future Trend</span></h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b" id="iq-body-50">
+      <p><strong>Microsoft Fabric</strong> is an all-in-one SaaS analytics platform from Microsoft that includes data integration, data engineering, warehousing, data science, real-time analytics, and Power BI — all in one unified experience.</p>
+      <br/>
+      <div class="compare">
+        <div class="compare-card left" style="border-color:rgba(0,120,212,.4);"><h3 style="color:var(--blue);">🔬 Azure Synapse (PaaS)</h3><ul>
+          <li><span class="tick">✓</span> Mature, battle-tested, widely adopted</li>
+          <li><span class="tick">✓</span> Fine-grained compute control (DWUs)</li>
+          <li><span class="cross">✗</span> Multiple services to configure</li>
+          <li><em>Today's enterprise standard</em></li>
+        </ul></div>
+        <div class="compare-card right" style="border-color:rgba(16,185,129,.4);"><h3 style="color:var(--green);">🌟 Microsoft Fabric (SaaS)</h3><ul>
+          <li><span class="tick">✓</span> Fully SaaS — Microsoft manages everything</li>
+          <li><span class="tick">✓</span> One unified product: Spark + SQL + Power BI</li>
+          <li><span class="tick">✓</span> OneLake — single data lake for entire org</li>
+          <li><em>Microsoft's future direction</em></li>
+        </ul></div>
+      </div>
+      <div class="ibox ib-orange"><div class="ib-icon">🚀</div><div class="ib-body"><h4>Interview Answer</h4><p>"Synapse is PaaS — you control the compute. Fabric is SaaS — Microsoft manages everything. Fabric is Microsoft's strategic direction and positioned as the future. For career planning: master Synapse today, keep learning Fabric for tomorrow."</p></div></div>
+    </div>
+  </div>
+  </div><!-- /synapse section -->
+
 </section>
 
 <!-- ══════════════════════════════════════════════
@@ -2557,13 +3191,13 @@ producer = EventHubProducerClient.from_connection_string(
 <footer>
   <div style="font-size:2rem;margin-bottom:.75rem;">☁️</div>
   <div style="font-weight:800;color:var(--t1);margin-bottom:.4rem;font-size:1.1rem;">Azure Data Engineering — Complete Study Guide 2025</div>
-  <div style="margin-bottom:1rem;">Compiled from 3-hour YouTube tutorial transcription • Expanded with Interview Q&amp;A, Security, and Quick Reference</div>
+  <div style="margin-bottom:1rem;">Compiled from 3-hour YouTube tutorial transcription • Expanded with 50 Interview Q&amp;As, diagrams, Security &amp; Quick Reference</div>
   <div style="display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;color:var(--t2);">
     <span>📘 14 Chapters</span>
+    <span>🎤 50 Interview Q&amp;As</span>
     <span>🛠️ 40+ Hands-on Steps</span>
     <span>💻 20+ Code Examples</span>
-    <span>🗺️ 25+ Diagrams</span>
-    <span>🎤 18 Interview Q&amp;As</span>
+    <span>🗺️ 30+ Diagrams</span>
     <span>📋 Quick Ref Cheat Sheet</span>
   </div>
 </footer>
@@ -2600,12 +3234,68 @@ const io = new IntersectionObserver(entries=>{
 },{threshold:.25});
 secs.forEach(s=>io.observe(s));
 
-// Accordion
+// Accordion (general)
 function acc(header){
   const body=header.nextElementSibling;
   const wasOpen=header.classList.contains('open');
-  document.querySelectorAll('.acc-h').forEach(h=>{h.classList.remove('open');h.nextElementSibling.classList.remove('open');});
+  // only close non-iq accordions
+  document.querySelectorAll('.acc-h:not(.iq-acc-h)').forEach(h=>{h.classList.remove('open');if(h.nextElementSibling)h.nextElementSibling.classList.remove('open');});
   if(!wasOpen){header.classList.add('open');body.classList.add('open');}
+}
+
+// Interview Q&A — accordion per question
+const iqViewed = new Set();
+function iqAcc(header, n){
+  const bodyId = 'iq-body-'+n;
+  const body = document.getElementById(bodyId);
+  if(!body) return;
+  const wasOpen = body.classList.contains('open');
+  body.classList.toggle('open', !wasOpen);
+  header.classList.toggle('open', !wasOpen);
+  const icon = header.querySelector('.acc-icon');
+  if(icon) icon.style.transform = !wasOpen ? 'rotate(180deg)' : '';
+  if(!wasOpen){ iqViewed.add(n); iqUpdateProgress(); }
+}
+
+function iqUpdateProgress(){
+  const v = iqViewed.size;
+  const tot = document.querySelectorAll('.iq-card:not([style*="display:none"]),.iq-card:not(.iq-hidden)').length || 50;
+  const el = document.getElementById('iq-viewed');
+  const bar = document.getElementById('iq-prog-bar');
+  const txt = document.getElementById('iq-prog-txt');
+  if(el) el.textContent = v;
+  if(bar) bar.style.width = Math.round(v/50*100)+'%';
+  if(txt) txt.textContent = v+' of 50 answers revealed';
+}
+
+function iqFilter(f, btn){
+  // Update button styles
+  document.querySelectorAll('[id^="iqf-"]').forEach(b=>{
+    b.className = b.id === 'iqf-'+f ? 'btn1' : 'btn2';
+    b.style.padding = '.4rem 1rem';
+    b.style.fontSize = '.75rem';
+  });
+  // Show/hide cards
+  document.querySelectorAll('.iq-card').forEach(card=>{
+    const lvl = card.dataset.level;
+    const topic = card.dataset.topic;
+    let show = false;
+    if(f==='all') show = true;
+    else if(f==='beg') show = lvl==='beg';
+    else if(f==='int') show = lvl==='int';
+    else show = topic===f;
+    card.style.display = show ? '' : 'none';
+  });
+  // Show/hide section dividers
+  document.querySelectorAll('.iq-section').forEach(sec=>{
+    const topic = sec.dataset.topic;
+    const visible = f==='all' || f==='beg' || f==='int' || f===topic;
+    sec.style.display = visible ? '' : 'none';
+  });
+  // Update total count
+  const visible = document.querySelectorAll('.iq-card:not([style*="display:none"])').length;
+  const el = document.getElementById('iq-total');
+  if(el) el.textContent = visible;
 }
 
 // Sidebar mobile
