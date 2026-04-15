@@ -1,0 +1,1675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="theme-color" content="#060913"/>
+<title>AML Detection System — Mobile First Book</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg-main: #060913;
+    --bg-sidebar: #0f1524;
+    --surface: #171d2b;
+    --accent: #60a5fa;
+    --accent-glow: rgba(96, 165, 250, 0.4);
+    --gold: #fbbf24;
+    --text-main: #cbd5e1;
+    --text-heading: #f8fafc;
+    --border: rgba(255, 255, 255, 0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  body { 
+    background: var(--bg-main); color: var(--text-main); 
+    font-family: 'Inter', sans-serif; line-height: 1.7;
+    display: flex; overflow-x: hidden; width: 100vw;
+  }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .mobile-topbar {
+    display: none; position: fixed; top: 0; left: 0; right: 0; height: 60px;
+    background: rgba(15, 21, 36, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    z-index: 2000; border-bottom: 1px solid var(--border); align-items: center; padding: 0 20px; justify-content: space-between;
+  }
+  .menu-btn { background: none; border: none; color: #fff; font-size: 28px; cursor: pointer; padding: 5px; transition: transform 0.2s; }
+  .menu-btn:active { transform: scale(0.9); }
+  .mobile-title { color: #fff; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 1.1rem; letter-spacing: 1px; }
+
+  .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 1000; opacity: 0; transition: opacity 0.3s; }
+
+  .sidebar { width: 320px; height: 100vh; position: fixed; top: 0; left: 0; background: var(--bg-sidebar); border-right: 1px solid var(--border); padding: 40px 20px 100px; overflow-y: auto; z-index: 1001; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+  .sidebar-title { font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 700; color: #fff; margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
+  .toc-item a { text-decoration: none; color: #94a3b8; font-size: 0.9rem; display: block; padding: 10px 12px; border-radius: 8px; transition: 0.2s; }
+  .toc-level-1 a { font-weight: 600; color: var(--text-heading); margin-top: 15px; font-family: 'Outfit', sans-serif; font-size: 1rem; }
+  .toc-level-2 a { font-size: 0.85rem; padding-left: 20px; }
+  .toc-item a:hover, .toc-item a:active { background: rgba(96, 165, 250, 0.1); color: var(--accent); }
+
+  .main-content { margin-left: 320px; flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; position: relative; }
+  
+  .ambient-glow { position: absolute; top: 5%; left: 50%; transform: translateX(-50%); width: 600px; height: 600px; background: radial-gradient(circle, rgba(96, 165, 250, 0.15) 0%, rgba(0,0,0,0) 70%); pointer-events: none; z-index: -1; border-radius: 50%; }
+
+  .title-page { width: 100%; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 5%; }
+  .title-badge { background: rgba(96, 165, 250, 0.1); border: 1px solid var(--accent); color: var(--accent); font-family: 'Outfit', sans-serif; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; padding: 8px 20px; border-radius: 30px; margin-bottom: 25px; box-shadow: 0 0 20px var(--accent-glow); }
+  .title-page h1 { font-family: 'Outfit', sans-serif; font-size: clamp(2.2rem, 7vw, 4.5rem); font-weight: 800; line-height: 1.15; color: #fff; max-width: 900px; margin-bottom: 20px; }
+  .title-page .subtitle { font-size: clamp(1rem, 3vw, 1.15rem); color: #94a3b8; max-width: 600px; }
+  
+  .problem-card { background: rgba(23, 29, 43, 0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border); border-left: 4px solid var(--gold); border-radius: 16px; padding: 30px; max-width: 800px; text-align: left; margin-top: 40px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); width: 100%; }
+  .problem-card h2 { font-family: 'Outfit', sans-serif; color: var(--gold); margin-bottom: 15px; font-size: 1.1rem; letter-spacing: 1px; text-transform: uppercase; }
+
+  .chapter { width: 100%; max-width: 850px; padding: 60px 5%; border-top: 1px solid var(--border); }
+  .chapter-header { margin-bottom: 30px; }
+  .chapter-label { font-family: 'Outfit', sans-serif; font-size: 0.8rem; letter-spacing: 3px; color: var(--accent); text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 8px; }
+  .chapter-main-title { font-family: 'Outfit', sans-serif; font-size: clamp(2rem, 6vw, 2.8rem); color: #ffffff; font-weight: 700; line-height: 1.2; }
+  
+  .chapter-body h1 { font-family: 'Outfit', sans-serif; font-size: clamp(1.5rem, 5vw, 1.8rem); color: #fff; margin: 40px 0 20px; line-height: 1.3; }
+  .chapter-body h2 { font-family: 'Outfit', sans-serif; font-size: clamp(1.3rem, 4vw, 1.5rem); color: var(--accent); margin: 35px 0 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; line-height: 1.3; }
+  .chapter-body h3 { font-family: 'Outfit', sans-serif; font-size: 1.15rem; color: var(--gold); margin: 25px 0 10px; }
+  .chapter-body p { margin-bottom: 20px; font-size: clamp(1rem, 2.5vw, 1.05rem); color: #cbd5e1; }
+  .chapter-body ul, .chapter-body ol { margin: 20px 0 20px 20px; color: #cbd5e1; font-size: clamp(1rem, 2.5vw, 1.05rem); }
+  .chapter-body li { margin-bottom: 12px; }
+  .chapter-body strong { color: #ffffff; font-weight: 600; }
+  .inline-code { font-family: 'Fira Code', monospace; color: #93c5fd; background: rgba(96, 165, 250, 0.15); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; word-break: break-word; }
+  
+  .code-wrapper { width: 100%; overflow-x: auto; background: #0a0d14; border: 1px solid var(--border); border-radius: 12px; margin: 25px 0; }
+  .chapter-body pre { padding: 20px; margin: 0; display: inline-block; min-width: 100%; }
+  .chapter-body pre code { font-family: 'Fira Code', monospace; font-size: 0.85rem; color: #e2e8f0; line-height: 1.5; }
+
+  .table-responsive { width: 100%; overflow-x: auto; margin: 25px 0; border: 1px solid var(--border); border-radius: 12px; -webkit-overflow-scrolling: touch; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+  table { width: 100%; min-width: 600px; border-collapse: collapse; }
+  th { background: var(--surface); color: var(--accent); padding: 14px 16px; text-align: left; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.95rem; }
+  td { padding: 12px 16px; border-top: 1px solid var(--border); color: #94a3b8; font-size: 0.95rem; }
+  tr:hover td { background: rgba(255,255,255,0.02); color: #fff; }
+
+  .mermaid { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin: 35px 0; overflow-x: auto; -webkit-overflow-scrolling: touch; display: flex; justify-content: center; width: 100%; }
+  .mermaid svg { max-width: 100% !important; height: auto !important; }
+
+  @media (max-width: 950px) {
+    .sidebar { transform: translateX(-100%); width: 300px; padding-top: 80px; box-shadow: 5px 0 25px rgba(0,0,0,0.5); }
+    .sidebar.open { transform: translateX(0); }
+    .sidebar-overlay.open { display: block; opacity: 1; }
+    
+    .mobile-topbar { display: flex; }
+    .main-content { margin-left: 0; padding-top: 60px; width: 100%; }
+    
+    .title-page { min-height: calc(100vh - 60px); padding-top: 40px; }
+    .ambient-glow { width: 300px; height: 300px; }
+    .problem-card { padding: 25px 20px; margin-top: 30px; }
+    
+    .chapter { padding: 50px 20px; border-top: none; position: relative; }
+    .chapter::before { content: ''; position: absolute; top: 0; left: 20px; right: 20px; height: 1px; background: var(--border); }
+    
+    th, td { padding: 12px 14px; font-size: 0.9rem; }
+  }
+  
+  @media (max-width: 380px) {
+    .chapter-main-title { font-size: 1.8rem; }
+    .sidebar { width: 280px; }
+  }
+</style>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#0f172a; --card:#1e293b; --accent:#8b5cf6; --accent2:#a78bfa; --text:#f8fafc; --muted:#94a3b8; --border:#334155; }
+  body,html { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); }
+
+  .hero { text-align:center; padding:5rem 1.5rem 3rem; }
+  .hero-badge { display:inline-block; background:rgba(139,92,246,0.12); color:var(--accent2); padding:8px 20px; border-radius:20px; font-weight:600; font-size:0.85rem; border:1px solid rgba(139,92,246,0.25); margin-bottom:1.2rem; letter-spacing:0.5px; }
+  .hero h1 { font-size:clamp(2.2rem,5vw,3.5rem); font-weight:800; background:linear-gradient(135deg,#fff 30%,#a78bfa 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:1rem; line-height:1.2; }
+  .hero p { color:var(--muted); font-size:1.05rem; max-width:650px; margin:0 auto 2rem; line-height:1.6; }
+  .hero-btns button { padding:10px 22px; border-radius:10px; font-weight:600; font-size:0.9rem; cursor:pointer; border:none; margin:0 6px; transition:all 0.2s; }
+  .hero-btns .btn-primary { background:var(--accent); color:#fff; }
+  .hero-btns .btn-primary:hover { background:var(--accent2); transform:translateY(-1px); }
+  .hero-btns .btn-outline { background:transparent; color:var(--muted); border:1px solid var(--border); }
+  .hero-btns .btn-outline:hover { border-color:var(--accent); color:var(--accent2); }
+
+  .topic-section { max-width:880px; margin:0 auto 5rem; padding:0 1rem; }
+  .topic-header { text-align:center; margin-bottom:2.5rem; }
+  .topic-label { color:var(--accent); font-weight:700; font-size:0.95rem; text-transform:uppercase; letter-spacing:2px; }
+  .topic-title { font-size:clamp(1.6rem,4vw,2.2rem); font-weight:700; color:#fff; margin-top:0.5rem; }
+  .topic-line { width:80px; height:3px; background:linear-gradient(to right,var(--accent),transparent); margin:1rem auto 0; border-radius:2px; }
+
+  .qa { background:var(--card); border:1px solid var(--border); border-radius:14px; margin-bottom:10px; overflow:hidden; transition:all 0.25s ease; }
+  .qa:hover { border-color:rgba(139,92,246,0.35); box-shadow:0 8px 25px rgba(0,0,0,0.15); }
+  .qa.open { border-color:rgba(139,92,246,0.5); }
+  .qa-q { width:100%; text-align:left; background:transparent; border:none; padding:1.15rem 1.4rem; font-size:1rem; font-weight:600; color:var(--text); cursor:pointer; display:flex; justify-content:space-between; align-items:flex-start; gap:12px; font-family:'Inter',sans-serif; line-height:1.5; }
+  .qa-q:hover { color:var(--accent2); }
+  .qa-arrow { color:var(--accent); font-size:0.8rem; transition:transform 0.3s; min-width:18px; margin-top:4px; }
+  .qa.open .qa-arrow { transform:rotate(180deg); }
+
+  .qa-a { max-height:0; overflow:hidden; transition:max-height 0.4s ease; }
+  .qa.open .qa-a { max-height:5000px; }
+  .qa-a-inner { padding:0 1.4rem 1.4rem; color:var(--muted); font-size:0.93rem; line-height:1.7; }
+  .qa-a-inner p { margin:0.6rem 0; }
+  .qa-a-inner ul { margin:0.5rem 0 0.8rem 1.2rem; padding:0; }
+  .qa-a-inner li { margin-bottom:0.4rem; }
+  .qa-a-inner strong { color:var(--text); }
+  .qa-a-inner code { background:#0f172a; color:#38bdf8; padding:2px 7px; border-radius:5px; font-size:0.88em; border:1px solid #1e3a5f; }
+  .qa-a-inner pre { margin:0.8rem 0; border-radius:10px; overflow-x:auto; }
+  .qa-a-inner pre code { display:block; padding:1rem 1.2rem; background:#0c1222; color:#e2e8f0; border:1px solid var(--border); font-size:0.85rem; line-height:1.5; }
+  .qa-a-inner hr { border:none; border-top:1px solid var(--border); margin:1rem 0; }
+
+  .qa-a-inner table { width:100%; border-collapse:collapse; margin:0.8rem 0; font-size:0.88rem; }
+  .qa-a-inner th { background:rgba(139,92,246,0.12); color:var(--accent2); padding:10px 12px; text-align:left; border:1px solid var(--border); font-weight:600; }
+  .qa-a-inner td { padding:8px 12px; border:1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<div class="mobile-topbar">
+  <div class="mobile-title">AML Docs</div>
+  <button class="menu-btn" onclick="toggleMenu()" aria-label="Toggle Menu">☰</button>
+</div>
+
+<div class="sidebar-overlay" onclick="closeMenu()"></div>
+
+<nav class="sidebar" id="sidebar">
+<div style="margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:15px;">
+<a href="index.html" style="color:var(--muted);text-decoration:none;font-size:0.85rem;display:block;padding:10px;background:rgba(255,255,255,0.04);border-radius:8px;transition:0.2s;">⬅ Back to Project Docs</a>
+</div>
+<div class="sidebar-title" style="color:#fff;font-size:1rem;">📚 200 Interview Questions</div>
+<div style="font-size:0.78rem;color:var(--muted);margin-bottom:1.5rem;">Project-Specific • Simple Language</div>
+<div class="toc-item toc-level-1"><a href="#t1" onclick="closeMenu()"><span style="color:var(--accent);font-weight:700;">Q1–Q50</span><br/>Project Overview & End-to-End Workflow</a></div>
+<div class="toc-item toc-level-1"><a href="#t2" onclick="closeMenu()"><span style="color:var(--accent);font-weight:700;">Q51–Q100</span><br/>Machine Learning & Data Engineering</a></div>
+<div class="toc-item toc-level-1"><a href="#t3" onclick="closeMenu()"><span style="color:var(--accent);font-weight:700;">Q101–Q150</span><br/>RAG Pipeline, LLM & Embeddings</a></div>
+<div class="toc-item toc-level-1"><a href="#t4" onclick="closeMenu()"><span style="color:var(--accent);font-weight:700;">Q151–Q200</span><br/>AML Domain, PMLA & System Design</a></div>
+</nav>
+<div class="main-content">
+<div class="ambient-glow" style="background:radial-gradient(ellipse at 50% 0%,rgba(139,92,246,0.12),transparent 65%);position:absolute;top:0;left:0;right:0;height:600px;pointer-events:none;"></div>
+<section class="hero">
+<div class="hero-badge">🎯 Project-Specific • Interview Ready</div>
+<h1>200 AML Project<br/>Interview Questions</h1>
+<p>Every question is directly grounded in your actual project code — <code>risk_engine.py</code>, <code>sar_generator.py</code>, <code>vector_store.py</code>, <code>views.py</code>. Answers are in simple interview language with diagrams.</p>
+<div class="hero-btns"><button class="btn-primary" onclick="expandAll()">📖 Expand All</button><button class="btn-outline" onclick="collapseAll()">📕 Collapse All</button></div>
+</section>
+
+<section id="t1" class="topic-section">
+  <div class="topic-header">
+    <div class="topic-label">Q1–Q50</div>
+    <h2 class="topic-title">Project Overview & End-to-End Workflow</h2>
+    <div class="topic-line"></div>
+  </div>
+  <div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q1. Can you tell me about your project?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>I built an <strong>AI-powered Anti-Money Laundering (AML) Detection System</strong>. It takes raw bank transaction data (CSV/Excel files), runs an <strong>Isolation Forest ML model</strong> to detect suspicious accounts, and then uses a <strong>RAG (Retrieval-Augmented Generation) pipeline</strong> to automatically generate legally compliant <strong>Suspicious Activity Reports (SARs)</strong> by referencing PMLA 2002 law documents. The frontend is React and backend is Python Django REST API.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q2. What problem does your project solve?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>In Indian banks, compliance officers manually review thousands of transactions every day looking for money laundering. This is slow, expensive, and error-prone. My system automates this — it mathematically identifies the top suspicious accounts in seconds and generates a draft legal report (SAR) in under 2 seconds using an LLM. What used to take 3-4 hours of human work now happens in seconds.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q3. Draw the complete architecture of your project.</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><div class="mermaid">
+graph TB
+    subgraph Frontend
+        A[React Dashboard]
+    end
+    subgraph Backend
+        B[Django REST API]
+        C[Background Thread]
+    end
+    subgraph ML Layer
+        D[RiskEngine - Isolation Forest]
+    end
+    subgraph RAG Layer
+        E[VectorStoreManager - FAISS]
+        F[SARGenerator - Groq LLM]
+    end
+    subgraph Storage
+        G[(SQLite Database)]
+        H[(FAISS Vector DB)]
+        I[PMLA PDF Documents]
+    end
+
+    A -->|POST /upload CSV| B
+    B -->|Spawns| C
+    C -->|Feeds DataFrame| D
+    D -->|Risk Scores + Patterns| C
+    C -->|bulk_create| G
+    A -->|POST /generate-sar| B
+    B -->|Fetches alert + transactions| G
+    B -->|Initializes| F
+    F -->|similarity_search| E
+    E -->|Reads embeddings from| H
+    I -->|Indexed into| H
+    F -->|Sends prompt to Groq| F
+    F -->|Returns SAR report| B
+    B -->|JSON Response| A
+</div></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q4. Walk me through what happens when a user uploads a CSV file, step by step.</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><ul>
+<li>The compliance officer uploads a CSV on the React dashboard.</li>
+<li>React sends a <code>POST /api/upload/</code> request with the file.</li>
+<li>In <code>views.py</code>, <code>UploadView</code> receives the file.</li>
+<li>It creates a <code>ProcessingTask</code> in the database with status <code>'Pending'</code> and a unique <code>task_id</code>.</li>
+<li>It spawns a <strong>background thread</strong> using <code>threading.Thread(target=background_process)</code>.</li>
+<li>It immediately returns <code>HTTP 202 Accepted</code> with the <code>task_id</code> — so the UI doesn't freeze.</li>
+<li>In the background thread:</li>
+<li>The file is read using <code>pd.read_csv(io.BytesIO(file_data))</code>.</li>
+<li>A <code>RiskEngine()</code> object is created.</li>
+<li><code>_map_columns()</code> normalizes the column names.</li>
+<li><code>_prepare_data()</code> cleans amounts (strips ₹, commas) and parses dates.</li>
+<li><code>extract_features_vectorized()</code> computes 4 behavioral features per account.</li>
+<li><code>analyze()</code> loads the pre-trained Isolation Forest model and scores all accounts.</li>
+<li>Scores are normalized to 0-100.</li>
+<li>Accounts scoring > 50 create <code>Alert</code> objects.</li>
+<li>Everything is saved to the database using <code>bulk_create()</code>.</li>
+<li>The frontend polls <code>GET /api/tasks/{task_id}/</code> every 2 seconds to check progress.</li>
+<li>When <code>task.status == 'Completed'</code>, the dashboard refreshes to show the new alerts.</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q5. Walk me through what happens when a user clicks "Generate SAR Report".</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><ul>
+<li>The React frontend sends <code>POST /api/alerts/{alert_id}/generate-sar/</code>.</li>
+<li>In <code>views.py</code>, <code>SARGenerationView</code> fetches the <code>Alert</code> and its linked <code>Account</code> from the database.</li>
+<li>It fetches the <strong>last 10 transactions</strong> for that account: <code>Transaction.objects.filter(account=account).order_by('-date_time')[:10]</code>.</li>
+<li>It formats these transactions into an <strong>evidence string</strong> like:</li>
+</ul>
+<code>- 2025-03-01: Deposit of ₹49500 involving ACC-202</code>
+<ul>
+<li>It initializes <code>SARGenerator(api_key=settings.GROQ_API_KEY)</code>.</li>
+<li>Inside <code>SARGenerator.__init__</code>:</li>
+<li>It creates a <code>ChatGroq</code> LLM connection (Llama-3.3-70b, temperature=0.1).</li>
+<li>It loads the <strong>FAISS vector database</strong> containing PMLA law embeddings.</li>
+<li>In <code>generate_report()</code>:</li>
+<li>A search query is built: <code>"Money laundering laws related to Structuring under PMLA 2002"</code>.</li>
+<li>FAISS retrieves the <strong>top 5 most relevant</strong> law paragraphs.</li>
+<li>A <code>ChatPromptTemplate</code> combines: System prompt + Evidence + Laws + Alert data.</li>
+<li>The chain <code>prompt | self.llm</code> sends everything to Groq's Llama-3.3 model.</li>
+<li>Groq returns a formatted Markdown SAR report in ~1.5 seconds.</li>
+<li>The API returns <code>{"report": "# SUSPICIOUS ACTIVITY REPORT..."}</code> to React.</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q6. Why did you choose Python for the backend?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Python has the richest ecosystem for ML and AI — Pandas, Scikit-Learn, LangChain, FAISS, HuggingFace all run natively in Python. Using Python means the ML pipeline and the API live in the same process with zero serialization overhead. Java or Go would require inter-process communication to talk to the ML models.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q7. What technologies/libraries did you use?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><table><tr><th>Layer</th><th>Technology</th><th>Purpose</th></tr><tr><td>Frontend</td><td>React.js</td><td>Dashboard UI</td></tr><tr><td>Backend API</td><td>Django REST Framework</td><td>REST endpoints</td></tr><tr><td>ML Model</td><td>Scikit-Learn (Isolation Forest)</td><td>Anomaly detection</td></tr><tr><td>Data Processing</td><td>Pandas, NumPy</td><td>Vectorized feature extraction</td></tr><tr><td>Vector Database</td><td>FAISS (Facebook AI)</td><td>Law document similarity search</td></tr><tr><td>Embeddings</td><td>HuggingFace all-MiniLM-L6-v2</td><td>Convert text to 384-dim vectors</td></tr><tr><td>LLM</td><td>Groq Cloud (Llama-3.3-70b)</td><td>Generate SAR reports</td></tr><tr><td>LLM Framework</td><td>LangChain</td><td>Chain prompts and LLM calls</td></tr><tr><td>Database</td><td>SQLite</td><td>Store accounts, alerts, transactions</td></tr></table>| Auth | JWT (Simple JWT) | Stateless authentication |</div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q8. What is REST API and how did you use it?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>REST (Representational State Transfer) is a way for two systems (frontend and backend) to talk using standard HTTP methods. In my project:</p>
+<ul>
+<li><code>POST /api/upload/</code> — uploads CSV file for analysis</li>
+<li><code>GET /api/alerts/</code> — retrieves all flagged suspicious accounts</li>
+<li><code>GET /api/alerts/stats/</code> — returns dashboard summary data (charts, counts)</li>
+<li><code>POST /api/alerts/{id}/generate-sar/</code> — triggers LLM to generate a SAR report</li>
+<li><code>GET /api/tasks/{id}/</code> — checks background processing status</li>
+</ul>
+<p>The frontend sends JSON, the backend returns JSON. They are completely decoupled — I could build a mobile app using the same API.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q9. What database models did you create?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Four models in <code>models.py</code>:</p>
+<ul>
+<li><strong>Account</strong> — Represents a bank account (account_id, name, total_transactions, risk_history as JSONField).</li>
+<li><strong>Alert</strong> — A suspicious finding (risk_score, type like "Structuring", priority as "Critical"/"High", linked to Account via ForeignKey).</li>
+<li><strong>Transaction</strong> — Individual bank transactions (amount, date_time, type, related_account, flag).</li>
+<li><strong>ProcessingTask</strong> — Tracks background processing status (task_id, status: Pending → Processing → Completed, progress percentage).</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q10. Why did you use a background thread for processing?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>If the ML analysis ran synchronously inside the API request, the HTTP connection would hang for 30-60 seconds while analyzing 50,000 rows. The browser would likely timeout. By spawning <code>threading.Thread(target=background_process)</code>, the API returns <code>HTTP 202</code> instantly, and the heavy computation runs in the background. The frontend polls for progress every 2 seconds.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q11. How does your system handle different CSV column formats?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>I wrote a column mapper in <code>_map_columns()</code> inside <code>risk_engine.py</code>. It has a dictionary like:</p>
+<pre><code>'account_id': ['account_id', 'account', 'acc no', 'customer id', 'id']
+'amount': ['amount', 'transaction amount', 'value', 'debit', 'credit']</code></pre>
+<p>It loops through the uploaded columns and matches them case-insensitively. So whether a bank sends "Acc No" or "Customer ID", the system maps it to our standard <code>account_id</code>. If required columns are missing, it raises a clear <code>ValueError</code>.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q12. How do you clean the transaction amounts?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>The <code>clean_amount()</code> function in <code>_prepare_data()</code> handles all edge cases:</p>
+<pre><code>def clean_amount(val):
+    if pd.isna(val): return 0.0
+    if isinstance(val, (int, float)): return float(val)
+    return float(str(val).replace('₹', '').replace(',', '').replace('$', ''))</code></pre>
+<p>It strips currency symbols (₹, $), removes commas (49,500 → 49500), handles NaN as 0.0, and returns a clean float for mathematical operations.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q13. How do you parse dates from different formats?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>In <code>_prepare_data()</code>:</p>
+<ul>
+<li>If both <code>date</code> and <code>time</code> columns exist: concatenate them and parse: <code>pd.to_datetime(dates + ' ' + times)</code>.</li>
+<li>If only <code>date</code> exists: parse directly: <code>pd.to_datetime(df['date'])</code>.</li>
+<li>If parsing fails: fallback with <code>errors='coerce'</code> which converts unparseable dates to <code>NaT</code> (Not a Time) instead of crashing.</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q14. What is JWT authentication and how did you implement it?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>JWT (JSON Web Token) is a stateless authentication method. When a user logs in, the server generates a signed token containing the user's ID. The frontend sends this token in every request header: <code>Authorization: Bearer <token></code>. The server verifies the mathematical signature without hitting the database. I used <code>djangorestframework-simplejwt</code> which generates both an Access Token (short-lived, 5 min) and a Refresh Token (long-lived, 24 hours).</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q15. How do you ensure one user can't see another user's data?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Every model has a <code>user = ForeignKey(User)</code> field. Every API query filters by the logged-in user:</p>
+<pre><code>def get_queryset(self):
+    return Account.objects.filter(user=self.request.user)</code></pre>
+<p>Even if someone guesses an alert_id, the query <code>Alert.objects.get(id=alert_id, user=request.user)</code> will return 404 because the <code>user</code> filter won't match.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q16. What is the file reading process for uploaded CSV/Excel?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>file_data = file_obj.read()  # Read raw bytes into RAM
+if filename.endswith('.csv'):
+    df = pd.read_csv(io.BytesIO(file_data))
+else:
+    df = pd.read_excel(io.BytesIO(file_data))</code></pre>
+<code>io.BytesIO()</code> wraps the raw bytes as an in-memory file-like object. Pandas reads directly from RAM without saving to disk — faster and more secure.</div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q17. What is `bulk_create()` and why did you use it?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Instead of saving 10,000 accounts one by one (10,000 SQL INSERT statements), <code>bulk_create()</code> packages them into a single SQL statement:</p>
+<pre><code>Account.objects.bulk_create(accounts_to_create.values())
+Alert.objects.bulk_create(alerts_to_create, batch_size=1000)</code></pre>
+<code>batch_size=1000</code> splits into chunks because SQLite has a max SQL statement length. This reduces insertion time from minutes to milliseconds.</div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q18. How do you prevent duplicate accounts on re-upload?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Before creating accounts, we pre-fetch all existing accounts for that user into a Python dictionary:</p>
+<pre><code>existing_accounts = {acc.account_id: acc for acc in Account.objects.filter(user=user)}</code></pre>
+<p>Then inside the loop: <code>if acc_id not in existing_accounts</code> — this is an O(1) dictionary lookup, not a database query. Only genuinely new accounts are created.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q19. What status codes does your API return?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><table><tr><th>Code</th><th>Where</th><th>Meaning</th></tr><tr><td>200</td><td>GET /alerts/</td><td>Successful data retrieval</td></tr><tr><td>201</td><td>POST /signup/</td><td>New user created</td></tr><tr><td>202</td><td>POST /upload/</td><td>File accepted for background processing</td></tr><tr><td>400</td><td>POST /signup/</td><td>Missing username or password</td></tr><tr><td>404</td><td>POST /generate-sar/</td><td>Alert not found for this user</td></tr></table>| 500 | POST /generate-sar/ | LLM or ML pipeline crashed |</div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q20. What happens if the background thread crashes?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>The entire <code>background_process()</code> function is wrapped in <code>try/except</code>:</p>
+<pre><code>except Exception as e:
+    task.status = 'Failed'
+    task.error_message = str(e)
+    task.save()</code></pre>
+<p>The task status changes to <code>'Failed'</code> and the error message is stored. The frontend polling sees <code>status: Failed</code> and displays the error to the user. The server itself never crashes.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q21. What is the `ProcessingTask` model and why is it needed?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>It tracks background job progress. Fields: <code>task_id</code> (UUID), <code>status</code> (Pending → Processing → Completed/Failed), <code>progress</code> (0-100%), <code>total_records</code>, <code>processed_records</code>. The API creates it immediately and the background thread updates it. The frontend polls <code>GET /api/tasks/{task_id}/</code> to show a progress bar.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q22. How does the progress bar work?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Inside the background loop, every 1000 records:</p>
+<pre><code>if i % 1000 == 0:
+    task.progress = int((i / total) * 100)
+    task.save()</code></pre>
+<p>The frontend hits <code>GET /api/tasks/{task_id}/</code> every 2 seconds. The response contains <code>{"progress": 45}</code>. React renders this as a progress bar filling from 0% to 100%.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q23. What are the main API endpoints?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><table><tr><th>Method</th><th>Endpoint</th><th>Action</th></tr><tr><td>POST</td><td>/api/upload/</td><td>Upload CSV for ML analysis</td></tr><tr><td>GET</td><td>/api/tasks/{id}/</td><td>Check processing status</td></tr><tr><td>GET</td><td>/api/accounts/</td><td>List all accounts</td></tr><tr><td>GET</td><td>/api/accounts/{id}/transactions/</td><td>Get transactions for an account</td></tr><tr><td>GET</td><td>/api/alerts/</td><td>List all suspicious alerts</td></tr><tr><td>GET</td><td>/api/alerts/stats/</td><td>Dashboard summary + charts data</td></tr><tr><td>POST</td><td>/api/alerts/{id}/generate-sar/</td><td>Generate SAR report via LLM</td></tr><tr><td>POST</td><td>/api/signup/</td><td>Register new user</td></tr></table>| POST | /api/auth/google/ | Google OAuth login |</div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q24. What is Google OAuth and how did you implement it?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Instead of creating passwords, users log in via their Google account. The React frontend gets a <code>token</code> from Google. It sends this to <code>POST /api/auth/google/</code>. In <code>views.py</code>, <code>GoogleLoginView</code> verifies the token using Google's public keys:</p>
+<pre><code>idinfo = id_token.verify_oauth2_token(token, requests.Request(), settings.GOOGLE_CLIENT_ID)</code></pre>
+<p>Then <code>User.objects.get_or_create(email=email)</code> either finds the existing user or creates a new one. JWT tokens are generated and returned.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q25. How is the alert severity (Critical/High) determined?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>priority = 'Critical' if res['riskScore'] > 90 else 'High'</code></pre>
+<p>Only accounts scoring above 50 get alerts at all. Among those, scores above 90 are marked "Critical" (red on the dashboard) and 50-90 are "High" (orange). This prioritization helps compliance officers focus on the most dangerous accounts first.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q26. What is the complete data pipeline from raw CSV to dashboard alert?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><div class="mermaid">
+graph TD
+    A[Raw CSV Upload] --> B[pd.read_csv into DataFrame]
+    B --> C[_map_columns: Normalize column names]
+    C --> D[_prepare_data: Clean amounts + Parse dates]
+    D --> E[extract_features_vectorized]
+    E --> F[4-Feature Matrix per Account]
+    F --> G[Isolation Forest scores all accounts]
+    G --> H[Min-Max Normalize to 0-100]
+    H --> I[Rule-based pattern tagging]
+    I --> J{Score > 50?}
+    J -->|Yes| K[Create Alert + Save to DB]
+    J -->|No| L[Create Account only]
+    K --> M[Dashboard displays alert]
+</div></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q27. What is the complete RAG pipeline for SAR generation?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><div class="mermaid">
+graph TD
+    A[User clicks Generate SAR] --> B[Fetch Alert + Account from DB]
+    B --> C[Fetch last 10 Transactions]
+    C --> D[Format evidence string]
+    D --> E[Build query from detected patterns]
+    E --> F[FAISS similarity_search k=5]
+    F --> G[Retrieve 5 relevant PMLA law paragraphs]
+    G --> H[Build ChatPromptTemplate]
+    H --> I["Chain: prompt | self.llm"]
+    I --> J[Groq Llama-3.3 generates SAR]
+    J --> K[Return Markdown report to React]
+</div></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q28. What data does the stats API endpoint return?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>The <code>GET /api/alerts/stats/</code> endpoint returns a single JSON with:</p>
+<ul>
+<li><code>critical_alerts</code>: Count of alerts with priority='Critical'</li>
+<li><code>flagged_accounts</code>: Count of distinct accounts with alerts</li>
+<li><code>suspicious_volume</code>: Total transaction volume of flagged accounts (formatted like "₹1.2M")</li>
+<li><code>detection_rate</code>: Percentage of accounts flagged (e.g., "5.4%")</li>
+<li><code>trend</code>: Array of {date, count} for the last 7 days (for the trend chart)</li>
+<li><code>distribution</code>: Array of {name, value} for each typology (for the pie chart)</li>
+<li><code>impact_feed</code>: The 5 most recent critical alerts (for the activity feed)</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q29. How does the typology distribution get calculated in the stats endpoint?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Each alert's <code>type</code> field can contain multiple typologies comma-separated: <code>"Structuring, Money Mule"</code>. Simple counting would treat this as one type. Instead, the code splits and counts each individually:</p>
+<pre><code>for t in typologies:
+    types = t['type'].split(', ')
+    for tp in types:
+        type_counts[tp] = type_counts.get(tp, 0) + 1</code></pre></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q30. What is `select_related('account')` and why is it important?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>In the stats endpoint: <code>Alert.objects.filter(...).select_related('account')[:5]</code>. Without it, accessing <code>alert.account.account_id</code> for 5 alerts fires 5 separate SQL queries (called the N+1 problem). <code>select_related</code> forces a SQL JOIN, fetching all data in one query. This is a critical performance optimization.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q31. How does the suspicious volume get calculated?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>volume_sum = Alert.objects.filter(user=request.user).aggregate(
+    total=Sum(Cast('amount', FloatField()))
+)['total'] or 0</code></pre>
+<p>Since <code>amount</code> is stored as a string (CharField), it must be <code>Cast()</code> to a float before summing. If the database cast fails (amounts contain ₹ symbols), a Python fallback manually strips symbols and sums.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q32. What is `ForeignKey` and how does it work in your models?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><code>Alert.account = models.ForeignKey(Account, on_delete=models.CASCADE)</code> means every Alert must belong to exactly one Account. <code>on_delete=CASCADE</code> means if an Account is deleted, all its Alerts are automatically deleted too. <code>related_name='alerts'</code> lets us do reverse lookups: <code>account.alerts.all()</code>.</div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q33. What is `JSONField` and where did you use it?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><code>Account.risk_history = models.JSONField(default=list)</code> stores a Python list/dict as JSON in the database. This is used for flexible, evolving data that doesn't fit a rigid table structure — like a history of risk scores over time: <code>[{"date": "2025-01-01", "score": 87}]</code>.</div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q34. Why is `unique_together = ('user', 'alert_id')` needed?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Two different users might generate alerts with coincidentally similar IDs. <code>unique_together</code> creates a compound database constraint: <code>alert_id</code> must only be unique within one user's data, not globally. This allows multi-tenant usage.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q35. How are alert IDs generated?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>alert_id = f"AL-{uuid.uuid4().hex[:10]}-{res['accountId']}"</code></pre>
+<code>uuid.uuid4()</code> generates a cryptographically random 128-bit identifier. <code>.hex[:10]</code> takes the first 10 hex characters. Combined with the account ID, this creates readable, unique, unguessable IDs like <code>AL-3f8a2b9c01-ACC101</code>.</div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q36. What Python libraries does your ML pipeline use?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><strong>Pandas</strong> — DataFrame operations, groupby, vectorized feature extraction
+<ul>
+<li><strong>NumPy</strong> — Raw array math for the feature matrix</li>
+<li><strong>Scikit-Learn</strong> — IsolationForest model training and scoring</li>
+<li><strong>Joblib</strong> — Serializing/deserializing the trained model to disk</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q37. What Python libraries does your RAG pipeline use?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><strong>LangChain</strong> — Orchestrates the prompt template and LLM chain
+<ul>
+<li><strong>langchain_groq</strong> — Groq API wrapper (ChatGroq class)</li>
+<li><strong>langchain_huggingface</strong> — Local embedding model wrapper</li>
+<li><strong>FAISS</strong> — Facebook's vector similarity search library</li>
+<li><strong>PyPDF</strong> — Extracts text from PMLA PDF documents</li>
+<li><strong>sentence-transformers</strong> — The embedding model (all-MiniLM-L6-v2)</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q38. What is the folder structure of your project?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>attempt/
+├── dashboard/
+│   ├── models.py          # Database models (Account, Alert, Transaction, ProcessingTask)
+│   ├── views.py           # REST API endpoints
+│   ├── serializers.py     # JSON serialization
+│   ├── urls.py            # URL routing
+│   ├── ml/
+│   │   ├── risk_engine.py # ML feature extraction + Isolation Forest
+│   │   └── models/
+│   │       └── isolation_forest.joblib  # Saved trained model
+│   └── rag/
+│       ├── utils/
+│       │   ├── sar_generator.py   # LLM prompt + SAR generation
+│       │   └── vector_store.py    # FAISS index creation/loading
+│       ├── knowledge_base/        # PMLA PDF documents
+│       └── vector_db/             # FAISS index files
+├── manage.py
+└── settings.py</code></pre></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q39. What type of data does your system process?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Bank transaction CSV files with columns like:</p>
+<table><tr><th>account_id</th><th>date</th><th>time</th><th>amount</th><th>type</th><th>related_account</th></tr><tr><td>ACC-101</td><td>2025-03-01</td><td>10:30</td><td>49500</td><td>Deposit</td><td>ACC-202</td></tr><tr><td>ACC-101</td><td>2025-03-01</td><td>14:00</td><td>49000</td><td>Withdrawal</td><td>ACC-303</td></tr></table>
+<p>Each row is one bank transaction. The file can have 1,000 to 100,000+ rows. The system groups these by account and extracts behavioral patterns.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q40. What are the four money laundering patterns your system detects?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><ul>
+<li><strong>Structuring (Smurfing):</strong> Breaking large deposits into amounts just below ₹50,000 to avoid CTR reporting.</li>
+<li><strong>Money Mule:</strong> Receiving a deposit and withdrawing a nearly identical amount within 24 hours — acting as a transit point.</li>
+<li><strong>Round Trip:</strong> Sending money to the same counterparty account repeatedly — circular fund movement.</li>
+<li><strong>High Volume:</strong> Total transaction volume exceeding ₹10,00,000 — unusual for normal retail accounts.</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q41. How does the system handle a file with 0 suspicious accounts?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>The <code>analyze()</code> method completes normally. All scores cluster around 40-60 (normal range). Since none exceed the <code>> 50</code> threshold, <code>alerts_to_create</code> stays empty. <code>bulk_create([])</code> is a no-op. The task completes with <code>status='Completed'</code> and the dashboard shows 0 new alerts. The system correctly reports "No suspicious activity detected."</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q42. What happens if all scores are identical?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Edge case: <code>if max_score == min_score: normalized_scores = [50] * len(scores)</code>. Division by zero would crash the Min-Max formula. The code handles it by assigning everyone a neutral score of 50.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q43. What if the CSV is missing the 'time' column?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>if 'time' not in self.df.columns:
+    self.df['datetime'] = pd.to_datetime(self.df['date'])</code></pre>
+<p>The system falls back to parsing just the date, defaulting time to midnight (00:00:00). The analysis continues without crashing.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q44. What if the CSV has completely wrong column names?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>After <code>_map_columns()</code> runs, it checks for required columns:</p>
+<pre><code>required = ['account_id', 'date', 'amount']
+missing = [col for col in required if col not in self.df.columns]
+if missing:
+    raise ValueError(f"Missing required columns: {', '.join(missing)}")</code></pre>
+<p>The error is caught by the <code>try/except</code> in <code>background_process</code>, which sets <code>task.status = 'Failed'</code> and stores the error message.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q45. What if the Groq API is down when generating a SAR?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><code>SARGenerationView</code> wraps everything in <code>try/except Exception as e</code>. If Groq is unreachable, the exception is caught and <code>HTTP 500</code> is returned with the error message. The server doesn't crash.</div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q46. What if the FAISS vector database doesn't exist?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>def load_vector_db(self):
+    if os.path.exists(os.path.join(self.db_path, "index.faiss")):
+        return FAISS.load_local(...)
+    return None</code></pre>
+<p>If the file doesn't exist, it returns <code>None</code>. In <code>generate_report()</code>, the code checks <code>if self.vector_db:</code> before searching. If None, the LLM still generates a report using its own training knowledge of PMLA — less precise but functional.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q47. How do you store the GROQ API key securely?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>In <code>settings.py</code>, the key is read from an environment variable: <code>GROQ_API_KEY = os.environ.get('GROQ_API_KEY')</code>. The actual key lives in a <code>.env</code> file that is listed in <code>.gitignore</code>. It's never committed to Git. In production, it would be stored in a secrets manager.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q48. What is CORS and why did you need it?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>CORS (Cross-Origin Resource Sharing) is a browser security feature. When React (port 3000) tries to call Django (port 8000), the browser blocks it by default. I configured <code>django-cors-headers</code> to explicitly allow the React domain to access the API.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q49. Could you swap the database from SQLite to PostgreSQL?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Yes, only 2 changes needed:</p>
+<ul>
+<li>Change <code>settings.py</code> DATABASES config from <code>sqlite3</code> to <code>postgresql</code>, add host/port/password.</li>
+<li>Install <code>psycopg2-binary</code>.</li>
+<li>Run <code>python manage.py migrate</code>.</li>
+</ul>
+<p>Zero code changes — Django ORM generates database-specific SQL automatically.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q50. What percentage of your project is Python vs JavaScript?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Roughly 70% Python (all backend logic, ML, RAG, API, data engineering) and 30% JavaScript (React frontend). As a C-DAC student focusing on AI/ML, all the core intelligence — feature extraction, Isolation Forest, FAISS retrieval, LLM prompting — is pure Python.</p></div></div>
+</div>
+</section>
+
+<section id="t2" class="topic-section">
+  <div class="topic-header">
+    <div class="topic-label">Q51–Q100</div>
+    <h2 class="topic-title">Machine Learning & Data Engineering</h2>
+    <div class="topic-line"></div>
+  </div>
+  <div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q51. What ML model did you use and why?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>I used <strong>Isolation Forest</strong> from Scikit-Learn. It's an <strong>unsupervised anomaly detection</strong> algorithm — perfect for AML because we don't have labeled data (we don't know which accounts are actually criminal). It automatically finds accounts whose behavior is mathematically "weird" compared to the majority.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q52. What does "unsupervised" mean in this context?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>It means the model doesn't need pre-labeled training data like <code>is_fraud = True/False</code>. In real banking, labels are extremely rare — less than 0.1% of flagged transactions turn out to be actual fraud. Supervised models would starve for positive examples. Isolation Forest works by finding outliers without labels.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q53. How does Isolation Forest work conceptually?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Think of it like a game of "20 Questions." The algorithm randomly asks questions about the data (e.g., "Is total_volume > 500,000?"). Normal accounts take many questions to isolate because they're all similar. Suspicious accounts can be isolated in just 2-3 questions because their values are drastically different. <strong>Fewer questions to isolate = more anomalous.</strong></p>
+<div class="mermaid">
+graph TD
+    A[All Accounts] -->|"volume > 500K?"| B[Yes: 50 accounts]
+    A -->|No| C[Normal: 9,950 accounts]
+    B -->|"structuring > 2?"| D[Yes: 3 accounts - ANOMALOUS]
+    B -->|No| E[47 accounts - probably normal]
+</div></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q54. What are the 4 features you extract from the raw transaction data?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><div class="mermaid">
+graph LR
+    Raw[Raw Transactions CSV] --> F1[total_volume: Sum of all amounts per account]
+    Raw --> F2[structuring_count: Transactions between ₹45K-₹50K]
+    Raw --> F3[mule_score: Matching deposit-withdrawal within 24hrs]
+    Raw --> F4[round_trip_count: Repeated transfers to same counterparty]
+</div>
+<p>Each feature captures a specific money laundering typology. Together they form a 4-dimensional behavioral profile of each bank account.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q55. How is `total_volume` calculated?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>stats = df.groupby('account_id')['amount'].agg(['sum', 'count'])</code></pre>
+<p>This groups all transactions by <code>account_id</code>, then calculates the sum (total money moved) and count (number of transactions) for each account in a single vectorized operation.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q56. How does Structuring detection work in your code?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>df['is_structuring'] = (df['amount'] >= 45000) & (df['amount'] < 50000)
+structuring = df.groupby('account_id')['is_structuring'].sum()</code></pre>
+<p>Line 1 creates a True/False column — True if the amount is in the ₹45,000-₹49,999 "danger zone" (just below the ₹50,000 CTR threshold). Line 2 counts the Trues per account. If an account has 3+ transactions in this range, it's likely deliberately splitting a large deposit to avoid reporting.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q57. Explain the Money Mule detection code step by step.</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>df = df.sort_values(['account_id', 'datetime'])          # Step 1: Sort by time
+df['prev_amount'] = df.groupby('account_id')['amount'].shift(1)  # Step 2: Get previous row's amount
+df['prev_type'] = df.groupby('account_id')['type'].shift(1)      # Step 3: Get previous row's type
+df['time_diff'] = df.groupby('account_id')['datetime'].diff().dt.total_seconds()  # Step 4: Time gap in seconds
+
+df['is_mule'] = (df['type'] == 'Withdrawal') &           # Current is Withdrawal
+                (df['prev_type'] == 'Deposit') &          # Previous was Deposit
+                (df['time_diff'] <= 86400) &              # Within 24 hours (86400 seconds)
+                (df['amount'] >= 0.95 * df['prev_amount']) &  # Amount matches within 5%
+                (df['amount'] <= 1.05 * df['prev_amount'])</code></pre></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q58. What does `.shift(1)` do and why is sorting important before using it?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><code>.shift(1)</code> moves every value in a column down by one row. After sorting by <code>['account_id', 'datetime']</code>, each row's <code>.shift(1)</code> value is the transaction that happened just before it for the same account. Without sorting first, <code>.shift(1)</code> could bring a value from a completely different account or date — giving meaningless results.</div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q59. Why is there a 5% tolerance (0.95 to 1.05) in mule detection?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Real money mules keep a 2-5% commission. If someone deposits ₹50,000 and withdraws exactly ₹47,500 (keeping ₹2,500 as their fee), a strict equality check would miss it. The ±5% window catches both exact and near-matching amounts.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q60. How does Round Trip detection work?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>round_trips = df[df['related_account'].notna()].groupby(['account_id', 'related_account']).size()
+round_trip_counts = round_trips[round_trips > 1].groupby('account_id').count()</code></pre>
+<p>It counts how many transactions exist between each (account, counterparty) pair. If Account A interacts with Account B more than once, that's a potential circular flow. The second groupby counts how many such suspicious relationships each account has.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q61. What is the feature matrix X that goes into the model?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>X = features_df[['total_volume', 'structuring_count', 'mule_score', 'round_trip_count']].values</code></pre>
+<p>This creates a 2D NumPy array where each row is one account and each column is one feature:</p>
+<pre><code>Account_A: [2,450,000,  5,  3,  2]  ← suspicious
+Account_B: [   45,000,  0,  0,  0]  ← normal</code></pre></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q62. What parameters did you set for the Isolation Forest?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>clf = IsolationForest(random_state=42, contamination=0.1)</code></pre>
+<ul>
+<li><code>random_state=42</code> — Fixed seed for reproducible results (same output every run).</li>
+<li><code>contamination=0.1</code> — Tells the model to expect ~10% of accounts to be suspicious. This sets the decision boundary.</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q63. Why is contamination set to 0.1 (10%)?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Our test dataset has roughly 10% suspicious accounts (e.g., <code>1000_rows_100_suspicious.csv</code> = exactly 10%). In real banking, fraud rate is 0.1-1%, so we would lower this to <code>0.01</code>. Setting it too high creates too many false positives; too low misses real fraud.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q64. How are raw ML scores converted to 0-100?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>scores = clf.decision_function(X)  # Returns raw scores (-0.5 to +0.5)
+normalized_scores = (1 - ((scores - min_score) / (max_score - min_score))) * 100</code></pre>
+<p>This is <strong>Min-Max Normalization</strong>. The most negative score (most anomalous) maps to 100, and the most positive score (most normal) maps to 0. The <code>1 - (...)</code> inverts the scale so higher = more suspicious.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q65. How are pattern labels assigned after scoring?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>if row['total_volume'] > 1000000: patterns.append('High Volume')
+if row['structuring_count'] >= 2: patterns.append('Structuring')
+if row['mule_score'] > 0: patterns.append('Money Mule')
+if row['round_trip_count'] > 0: patterns.append('Round Trip')
+if risk_score > 75 and not patterns: patterns.append('Anomalous Behavior')</code></pre>
+<p>This is a <strong>rule-based post-processor</strong> on top of the ML score. It gives each alert a human-readable explanation. The last rule ("Anomalous Behavior") is a catch-all for accounts that are mathematically strange but don't match any specific typology.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q66. What is "Anomalous Behavior" pattern?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>It appears when the ML score is high (>75) but none of the 4 specific rules triggered. This means the combination of features is unusual — for example, moderate volume + moderate structuring + moderate mule activity — none individually alarming, but together statistically rare.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q67. How is the trained model saved and loaded?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code># Save after training:
+joblib.dump(clf, self.MODEL_PATH)  # Saves to dashboard/ml/models/isolation_forest.joblib
+
+# Load for scoring:
+clf = joblib.load(self.MODEL_PATH)</code></pre>
+<code>joblib</code> is optimized for large NumPy arrays inside Scikit-Learn models. The model is trained once on a baseline dataset and reused for all future uploads.</div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q68. Why save the model instead of retraining every time?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Retraining on every upload would change the "definition of normal" with each file. The model should be trained once on a large representative baseline, so all future uploads are scored against the same consistent standard. This ensures auditable, reproducible results.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q69. What is Pandas Vectorization and why is it faster than loops?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Vectorization applies an operation to an entire column at once using optimized C code, instead of Python's slow row-by-row loop.</p>
+<p>Example: <code>df['amount'] * 1.05</code> multiplies ALL 100,000 values in a single CPU instruction. A Python <code>for</code> loop doing the same takes 100,000 individual function calls. Vectorized code can be 100x to 1000x faster.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q70. What does `groupby` do conceptually?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>It splits the DataFrame into groups based on a column value. Example: <code>df.groupby('account_id')</code> creates separate mini-DataFrames for each unique account. Then <code>.sum()</code> or <code>.count()</code> operates on each group independently and returns one result per group.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q71. What does `.fillna(0)` do and why is it necessary?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>When concatenating the 4 feature series with <code>pd.concat([...], axis=1)</code>, some accounts might have no round-trip or mule activity. Those cells become <code>NaN</code>. Scikit-Learn crashes on NaN values. <code>.fillna(0)</code> replaces missing values with 0, meaning "no suspicious activity detected for this feature."</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q72. What does `.values` do in `features_df[['total_volume', ...]].values`?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>It strips away all Pandas metadata (column names, index labels) and returns a raw NumPy 2D array. Scikit-Learn's <code>.fit()</code> and <code>.decision_function()</code> require pure NumPy arrays, not DataFrames.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q73. What is the `.agg(['sum', 'count'])` doing?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>It applies multiple aggregation functions to the same grouped column simultaneously:</p>
+<pre><code>stats = df.groupby('account_id')['amount'].agg(['sum', 'count'])</code></pre>
+<p>Returns a DataFrame with two columns: the total amount (sum) and the number of transactions (count) per account — in a single pass over the data.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q74. What does `.diff().dt.total_seconds()` compute?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><code>.diff()</code> — Subtracts each row from the previous row in the same group, giving a <code>timedelta</code> (time difference).
+<ul>
+<li><code>.dt.total_seconds()</code> — Converts that timedelta to a raw float number of seconds.</li>
+</ul>
+<p>Result: the exact time gap (in seconds) between consecutive transactions for each account.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q75. What is the difference between `.fit()` and `.decision_function()`?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><code>.fit(X)</code> — Builds the 100 random trees using the training data. This is the "learning" step.
+<ul>
+<li><code>.decision_function(X)</code> — Drops each account through the pre-built trees and measures how quickly it gets isolated. This is the "scoring" step.</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q76. What happens if `features_df` is empty?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>if features_df.empty:
+    return []</code></pre>
+<p>This could happen if the CSV has no parseable rows. Returning an empty list prevents <code>clf.decision_function()</code> from crashing on an empty array.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q77. Why 100 trees (default n_estimators)?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Isolation Forest builds 100 independent random trees. Each tree votes independently on how anomalous each account is. Averaging 100 votes cancels out the noise of any single random split, making the final score stable and reliable.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q78. What is Feature Engineering?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>It's the process of creating meaningful mathematical metrics from raw data. Raw data says "₹49,500 deposit." Feature engineering transforms this into <code>structuring_count = 1</code> (it's in the danger zone). The ML model can't understand raw transactions — it needs these computed behavioral features.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q79. Could you add more features to improve detection?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Yes, possible additions:</p>
+<ul>
+<li><strong>Night transaction ratio</strong> — % of transactions between 11 PM - 4 AM</li>
+<li><strong>Account age</strong> — New accounts with high volume are suspicious</li>
+<li><strong>Counterparty diversity</strong> — Sending all money to one account is suspicious</li>
+<li><strong>Geographic spread</strong> — Transactions from multiple cities simultaneously</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q80. Why Isolation Forest over other algorithms?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><table><tr><th>Algorithm</th><th>Problem for AML</th></tr><tr><td>K-Means</td><td>Requires specifying cluster count; sensitive to outliers</td></tr><tr><td>DBSCAN</td><td>Needs epsilon tuning; O(N²) for large datasets</td></tr><tr><td>LOF (Local Outlier Factor)</td><td>Computes pairwise distances — extremely slow</td></tr></table>| <strong>Isolation Forest</strong> | ✅ O(N log N), designed for outliers, handles imbalanced data |</div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q81. What is `pd.to_datetime()` and why not use Python's `datetime.strptime()`?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><code>pd.to_datetime()</code> is vectorized — it converts an entire column of 100,000 date strings in one call using C code. Python's <code>strptime()</code> handles one string at a time, requiring a loop. Pandas is also smarter — <code>format='mixed'</code> handles multiple date formats automatically.</div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q82. What does `io.BytesIO()` do?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>It wraps raw bytes (from the uploaded file) as a file-like object in RAM. Pandas normally reads from a file path. <code>BytesIO</code> lets Pandas read from memory without saving the file to disk — faster and more secure (no temporary files on the server).</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q83. How do you handle currency symbols in amount columns?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>The <code>clean_amount()</code> function chains <code>.replace()</code> calls:</p>
+<pre><code>str(val).replace('₹', '').replace(',', '').replace('$', '')</code></pre>
+<p>This converts <code>"₹49,500.00"</code> → <code>"49500.00"</code> → <code>float(49500.0)</code>. It handles Indian Rupee, US Dollar, and comma-separated formats.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q84. What does `errors='coerce'` do in date parsing?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>pd.to_datetime(df['date'], errors='coerce')</code></pre>
+<p>Instead of crashing on unparseable dates like "N/A" or "Invalid", it silently converts them to <code>NaT</code> (Not a Time). This lets the rest of the data process smoothly.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q85. What is the `MODEL_PATH` variable?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>MODEL_PATH = os.path.join(os.path.dirname(__file__), 'models', 'isolation_forest.joblib')</code></pre>
+<code>os.path.dirname(__file__)</code> gets the directory of <code>risk_engine.py</code>. Then it joins <code>'models/isolation_forest.joblib'</code>. This creates an absolute path that works regardless of where Django is started from.</div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q86. What is a NumPy array vs a Python list?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><table><tr><th>Feature</th><th>Python List</th><th>NumPy Array</th></tr><tr><td>Speed</td><td>Slow (Python loops)</td><td>Fast (C-compiled)</td></tr><tr><td>Memory</td><td>Each element is a Python object with overhead</td><td>Contiguous block of identical types</td></tr><tr><td>Operations</td><td>Manual loops needed</td><td>Vectorized: <code>arr * 2</code> multiplies everything</td></tr></table>| ML Support | Not compatible | Required by Scikit-Learn |</div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q87. What is Min-Max Normalization mathematically?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Formula: <code>normalized = (value - min) / (max - min)</code></p>
+<p>This compresses any range (like -0.5 to +0.5) into 0 to 1. In our code, we also multiply by 100 and invert (using <code>1 - value</code>) to get a 0-100 risk score where 100 is most suspicious.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q88. What is the time complexity of your feature extraction?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>All operations use Pandas <code>groupby</code>, <code>shift</code>, and boolean masking — all <strong>O(N log N)</strong> or <strong>O(N)</strong>. There are zero nested loops. On 100,000 transactions, the entire feature extraction runs in under 1 second.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q89. What would happen without the `.sort_values()` before `.shift()`?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Disaster. <code>.shift(1)</code> brings the previous row's value into the current row. Without sorting by <code>['account_id', 'datetime']</code>, "previous row" might be a transaction from a different account or a different date. The mule detection would flag random, meaningless pairs.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q90. How many accounts does the model typically process?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>A file with 20,000 transactions across 2,000 unique accounts creates a feature matrix of 2,000 rows × 4 columns. The Isolation Forest processes this in <100 milliseconds. Even 100,000 accounts would complete in seconds.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q91. What is Overfitting and does Isolation Forest suffer from it?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Overfitting = the model memorizes training data perfectly but fails on new data. Isolation Forest inherently resists overfitting because:</p>
+<ul>
+<li>Trees are deliberately random (random features, random split points).</li>
+<li>Trees are kept shallow.</li>
+<li>Averaging 100 trees smooths out individual biases.</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q92. What is the contamination parameter conceptually?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>It sets the "strictness dial." At <code>contamination=0.01</code>, only the top 1% most extreme outliers are flagged. At <code>contamination=0.2</code>, the top 20% are flagged. Think of it as adjusting how sensitive the metal detector is at the airport.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q93. What is Joblib and why not use Python's Pickle?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Both serialize Python objects to binary files. Joblib is specifically optimized for Scikit-Learn models containing large NumPy arrays — it uses memory-mapping for faster loading and better compression. Pickle handles general Python objects but is slower for numerical data.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q94. What is `use_saved_model=True` vs `False`?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><code>True</code> — Load the pre-trained <code>.joblib</code> model from disk. Used in production.
+<ul>
+<li><code>False</code> — Train a brand-new Isolation Forest on the current data. Used when building the initial baseline or when you want the model to adapt to a specific dataset.</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q95. What is the `train()` method for?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>It receives a large baseline transaction dataset, extracts features, fits a new Isolation Forest, and saves it to disk:</p>
+<pre><code>clf = IsolationForest(random_state=42, contamination=0.1)
+clf.fit(X)
+joblib.dump(clf, self.MODEL_PATH)</code></pre>
+<p>This creates the "gold standard" model that all future uploads are scored against.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q96. How does the `.iterrows()` loop at the end work?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>for i, (account_id, row) in enumerate(features_df.iterrows()):</code></pre>
+<p>After scoring, this loops through the features DataFrame to build the final result list. Each <code>row</code> contains the 4 features. The loop zips each account's features with its normalized risk score to create the output dictionary.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q97. What is the difference between `.apply()` and vectorized operations?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><code>.apply()</code> calls a Python function on each row individually — slow.
+<ul>
+<li>Vectorized ops like <code>(df['amount'] >= 45000) & (df['amount'] < 50000)</code> run in C on the entire column at once — fast.</li>
+</ul>
+<p>I use <code>.apply()</code> only for <code>clean_amount()</code> where complex string parsing is needed. All feature extraction uses pure vectorization.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q98. Why only save top 5 transactions per account?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>From <code>views.py</code>:</p>
+<pre><code>sample_txns = df[df['account_id'] == res['accountId']].sort_values(by='amount', ascending=False).head(5)</code></pre>
+<p>Saving all transactions for 20,000 accounts would create millions of database rows, overwhelming SQLite. The top 5 by amount captures the most significant evidence for the SAR generator.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q99. Could you use Deep Learning (Neural Networks) instead?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Not ideal for this use case. Tabular banking data (rows/columns) doesn't benefit from Neural Networks, which excel at images, text, and sequences. Scikit-Learn's tree-based models are specifically designed for tabular anomaly detection, are faster by 100x, require no GPU, and are more interpretable for regulatory auditing.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q100. Summarize the ML pipeline in your own words.</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>The <code>RiskEngine</code> class takes messy raw bank transaction data, normalizes column names, cleans amounts and dates, extracts 4 mathematical behavioral features per account using vectorized Pandas operations, feeds the feature matrix into a pre-trained Isolation Forest to compute anomaly scores, normalizes scores to 0-100, and tags each suspicious account with a human-readable pattern label. The entire process is designed to be fast (vectorized, no loops), reproducible (random_state=42), and explainable (rule-based labels on top of ML scores).</p></div></div>
+</div>
+</section>
+
+<section id="t3" class="topic-section">
+  <div class="topic-header">
+    <div class="topic-label">Q101–Q150</div>
+    <h2 class="topic-title">RAG Pipeline, LLM & Embeddings</h2>
+    <div class="topic-line"></div>
+  </div>
+  <div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q101. What is RAG (Retrieval-Augmented Generation)?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>RAG is a technique where instead of relying solely on the LLM's memory, we first <strong>retrieve</strong> relevant facts from a private database, then <strong>augment</strong> the prompt with those facts, so the LLM <strong>generates</strong> a factually grounded answer. In my project, the "facts" are paragraphs from PMLA 2002 law documents stored in a FAISS vector database.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q102. Why did you need RAG? Why not just ask the LLM directly?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Two critical reasons:</p>
+<ul>
+<li><strong>Hallucination</strong> — If I ask Llama-3.3 "quote PMLA Section 12", it might invent fake section numbers. RAG provides the actual text.</li>
+<li><strong>Private Data</strong> — The LLM has never seen our specific PMLA PDFs or RBI circulars. RAG feeds it the exact legal paragraphs it needs.</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q103. Draw the RAG architecture of your project.</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><div class="mermaid">
+graph TD
+    subgraph "One-Time Indexing (Offline)"
+        A[PMLA PDF Documents] --> B[PyPDFLoader extracts text]
+        B --> C[RecursiveCharacterTextSplitter chunks text]
+        C --> D["all-MiniLM-L6-v2 creates 384-dim vectors"]
+        D --> E[(FAISS Index saved to disk)]
+    end
+
+    subgraph "Runtime SAR Generation"
+        F[Alert patterns: Structuring] --> G[Build query string]
+        G --> H[FAISS similarity_search k=5]
+        E --> H
+        H --> I[Top 5 law paragraphs retrieved]
+        I --> J[ChatPromptTemplate + evidence]
+        J --> K["Groq Llama-3.3-70b generates SAR"]
+        K --> L[Markdown SAR Report returned]
+    end
+</div></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q104. What is a Vector Embedding?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>It's a mathematical representation of text as an array of numbers. The sentence "Money laundering under PMLA" becomes a 384-dimensional float array like <code>[0.12, -0.45, 0.99, ...]</code>. Semantically similar sentences have similar arrays — their vectors "point in the same direction" in 384-dimensional space.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q105. What Embedding model did you use?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><code>all-MiniLM-L6-v2</code> from HuggingFace. It's a small (22 MB), fast, and free model that converts text into 384-dimensional vectors. It runs 100% locally on CPU — no API calls, no internet needed, no cost, and complete data privacy.</div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q106. What is FAISS?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>FAISS (Facebook AI Similarity Search) is an open-source C++ library by Meta. It stores vectors and finds the nearest neighbors extremely fast — even among millions of vectors. In my project, it stores the embedded PMLA law chunks and retrieves the most relevant ones for each SAR query.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q107. What is Cosine Similarity?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>It measures the angle between two vectors. If two vectors point in the same direction (angle = 0°), cosine similarity = 1.0 (identical meaning). If they're perpendicular (90°), it's 0.0 (unrelated). FAISS uses this to find which law chunks are most semantically similar to the query.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q108. Walk me through the `create_vector_db()` function.</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code># 1. Load PDFs
+for filename in os.listdir(self.kb_path):
+    if filename.endswith('.pdf'):
+        loader = PyPDFLoader(os.path.join(self.kb_path, filename))
+        all_docs.extend(loader.load())
+
+# 2. Split into chunks
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
+splits = text_splitter.split_documents(all_docs)
+
+# 3. Create embeddings and index
+vectorstore = FAISS.from_documents(documents=splits, embedding=self.embeddings)
+
+# 4. Save to disk
+vectorstore.save_local(self.db_path)</code></pre>
+<p>Step 1: Extract text from every PDF in the knowledge_base folder. Step 2: Split into 1000-character chunks with 100-character overlap. Step 3: Convert each chunk to a 384-dim vector and build the FAISS index. Step 4: Save to disk as <code>index.faiss</code> and <code>index.pkl</code>.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q109. What is `RecursiveCharacterTextSplitter`?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>It splits text at natural boundaries using a priority list: first tries double newlines (<code>\n\n</code> — paragraphs), then single newlines, then spaces, then individual characters. This ensures legal clauses aren't cut mid-sentence. <code>chunk_size=1000</code> limits each chunk to ~1000 characters.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q110. Why use `chunk_overlap=100`?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>If a key legal phrase spans the boundary between chunk 1 and chunk 2, without overlap it would be split across both chunks and neither would contain the complete phrase. The 100-character overlap ensures the phrase appears complete in at least one chunk.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q111. What does `similarity_search(query, k=5)` return?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>It returns the 5 chunks from the FAISS index whose vectors are closest to the query vector. Each result is a LangChain <code>Document</code> object with:</p>
+<ul>
+<li><code>doc.page_content</code> — the actual text (the law paragraph)</li>
+<li><code>doc.metadata</code> — source information like <code>{'source': 'PMLA_2002.pdf', 'page': 14}</code></li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q112. What query is sent to FAISS?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>query = f"Money laundering laws related to {', '.join(patterns)} under PMLA 2002 and RBI KYC Master Directions"</code></pre>
+<p>If the ML detected "Structuring" and "Money Mule", the query becomes: "Money laundering laws related to Structuring, Money Mule under PMLA 2002 and RBI KYC Master Directions."</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q113. What is the `SARGenerator` class?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>It's the central class in <code>sar_generator.py</code> that:</p>
+<ul>
+<li>Creates a connection to the Groq LLM (Llama-3.3, temperature=0.1)</li>
+<li>Loads the FAISS vector database</li>
+<li>Has a <code>generate_report()</code> method that retrieves laws, builds the prompt, calls the LLM, and returns the SAR</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q114. What LLM did you use and how do you connect to it?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>self.llm = ChatGroq(
+    temperature=0.1,
+    model_name="llama-3.3-70b-versatile",
+    groq_api_key=api_key
+)</code></pre>
+<strong>Llama-3.3-70b-versatile</strong> — a 70 billion parameter open-source model by Meta, hosted on Groq Cloud. <code>ChatGroq</code> is LangChain's wrapper class that handles the HTTP API communication.</div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q115. What is Groq and why did you choose it?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Groq builds custom hardware called <strong>LPU (Language Processing Units)</strong> that run LLM inference extremely fast — 800+ tokens/second, roughly 10x faster than OpenAI. For SAR generation, this means the user gets their report in ~1.5 seconds instead of 15 seconds. And it supports Llama (open-source), so no vendor lock-in.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q116. What is Temperature in an LLM?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Temperature controls the randomness of the output:</p>
+<ul>
+<li><code>temperature=1.0</code> — Creative, varied, sometimes hallucinated</li>
+<li><code>temperature=0.0</code> — Completely deterministic, always picks the highest-probability token</li>
+<li><code>temperature=0.1</code> (our setting) — Almost deterministic but with slight variation. Perfect for legal documents where accuracy is critical but slight phrasing variation is acceptable.</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q117. What is a Token in an LLM?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Tokens are the atomic units an LLM processes — sub-word pieces. "Structuring" might be tokenized as ["Struct", "uring"]. Our input prompt is roughly 2,000-3,000 tokens. The SAR output is ~600-800 tokens. Groq charges per token. Llama-3.3 has a 128,000 token context window.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q118. What is the Context Window?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>The maximum number of tokens (input + output) an LLM can process in one call. Llama-3.3 has 128K tokens. Our full prompt (system + laws + evidence + template) uses about 3,000-5,000 tokens — well within limits. If we retrieved k=50 chunks instead of k=5, we'd risk overloading the context.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q119. Explain the prompt template structure.</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>The prompt has two parts:</p>
+<ul>
+<li><strong>System message:</strong> Sets the AI's persona — "You are an elite Financial Crime Compliance Officer at a major Indian Bank."</li>
+<li><strong>User message:</strong> Contains the SAR template with placeholders like <code>{evidence}</code>, <code>{laws}</code>, <code>{patterns}</code>, <code>{risk_score}</code>. LangChain fills these with actual values at runtime using <code>.invoke(dict)</code>.</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q120. What is LangChain LCEL (pipe syntax)?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>chain = prompt | self.llm
+response = chain.invoke({...})</code></pre>
+<p>The <code>|</code> operator chains the prompt to the LLM. When <code>.invoke()</code> is called, it first formats the prompt template with the input values, then passes the formatted messages to the LLM. This is cleaner than manually calling <code>prompt.format()</code> then <code>llm.invoke()</code>.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q121. What input data goes into the SAR prompt?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><table><tr><th>Variable</th><th>Source</th><th>Example</th></tr><tr><td><code>{name}</code></td><td>Account model</td><td>"Account ACC-101"</td></tr><tr><td><code>{acc_id}</code></td><td>Alert.account</td><td>"ACC-101"</td></tr><tr><td><code>{case_id}</code></td><td>Alert.alert_id</td><td>"AL-3f8a2b01-ACC101"</td></tr><tr><td><code>{risk_score}</code></td><td>ML RiskEngine</td><td>92</td></tr><tr><td><code>{risk_level}</code></td><td>Computed</td><td>"CRITICAL - IMMEDIATE ACTION REQUIRED"</td></tr><tr><td><code>{patterns}</code></td><td>ML patterns</td><td>"Structuring, Money Mule"</td></tr><tr><td><code>{evidence}</code></td><td>Last 10 transactions</td><td>"- 2025-03-01: Deposit of ₹49500..."</td></tr></table>| <code>{laws}</code> | FAISS retrieval | "Content: Section 3 of PMLA..." |</div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q122. How is the evidence string constructed?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>recent_txns = Transaction.objects.filter(account=account).order_by('-date_time')[:10]
+evidence = "\n".join([
+    f"- {t.date_time.strftime('%Y-%m-%d')}: {t.type} of {t.amount} involving {t.related_account or 'N/A'}"
+    for t in recent_txns
+])</code></pre>
+<p>The last 10 transactions are formatted as bullet points with date, type, amount, and counterparty.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q123. How is the risk level string determined?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>score = int(risk_score)
+risk_level = "CRITICAL - IMMEDIATE ACTION REQUIRED" if score >= 90
+         else "HIGH PRIORITY - INVESTIGATE" if score >= 75
+         else "MEDIUM RISK"</code></pre></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q124. What does the generated SAR report contain?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Six sections:</p>
+<ul>
+<li><strong>Report Information</strong> — SAR ID, date, account ID, risk score (Markdown table)</li>
+<li><strong>Detected Pattern</strong> — Primary typology (Structuring, Money Mule, etc.)</li>
+<li><strong>Transaction Summary</strong> — Count, volume, suspicious period (Markdown table)</li>
+<li><strong>Violated Laws</strong> — PMLA sections with relevance scores (Markdown table)</li>
+<li><strong>Compliance Narrative</strong> — How the behavior violates the cited laws + fund flow reconstruction</li>
+<li><strong>Recommendation</strong> — "File STR with FIU-IND immediately"</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q125. How does the LLM know which laws to cite?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>The prompt includes <code>{laws}</code> which is filled with the 5 PMLA paragraphs retrieved by FAISS. The system prompt instructs: "If the provided laws don't explicitly mention the pattern, infer from general Principles of PMLA (Section 3)." This ensures the model always has a fallback.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q126. What is `FAISS.save_local()` saving?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Two files:</p>
+<ul>
+<li><strong><code>index.faiss</code></strong> — The binary vector index (the mathematical graph of all 384-dim vectors)</li>
+<li><strong><code>index.pkl</code></strong> — A pickle file mapping vector IDs back to their original text content and metadata</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q127. What is `allow_dangerous_deserialization=True`?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>FAISS.load_local(self.db_path, self.embeddings, allow_dangerous_deserialization=True)</code></pre>
+<p>Python's pickle can execute arbitrary code during deserialization. This flag acknowledges the risk. It's safe in our case because we create the pickle file ourselves from our own PDF documents — no external untrusted data.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q128. What is `VectorStoreManager`?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>A utility class in <code>vector_store.py</code> that separates the vector database concerns from the SAR generation logic:</p>
+<ul>
+<li><code>create_vector_db()</code> — Builds the index from PDF documents</li>
+<li><code>load_vector_db()</code> — Loads the existing index for querying</li>
+</ul>
+<p>This follows the Single Responsibility Principle.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q129. How do you add new regulation documents to the system?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><ul>
+<li>Drop the new PDF into the <code>knowledge_base/</code> folder.</li>
+<li>Run <code>python -m dashboard.rag.utils.vector_store</code> (the <code>__main__</code> block).</li>
+<li>The script processes all PDFs and rebuilds <code>index.faiss</code>.</li>
+</ul>
+<p>No LLM retraining needed. The new law is instantly retrievable in the next SAR generation.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q130. What happens if you retrieve k=50 instead of k=5?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>The prompt would contain ~50,000 characters of legal text (~12,500 tokens). This causes:</p>
+<ul>
+<li>Much higher API costs (charges per token)</li>
+<li>The LLM may "forget" the evidence at the beginning of the prompt ("Lost in the Middle" phenomenon)</li>
+<li>Slower generation time</li>
+</ul>
+<p>k=5 is the sweet spot — enough legal context without overwhelming the model.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q131. What is `PyPDFLoader`?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>A LangChain class that uses the <code>pypdf</code> library to extract text from PDF files page by page. Each page becomes a <code>Document(page_content="...", metadata={'source': 'PMLA.pdf', 'page': 3})</code>.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q132. What is the difference between the Embedding Model and the LLM?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><table><tr><th>Embedding (MiniLM)</th><th>LLM (Llama-3.3)</th></tr><tr><td><strong>Purpose</strong></td><td>Text → Numbers</td><td>Text → Text</td></tr><tr><td><strong>Output</strong></td><td>384 floats (vector)</td><td>Hundreds of words (SAR report)</td></tr><tr><td><strong>Size</strong></td><td>22M parameters</td><td>70B parameters</td></tr><tr><td><strong>Runs</strong></td><td>Locally on CPU</td><td>Groq Cloud GPU/LPU</td></tr></table>| <strong>Cost</strong> | Free | Per-token charges |</div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q133. How many times does the embedding model run during SAR generation?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Exactly <strong>once</strong> — to embed the search query ("Money laundering laws related to Structuring..."). The PMLA chunk embeddings were pre-computed during indexing. At runtime, only the new query needs to be embedded to search against the existing index.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q134. What is `ChatPromptTemplate.from_messages()`?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>It creates a multi-role prompt:</p>
+<pre><code>ChatPromptTemplate.from_messages([
+    ("system", "You are an elite..."),   # Sets AI persona
+    ("user", "GENERATE A SAR...")        # The actual task
+])</code></pre>
+<p>The system message constrains behavior, and the user message contains the template with <code>{variables}</code>.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q135. Could you swap Groq for OpenAI?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Yes, change one line:</p>
+<pre><code># From:
+self.llm = ChatGroq(model_name="llama-3.3-70b-versatile", ...)
+# To:
+self.llm = ChatOpenAI(model_name="gpt-4o", openai_api_key=api_key)</code></pre>
+<p>LangChain provides a unified interface — both implement the same <code>BaseChatModel</code> class.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q136. Could you run the LLM locally instead of using Groq?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Yes, using Ollama:</p>
+<pre><code>from langchain_community.chat_models import ChatOllama
+self.llm = ChatOllama(model="llama3.3", base_url="http://localhost:11434")</code></pre>
+<p>Requires a GPU with 40GB+ VRAM for the 70b model, or use the 8b model (fits in 8GB). The entire system would have zero external dependencies.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q137. What is Fine-Tuning vs RAG?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><table><tr><th>Fine-Tuning</th><th>RAG</th></tr><tr><td><strong>What</strong></td><td>Retrains the model's weights on your data</td><td>Fetches data at runtime and injects into prompt</td></tr><tr><td><strong>Cost</strong></td><td>₹5-50 Lakhs GPU compute</td><td>Free (FAISS is local)</td></tr><tr><td><strong>Time</strong></td><td>Days/Weeks</td><td>Minutes to index new PDFs</td></tr><tr><td><strong>Updates</strong></td><td>Retrain entire model</td><td>Just add new PDFs</td></tr><tr><td><strong>Best for</strong></td><td>Changing model behavior</td><td>Adding factual knowledge</td></tr></table>
+<p>RAG is clearly the right choice for our use case — we need to add legal facts, not change how the model writes.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q138. What is LLM Hallucination?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>When the LLM generates plausible-sounding but factually incorrect information. For example, citing "PMLA Section 452" when PMLA only has ~75 sections. RAG mitigates this by providing the actual legal text — the LLM quotes what it's given rather than making things up.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q139. How does the prompt prevent hallucination?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Three safeguards:</p>
+<ul>
+<li><strong>RAG grounding</strong> — The actual law text is provided in <code>{laws}</code>.</li>
+<li><strong>Explicit instruction</strong> — "If specific section unknown, cite 'PMLA Section 3'"</li>
+<li><strong>Low temperature</strong> — <code>0.1</code> keeps the model highly deterministic.</li>
+<li><strong>Disclaimer footer</strong> — "All findings must be reviewed by qualified compliance officers."</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q140. What does the fallback look like when the vector DB is unavailable?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>if self.vector_db:
+    docs = self.vector_db.similarity_search(query, k=5)
+    relevant_laws = "...extracted text..."
+except:
+    relevant_laws = "Vector Database not accessible. Using general PMLA knowledge."</code></pre>
+<p>The LLM uses its own built-in knowledge of PMLA (from pre-training) to generate the report. Less precise citations but the report still generates.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q141. What is a Transformer (the architecture behind Llama)?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>A neural network architecture that uses <strong>Self-Attention</strong> — every word "looks at" every other word simultaneously to understand context. Unlike older RNNs that read left-to-right, Transformers process the entire sentence in parallel, making them much faster and better at understanding long-range dependencies.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q142. What are the 70 Billion parameters in Llama-3.3?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Parameters are the mathematical weights (numbers) inside the neural network. During training on trillions of text tokens, these weights are adjusted to minimize prediction error. 70 billion weights encode the model's "understanding" of language, logic, and factual knowledge. More parameters = more capacity to represent complex patterns.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q143. What is the `metadata.get('source', 'Unknown Document')` doing?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>relevant_laws = "\n\n".join([
+    f"Source: {doc.metadata.get('source', 'Unknown Document')}\nContent: {doc.page_content}"
+    for doc in docs
+])</code></pre>
+<p>For each retrieved law chunk, it prepends the source filename (like "PMLA_2002.pdf") so the SAR report can cite where the law came from. <code>.get('source', 'Unknown')</code> is a safe dict access that defaults to "Unknown Document" if metadata is missing.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q144. How fast is the SAR generation end-to-end?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>FAISS retrieval: ~10-15 milliseconds</p>
+<ul>
+<li>Embedding the query: ~20 milliseconds</li>
+<li>Prompt formatting: ~1 millisecond</li>
+<li>Groq LLM inference: ~1-2 seconds</li>
+<li><strong>Total: ~1.5-2 seconds</strong> for a complete, legally structured SAR report</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q145. What is the `HuggingFaceEmbeddings` class?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>self.embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")</code></pre>
+<p>LangChain's wrapper around HuggingFace's <code>sentence-transformers</code> library. On first use, it downloads the 22MB model weights and caches them locally. Every subsequent call runs local CPU inference to convert text → 384-dim vectors.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q146. What is the `__main__` block in vector_store.py?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>if __name__ == "__main__":
+    manager = VectorStoreManager()
+    manager.create_vector_db()</code></pre>
+<p>This allows running the file directly as a script: <code>python -m dashboard.rag.utils.vector_store</code>. It creates/rebuilds the FAISS index from all PDFs in the knowledge_base folder. This is run once during setup, not during normal operation.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q147. Is the embedding deterministic?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Yes. The same text always produces the exact same 384-float vector. "PMLA Section 3" will always map to the identical mathematical coordinates. This means FAISS retrieval is consistent and reproducible.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q148. What is HNSW (the FAISS indexing algorithm)?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>HNSW (Hierarchical Navigable Small World) is how FAISS organizes vectors for fast search. Instead of comparing the query against every single vector (slow), it builds a multi-layer graph — like highways connecting cities. The search starts at the "highway" layer and navigates down to the "street" layer, finding the nearest neighbors in O(log N) time.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q149. Could you use a different vector database?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Yes. Alternatives:</p>
+<ul>
+<li><strong>Chroma</strong> — Simpler API, good for prototyping</li>
+<li><strong>Pinecone</strong> — Cloud-managed, scales to billions of vectors</li>
+<li><strong>Weaviate</strong> — Supports hybrid keyword + vector search</li>
+</ul>
+<p>I would only need to change <code>VectorStoreManager</code> — the <code>SARGenerator</code> just calls <code>similarity_search()</code> which has the same interface.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q150. What is the "Relevance Score (0-1)" in the SAR's Violated Laws table?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>The SAR template asks the LLM to self-evaluate how strongly each law applies:</p>
+<pre><code>| Law/Regulation | Section | Relevance Score (0-1) |
+| PMLA 2002 | Section 3 | 0.95 |</code></pre>
+<p>The LLM assigns 0.95 if the law directly addresses the detected pattern, or 0.60 if it's tangentially related. This helps compliance officers prioritize which citations to investigate first.</p></div></div>
+</div>
+</section>
+
+<section id="t4" class="topic-section">
+  <div class="topic-header">
+    <div class="topic-label">Q151–Q200</div>
+    <h2 class="topic-title">AML Domain, PMLA & System Design</h2>
+    <div class="topic-line"></div>
+  </div>
+  <div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q151. What is Money Laundering?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>It is the process of making illegally obtained money appear legitimate. Criminals "clean" dirty money through three stages:</p>
+<ul>
+<li><strong>Placement</strong> — Depositing cash into the banking system</li>
+<li><strong>Layering</strong> — Moving money through multiple accounts to hide the trail</li>
+<li><strong>Integration</strong> — Using the cleaned money for legitimate purchases</li>
+</ul>
+<div class="mermaid">
+graph LR
+    A[Drug Money ₹50L] -->|Placement| B[Multiple Cash Deposits ₹49K each]
+    B -->|Layering| C[Transfer through 5 shell accounts]
+    C -->|Integration| D[Buy Real Estate]
+    style A fill:#ff6666
+    style D fill:#66cc66
+</div></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q152. What is PMLA 2002?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><strong>Prevention of Money Laundering Act, 2002</strong> — India's primary legislation against financial crime. Key sections in our project:
+<ul>
+<li><strong>Section 3</strong> — Defines the offence of money laundering</li>
+<li><strong>Section 12</strong> — Mandates banks to report suspicious transactions to FIU-IND</li>
+<li><strong>Section 13</strong> — Empowers the Adjudicating Authority to attach property</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q153. What is FIU-IND?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><strong>Financial Intelligence Unit - India</strong>, under the Ministry of Finance. Banks must file Suspicious Transaction Reports (STRs) with FIU-IND within 7 days of detection. Our SAR generator produces the draft of this legally mandated document.</div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q154. What is a CTR (Currency Transaction Report)?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Under PMLA, banks must automatically report any cash transaction above ₹10,00,000 (or series of transactions aggregating to ₹10,00,000 in a month) to FIU-IND. Criminals avoid CTRs by "structuring" — breaking deposits into amounts below the threshold.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q155. How does your system detect Structuring specifically?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>The ₹45,000-₹49,999 range in <code>extract_features_vectorized()</code> targets deposits deliberately kept just below ₹50,000. If an account has 2+ transactions in this range, the <code>structuring_count >= 2</code> rule flags it. The ML model independently scores the mathematical unusualness of this pattern.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q156. What is a Money Mule?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>A person (often unwitting) who receives money in their bank account and immediately transfers it elsewhere, acting as a transit point to obscure the money trail. Our <code>mule_score</code> detects accounts where a Withdrawal closely follows a Deposit of a similar amount within 24 hours.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q157. What is a Shell Company and how does Round Trip detection catch it?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>A shell company is a registered entity with no real business operations — used purely as a financial conduit. Money flows: Criminal → Shell A → Shell B → Criminal. Our <code>round_trip_count</code> detects when the same <code>related_account</code> appears repeatedly, which signals circular money movement through shell entities.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q158. What is KYC (Know Your Customer)?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>KYC is the identity verification process during account opening — collecting ID proof, address proof, and understanding the customer's expected transaction behavior. Our system focuses on the <strong>post-KYC monitoring</strong> — continuous analysis of actual transactions to detect suspicious behavior after the customer is already onboarded.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q159. What is Enhanced Due Diligence (EDD)?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>EDD is a heightened investigation triggered for high-risk accounts. When our SAR recommendation says "Consider Enhanced Due Diligence," it means the compliance team should collect additional documentation: beneficial ownership proof, source of funds declarations, and business activity justification.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q160. What are FATF Recommendations?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>FATF (Financial Action Task Force) is the global standard-setter for AML. Its 40 Recommendations define what every country's AML laws must cover. India's PMLA 2002 was drafted to comply with FATF standards. Our LLM prompt references FATF as a fallback when specific PMLA sections don't apply.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q161. What is the "Human-in-the-Loop" in your system?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>The AI makes <strong>zero enforcement decisions</strong>:</p>
+<ul>
+<li>ML flags suspicious accounts → Human analyst reviews</li>
+<li>LLM generates SAR draft → Human compliance officer reviews and edits</li>
+<li>Filing the STR with FIU-IND → Human officer submits manually</li>
+<li>Account freezing → Human authorization through core banking system</li>
+</ul>
+<p>The AI is purely an investigative assistant, not a decision-maker.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q162. What happens in your system across the 3 stages of money laundering?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><table><tr><th>Stage</th><th>What happens</th><th>Your system detects</th></tr><tr><td><strong>Placement</strong></td><td>Criminal deposits ₹49,000 five times</td><td><code>structuring_count = 5</code></td></tr><tr><td><strong>Layering</strong></td><td>Money moves rapidly between accounts</td><td><code>mule_score > 0</code>, <code>round_trip_count > 0</code></td></tr></table>| <strong>Integration</strong> | Large withdrawal to buy property | <code>total_volume > 1,000,000</code> |</div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q163. How would you deploy this project to production?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><ul>
+<li><strong>Database:</strong> Switch from SQLite to PostgreSQL</li>
+<li><strong>Background Tasks:</strong> Replace <code>threading.Thread</code> with Celery + Redis (distributed job queue)</li>
+<li><strong>Containerize:</strong> Docker + Docker Compose</li>
+<li><strong>HTTPS:</strong> Nginx reverse proxy with SSL certificate</li>
+<li><strong>Scaling:</strong> Multiple Celery workers behind a load balancer</li>
+<li><strong>Monitoring:</strong> Sentry for exceptions, CloudWatch for metrics</li>
+<li><strong>CI/CD:</strong> GitHub Actions → build → test → deploy to AWS ECS</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q164. Why replace `threading.Thread` with Celery in production?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Python's threading has limitations:</p>
+<ul>
+<li>If the server restarts, the thread dies and the task is lost</li>
+<li>No retry mechanism if a task fails</li>
+<li>Can't distribute work across multiple servers</li>
+</ul>
+<p>Celery provides persistent task queues (tasks survive restarts), automatic retries, distributed workers, and monitoring dashboards.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q165. What if two users upload CSV files simultaneously?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Each upload spawns an independent background thread with its own <code>RiskEngine()</code> instance. Each instance has its own <code>self.df</code> DataFrame in memory. They never share state. The only shared resource is the database, but <code>bulk_create()</code> operations are atomic and brief.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q166. What is the biggest technical risk in your project?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><strong>LLM Hallucination</strong> — the model could cite fake legal sections. Mitigations:
+<ul>
+<li>RAG provides actual PMLA text (grounding)</li>
+<li>Temperature=0.1 keeps output deterministic</li>
+<li>The prompt says to cite "PMLA Section 3" as fallback</li>
+<li>The SAR footer says "must be reviewed by qualified compliance officers"</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q167. What if the uploaded file has 50 million rows?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Current system reads the entire file into memory. For 50M rows:</p>
+<ul>
+<li>Use <code>pd.read_csv(filepath, chunksize=100000)</code> to process in 100K-row batches</li>
+<li>Use Dask or PySpark for distributed computation</li>
+<li>Switch from in-memory processing to Kafka streaming ingestion</li>
+<li>Use PostgreSQL for intermediate storage instead of SQLite</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q168. How would you test the ML pipeline?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Create a test CSV with known suspicious patterns:</p>
+<pre><code>test_data = pd.DataFrame([
+    {'account_id': 'A1', 'amount': 48000, 'type': 'Deposit', ...},  # Structuring
+    {'account_id': 'A1', 'amount': 49000, 'type': 'Deposit', ...},  # Structuring
+])
+engine = RiskEngine(test_data)
+results = engine.analyze(use_saved_model=False)
+assert results[0]['patterns'] == ['Structuring']
+assert results[0]['riskScore'] > 50</code></pre></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q169. How would you test the RAG retrieval quality?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Create test cases with known expected laws:</p>
+<ul>
+<li>Query: "Structuring" → Expected: PMLA Section 3, Section 12</li>
+<li>Query: "Large cash transaction" → Expected: RBI CTR guidelines</li>
+<li>Run <code>similarity_search</code> for each and check if expected laws are in the top 5</li>
+<li>Calculate <strong>Recall@5</strong> — fraction of expected laws found in top 5 results</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q170. What is Model Drift and how would you handle it?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Over time, normal banking behavior changes (inflation, digital payments growth). The 2024 model baseline becomes outdated. Solution:</p>
+<ul>
+<li>Periodically retrain the Isolation Forest on recent data (quarterly)</li>
+<li>Monitor the average risk score — if it keeps increasing, the model needs retraining</li>
+<li>Version your models with dates: <code>isolation_forest_2025Q1.joblib</code></li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q171. What is a False Positive and why does it matter in AML?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>A False Positive = flagging a normal account as suspicious. In AML, too many false positives cause "alert fatigue" — compliance officers stop carefully reviewing alerts because 95% are false alarms. This leads to missing actual fraud. Tuning the <code>contamination</code> parameter helps reduce false positives.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q172. What regulatory implications does AI-generated SAR have?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>The human compliance officer is legally responsible, not the AI</p>
+<ul>
+<li>All inputs (evidence, retrieved laws) and outputs (SAR text) must be logged for audit</li>
+<li>The AI's reasoning must be explainable (RAG citations provide this)</li>
+<li>Customer data must stay within India (RBI data localization)</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q173. What is `select_related` and why does it prevent N+1 queries?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Without <code>select_related</code>:</p>
+<pre><code>SELECT * FROM alerts;           -- Query 1
+SELECT * FROM accounts WHERE id = 1;  -- Query 2
+SELECT * FROM accounts WHERE id = 2;  -- Query 3
+... (5 more queries)</code></pre>
+<p>With <code>select_related('account')</code>:</p>
+<pre><code>SELECT * FROM alerts JOIN accounts ON alerts.account_id = accounts.id;  -- 1 query only</code></pre></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q174. What data security measures does your system have?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>JWT authentication on all endpoints</p>
+<ul>
+<li>User-level data isolation (<code>filter(user=request.user)</code>)</li>
+<li>API keys in environment variables (not in code)</li>
+<li>Password hashing (Django uses PBKDF2 + SHA256)</li>
+<li>CORS restrictions</li>
+<li>Disclaimer on AI-generated content</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q175. What is `unique_together` and why is it important?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>class Meta:
+    unique_together = ('user', 'alert_id')</code></pre>
+<p>This creates a database-level constraint: the combination of <code>user</code> + <code>alert_id</code> must be unique. Two different users can have alerts with the same <code>alert_id</code>, but one user cannot have duplicate alert IDs. This prevents data corruption on re-uploads.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q176. How would you improve the SAR quality?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><ul>
+<li>Add more regulatory PDFs (FATF guidelines, RBI circulars, bank internal policies)</li>
+<li>Use a larger embedding model (<code>all-mpnet-base-v2</code> — 768 dimensions, more accurate)</li>
+<li>Add a human feedback loop where compliance officers rate SAR quality</li>
+<li>Fine-tune the prompt based on officer feedback</li>
+<li>Implement SAR caching to avoid regenerating identical reports</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q177. What Python design pattern is `RiskEngine`?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><strong>Facade Pattern</strong> — it provides a simple <code>analyze()</code> interface that hides the complexity of column mapping, data cleaning, feature extraction, model loading, scoring, and pattern tagging. The caller in <code>views.py</code> doesn't need to know any of these implementation details.</div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q178. What is the separation of concerns in your codebase?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><table><tr><th>File</th><th>Responsibility</th></tr><tr><td><code>models.py</code></td><td>Data structure (what to store)</td></tr><tr><td><code>views.py</code></td><td>API logic (how to respond to HTTP)</td></tr><tr><td><code>risk_engine.py</code></td><td>ML logic (how to detect fraud)</td></tr><tr><td><code>sar_generator.py</code></td><td>LLM logic (how to write the SAR)</td></tr><tr><td><code>vector_store.py</code></td><td>Vector DB logic (how to index/search laws)</td></tr><tr><td><code>serializers.py</code></td><td>Data formatting (Python ↔ JSON)</td></tr></table>
+<p>Each file does one thing and does it well. Changing the ML model doesn't affect the API. Changing the LLM doesn't affect the ML.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q179. What if the API key is wrong or expired?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>The <code>SARGenerationView</code> wraps everything in <code>try/except</code>:</p>
+<pre><code>except Exception as e:
+    return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)</code></pre>
+<p>Groq throws an <code>AuthenticationError</code>. The error is caught and returned as a clean JSON error response.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q180. How does the trend chart data get calculated?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>for i in range(7):
+    day = last_7_days + timedelta(days=i+1)
+    count = next((t['count'] for t in trends if t['date'] == day), 0)
+    trend_data.append({"date": day.strftime('%d %b'), "count": count})</code></pre>
+<p>It loops through the last 7 days. For each day, it checks if any alerts were created. Days with no alerts get <code>count: 0</code>. This prevents gaps in the chart.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q181. What is the `ProcessingTask` status lifecycle?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><div class="mermaid">
+graph LR
+    A[Pending] -->|Thread starts| B[Processing]
+    B -->|All done| C[Completed]
+    B -->|Exception| D[Failed]
+</div>
+<code>Pending</code> → Created when upload received. <code>Processing</code> → Background thread begins. <code>Completed</code> → All results saved. <code>Failed</code> → Any exception, error message stored.</div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q182. Could your system detect cryptocurrency laundering?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Not currently — it processes standard bank CSV files (fiat currency). For crypto, you would need:</p>
+<ul>
+<li>Blockchain transaction data from APIs (Etherscan, Chainalysis)</li>
+<li>Different features (mixer detection, darknet addresses, cross-chain bridges)</li>
+<li>Updated knowledge base with FATF crypto guidelines</li>
+</ul>
+<p>The architecture (ML + RAG) would remain the same.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q183. What is the `risk_history` JSONField used for?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Currently stubbed as <code>default=list</code>. In production, every time an account is scored, a new entry would be appended: <code>[{"date": "2025-03-01", "score": 87}]</code>. This creates a risk timeline showing if an account's suspiciousness is increasing or decreasing over time.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q184. How do you handle the re-upload of the same file?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>The <code>existing_accounts</code> dictionary prevents duplicate accounts. However, duplicate alerts could be created. A production fix: check <code>Alert.objects.filter(account=account, type=pattern, date=today).exists()</code> before creating each alert.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q185. What is the difference between your Alert and Transaction models?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><strong>Transaction</strong> = Raw fact: "Account A deposited ₹49,500 on March 1st"
+<ul>
+<li><strong>Alert</strong> = Derived intelligence: "Account A's overall pattern of 15 transactions shows Structuring behavior with 92% risk score"</li>
+</ul>
+<p>One Alert synthesizes patterns across multiple Transactions.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q186. Why is `amount` stored as CharField instead of DecimalField?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>The incoming CSV data often contains currency symbols and commas: <code>"₹49,500"</code>. If I used <code>DecimalField</code>, Django would crash trying to validate this string. <code>CharField</code> preserves the raw value. The volume sum is calculated at query time by casting to float.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q187. What is `Cast(FloatField())` in the stats endpoint?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>Sum(Cast('amount', FloatField()))</code></pre>
+<p>Since <code>amount</code> is a CharField in the database, we can't use <code>Sum()</code> directly. <code>Cast('amount', FloatField())</code> tells the database to convert the string to a number before summing. If this fails (amounts have ₹ symbols), a Python fallback handles the conversion.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q188. What is the OTPVerification model for?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><pre><code>def is_expired(self):
+    return timezone.now() > self.created_at + timedelta(minutes=10)</code></pre>
+<p>It stores email OTP codes with a 10-minute expiry. This adds an extra security layer — even if someone intercepts the OTP, it's useless after 10 minutes.</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q189. What would you do differently if you had more time?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><ul>
+<li>Add real-time streaming with Apache Kafka</li>
+<li>Build a graph neural network for network-based fraud detection</li>
+<li>Implement SAR report caching (don't regenerate identical reports)</li>
+<li>Add a compliance officer feedback loop to improve ML</li>
+<li>Build an audit trail with blockchain timestamping</li>
+<li>Deploy on Kubernetes for auto-scaling</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q190. How scalable is your current architecture?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><table><tr><th>Component</th><th>Current Limit</th><th>Production Solution</th></tr><tr><td>Database</td><td>SQLite (1 writer at a time)</td><td>PostgreSQL</td></tr><tr><td>Background Jobs</td><td>Python threads</td><td>Celery + Redis</td></tr><tr><td>Vector DB</td><td>FAISS in-memory</td><td>Pinecone cloud</td></tr><tr><td>File Processing</td><td>Single machine</td><td>Spark cluster</td></tr></table>| Web Server | Django dev server | Gunicorn + Nginx |</div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q191. What is the complete end-to-end workflow from CSV to SAR?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><div class="mermaid">
+graph TD
+    A[Bank uploads CSV] --> B[Django receives file]
+    B --> C[Background Thread spawned]
+    C --> D[Pandas reads + cleans data]
+    D --> E[RiskEngine extracts 4 features]
+    E --> F[Isolation Forest scores accounts]
+    F --> G[Scores normalized 0-100]
+    G --> H[Pattern labels assigned]
+    H --> I[Alerts saved to database]
+    I --> J[Dashboard shows flagged accounts]
+    J --> K[Officer clicks Generate SAR]
+    K --> L[SARGenerator builds query]
+    L --> M[FAISS retrieves PMLA laws]
+    M --> N[LangChain builds prompt]
+    N --> O[Groq Llama-3.3 generates report]
+    O --> P[SAR displayed in Markdown]
+    P --> Q[Officer reviews and files STR]
+</div></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q192. Explain the tech stack in one sentence each.</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><strong>React</strong> — Renders the compliance dashboard UI
+<ul>
+<li><strong>Django REST Framework</strong> — Exposes secure REST API endpoints</li>
+<li><strong>Pandas</strong> — Vectorized feature extraction from transaction data</li>
+<li><strong>Scikit-Learn IsolationForest</strong> — Unsupervised anomaly detection scoring</li>
+<li><strong>FAISS</strong> — Vector similarity search over PMLA law embeddings</li>
+<li><strong>HuggingFace MiniLM</strong> — Converts text to 384-dimensional vectors locally</li>
+<li><strong>Groq Llama-3.3</strong> — Generates legally structured SAR reports</li>
+<li><strong>LangChain</strong> — Orchestrates the prompt → retrieval → LLM chain</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q193. What makes your project different from a typical CRUD application?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>It's not just storing and retrieving data. It performs:</p>
+<ul>
+<li><strong>Mathematical ML inference</strong> — Isolation Forest scoring</li>
+<li><strong>Vectorized data engineering</strong> — Pandas groupby, shift, diff operations</li>
+<li><strong>AI text generation</strong> — LLM-powered report writing</li>
+<li><strong>Semantic search</strong> — FAISS vector similarity over legal documents</li>
+<li><strong>Asynchronous processing</strong> — Background threads with progress tracking</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q194. What was the most challenging part of the project?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Building the <code>extract_features_vectorized()</code> function — converting AML domain knowledge (structuring, mule behavior) into pure vectorized Pandas operations without any Python loops. Every line had to be mathematically correct and handle edge cases (NaN, missing columns, unsorted data).</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q195. How do you ensure audit compliance?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Every alert has a timestamp, risk score, and detected pattern</p>
+<ul>
+<li>SAR reports include the exact laws cited and evidence used</li>
+<li>All API actions are associated with a specific authenticated user</li>
+<li>The <code>ProcessingTask</code> logs start time, completion time, and any errors</li>
+<li>The SAR footer explicitly states it's AI-generated and needs human review</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q196. What real-world impacts could this system have?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>Reduce compliance team workload by 70-80%</p>
+<ul>
+<li>Process 100,000 transactions in seconds instead of days</li>
+<li>Generate legally structured SARs in 2 seconds instead of 3 hours</li>
+<li>Detect patterns humans might miss (combinations across thousands of accounts)</li>
+<li>Maintain consistent detection standards (no Monday vs Friday fatigue)</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q197. How is this project relevant to current industry trends?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><strong>AI in FinTech</strong> — Banks are actively adopting ML for fraud detection
+<ul>
+<li><strong>RAG is the #1 enterprise AI pattern</strong> — used by JP Morgan, Goldman Sachs for document Q&A</li>
+<li><strong>Open-source LLMs (Llama)</strong> — Banks prefer on-premise models for data privacy</li>
+<li><strong>Regulatory Technology (RegTech)</strong> — Automating compliance is a billion-dollar market</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q198. If an interviewer asked "what would you improve?", what would you say?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>"Three things: First, I'd add more features to the ML model — night transaction ratio and account age would catch more sophisticated fraud. Second, I'd use a graph neural network to detect network-level patterns like criminal rings. Third, I'd implement a compliance officer feedback loop where they rate SAR quality, and those ratings fine-tune the prompt template over time."</p></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q199. What did you learn from building this project?</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>How to build end-to-end ML pipelines (data → features → model → predictions → UI)</p>
+<ul>
+<li>The practical difference between RAG and fine-tuning</li>
+<li>How vectorized operations in Pandas are 100x faster than Python loops</li>
+<li>How FAISS enables semantic search over legal documents</li>
+<li>How to orchestrate LLM calls with LangChain's chain syntax</li>
+<li>The importance of data cleaning (80% of the work in real-world ML)</li>
+</ul></div></div>
+</div>
+<div class="qa">
+  <button class="qa-q" onclick="this.parentElement.classList.toggle('open')"><span>Q200. Summarize your entire project in 60 seconds for an interviewer.</span><span class="qa-arrow">▼</span></button>
+  <div class="qa-a"><div class="qa-a-inner"><p>"I built an AI-powered Anti-Money Laundering system that takes raw bank transaction CSV files, runs them through a Python ML pipeline using Pandas for feature extraction and Isolation Forest for anomaly detection, produces a 0-100 risk score per account, and then uses a RAG pipeline — combining FAISS vector search over PMLA law documents with Groq's Llama-3.3 LLM — to automatically generate legally structured Suspicious Activity Reports. The system detects four money laundering typologies: Structuring, Money Mule activity, Round Trip transfers, and High Volume transactions. The entire flow — from CSV upload to SAR generation — takes under 5 seconds for 20,000 transactions. The architecture is decoupled: React frontend, Django REST API backend, SQLite database, with JWT authentication and background processing for scalability."</p></div></div>
+</div>
+</section>
+</div>
+
+<script>
+function expandAll(){document.querySelectorAll('.qa').forEach(e=>e.classList.add('open'))}
+function collapseAll(){document.querySelectorAll('.qa').forEach(e=>e.classList.remove('open'))}
+</script>
+
+<script>

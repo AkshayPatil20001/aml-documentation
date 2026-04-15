@@ -1,0 +1,2625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Azure Data Engineering — Complete Study Guide 2025</title>
+<meta name="description" content="Detailed beginner-friendly Azure Data Engineering notes with diagrams, analogies, hands-on steps, and real-world examples."/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#04111f;
+  --bg2:#071828;
+  --bg3:#0a1f35;
+  --card:#0d2240;
+  --card2:#102a4a;
+  --blue:#0078d4;
+  --cyan:#00b4d8;
+  --purple:#7c3aed;
+  --green:#10b981;
+  --orange:#f59e0b;
+  --pink:#ec4899;
+  --red:#ef4444;
+  --yellow:#fbbf24;
+  --t1:#e2e8f0;
+  --t2:#94a3b8;
+  --t3:#64748b;
+  --border:rgba(0,120,212,0.18);
+  --glow:rgba(0,120,212,0.35);
+  --sw:280px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t1);line-height:1.7;overflow-x:hidden;}
+
+/* BG */
+body::before{content:'';position:fixed;inset:0;background:
+  radial-gradient(ellipse 90% 60% at 15% 5%,rgba(0,120,212,.13) 0%,transparent 55%),
+  radial-gradient(ellipse 60% 50% at 85% 90%,rgba(124,58,237,.09) 0%,transparent 55%),
+  radial-gradient(ellipse 40% 40% at 50% 50%,rgba(0,180,216,.05) 0%,transparent 65%);
+  pointer-events:none;z-index:0;}
+
+/* PROGRESS */
+#prog{position:fixed;top:0;left:var(--sw);right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--purple));transform-origin:left;transform:scaleX(0);z-index:300;transition:transform .08s;}
+
+/* SIDEBAR */
+.sb{position:fixed;left:0;top:0;width:var(--sw);height:100vh;background:rgba(5,16,30,.97);backdrop-filter:blur(24px);border-right:1px solid var(--border);overflow-y:auto;z-index:200;transition:transform .3s;}
+.sb::-webkit-scrollbar{width:3px;}
+.sb::-webkit-scrollbar-thumb{background:var(--blue);border-radius:3px;}
+.sb-brand{padding:1.4rem 1.4rem 1rem;border-bottom:1px solid var(--border);display:flex;gap:.75rem;align-items:center;}
+.sb-logo{width:44px;height:44px;background:linear-gradient(135deg,var(--blue),var(--cyan));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;box-shadow:0 0 20px var(--glow);flex-shrink:0;}
+.sb-brand h2{font-size:.8rem;font-weight:800;line-height:1.3;}
+.sb-brand span{font-size:.68rem;color:var(--cyan);}
+.sb-sec{padding:.5rem 1.3rem .2rem;font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);}
+.sb a{display:flex;align-items:center;gap:.6rem;padding:.5rem 1.3rem;color:var(--t2);text-decoration:none;font-size:.8rem;font-weight:500;border-left:2px solid transparent;transition:all .2s;}
+.sb a:hover,.sb a.active{color:var(--cyan);background:rgba(0,180,216,.07);border-left-color:var(--cyan);}
+.sb a em{margin-left:auto;font-style:normal;font-size:.62rem;color:var(--t3);font-family:'JetBrains Mono',monospace;}
+
+/* MAIN */
+.main{margin-left:var(--sw);position:relative;z-index:1;}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:5rem 3rem 4rem;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 65% at 50% 45%,rgba(0,120,212,.22) 0%,transparent 70%);}
+.badge{display:inline-flex;align-items:center;gap:.5rem;padding:.38rem 1rem;background:rgba(0,120,212,.12);border:1px solid rgba(0,120,212,.45);border-radius:100px;font-size:.72rem;font-weight:700;color:var(--cyan);letter-spacing:.05em;margin-bottom:1.8rem;position:relative;animation:fadeUp .7s ease both;}
+.badge::before{content:'';width:6px;height:6px;background:var(--cyan);border-radius:50%;animation:blink 2s infinite;}
+.hero h1{font-size:clamp(2.4rem,5vw,4.8rem);font-weight:900;line-height:1.08;margin-bottom:1.4rem;background:linear-gradient(135deg,#fff 0%,#90e0ff 45%,var(--blue) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:fadeUp .8s .1s ease both;position:relative;}
+.hero p{font-size:1.05rem;color:var(--t2);max-width:620px;margin-bottom:2.5rem;animation:fadeUp .8s .2s ease both;position:relative;}
+.stats{display:flex;gap:3rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem;animation:fadeUp .8s .3s ease both;position:relative;}
+.stat-n{font-size:2.2rem;font-weight:900;background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.stat-l{font-size:.72rem;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;}
+.hero-cta{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;position:relative;animation:fadeUp .8s .4s ease both;}
+.btn1{padding:.85rem 2rem;background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;border:none;border-radius:12px;font-size:.9rem;font-weight:700;cursor:pointer;box-shadow:0 0 30px var(--glow);text-decoration:none;transition:all .3s;}
+.btn1:hover{transform:translateY(-3px);box-shadow:0 0 50px var(--glow),0 10px 30px rgba(0,0,0,.3);}
+.btn2{padding:.85rem 2rem;background:rgba(255,255,255,.05);color:var(--t1);border:1px solid var(--border);border-radius:12px;font-size:.9rem;font-weight:700;cursor:pointer;text-decoration:none;transition:all .3s;}
+.btn2:hover{background:rgba(255,255,255,.09);border-color:var(--cyan);transform:translateY(-3px);}
+
+/* CHAPTER MAP */
+.chap-map{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem;padding:3rem;background:var(--bg2);border-bottom:1px solid var(--border);}
+.map-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.1rem;cursor:pointer;transition:all .3s;text-decoration:none;display:block;}
+.map-card:hover{border-color:var(--cyan);transform:translateY(-4px);box-shadow:0 8px 30px rgba(0,0,0,.3);}
+.map-card .mi{font-size:1.4rem;margin-bottom:.4rem;}
+.map-card .mn{font-size:.62rem;font-family:'JetBrains Mono',monospace;color:var(--t3);margin-bottom:.2rem;}
+.map-card .mt{font-size:.82rem;font-weight:700;color:var(--t1);}
+
+/* CHAPTER */
+.ch{padding:5rem 3.5rem;border-bottom:1px solid rgba(255,255,255,.04);position:relative;}
+.ch::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,transparent,var(--blue),transparent);opacity:0;transition:opacity .6s;}
+.ch.vis::after{opacity:1;}
+.ch-head{display:flex;align-items:flex-start;gap:1.5rem;margin-bottom:2.5rem;}
+.ch-num{width:60px;height:60px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:800;flex-shrink:0;border:1px solid;}
+.n-blue{background:rgba(0,120,212,.15);border-color:rgba(0,120,212,.5);color:var(--blue);}
+.n-cyan{background:rgba(0,180,216,.15);border-color:rgba(0,180,216,.5);color:var(--cyan);}
+.n-purple{background:rgba(124,58,237,.15);border-color:rgba(124,58,237,.5);color:var(--purple);}
+.n-green{background:rgba(16,185,129,.15);border-color:rgba(16,185,129,.5);color:var(--green);}
+.n-orange{background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.5);color:var(--orange);}
+.n-pink{background:rgba(236,72,153,.15);border-color:rgba(236,72,153,.5);color:var(--pink);}
+.ch-title h2{font-size:2rem;font-weight:900;margin-bottom:.3rem;line-height:1.2;}
+.ch-title .sub{font-size:.9rem;color:var(--t3);}
+
+/* TAGS */
+.tags{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.75rem;}
+.tag{padding:.25rem .75rem;border-radius:100px;font-size:.68rem;font-weight:700;border:1px solid;}
+.tb{background:rgba(0,120,212,.1);border-color:rgba(0,120,212,.4);color:var(--blue);}
+.tc{background:rgba(0,180,216,.1);border-color:rgba(0,180,216,.4);color:var(--cyan);}
+.tp{background:rgba(124,58,237,.1);border-color:rgba(124,58,237,.4);color:var(--purple);}
+.tg{background:rgba(16,185,129,.1);border-color:rgba(16,185,129,.4);color:var(--green);}
+.to{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.4);color:var(--orange);}
+.tr{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.4);color:var(--red);}
+
+/* CARDS GRID */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.4rem;margin-bottom:2.5rem;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;transition:all .3s;position:relative;overflow:hidden;}
+.card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,120,212,.06),transparent);opacity:0;transition:opacity .3s;}
+.card:hover{border-color:rgba(0,120,212,.5);transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.3),0 0 30px var(--glow);}
+.card:hover::before{opacity:1;}
+.card .ci{font-size:1.8rem;margin-bottom:.7rem;}
+.card h3{font-size:.95rem;font-weight:800;margin-bottom:.5rem;}
+.card p{font-size:.85rem;color:var(--t2);line-height:1.65;}
+
+/* INFO BOX */
+.ibox{border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;display:flex;gap:1rem;align-items:flex-start;}
+.ib-blue{background:rgba(0,120,212,.1);border:1px solid rgba(0,120,212,.35);}
+.ib-green{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.35);}
+.ib-orange{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.35);}
+.ib-purple{background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.35);}
+.ib-red{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.35);}
+.ib-cyan{background:rgba(0,180,216,.1);border:1px solid rgba(0,180,216,.35);}
+.ib-icon{font-size:1.3rem;flex-shrink:0;margin-top:.1rem;}
+.ib-body h4{font-size:.88rem;font-weight:800;margin-bottom:.2rem;}
+.ib-body p{font-size:.85rem;color:var(--t2);line-height:1.65;}
+.ib-body ul{font-size:.85rem;color:var(--t2);line-height:1.7;padding-left:1.2rem;}
+
+/* KEY POINTS */
+.kp{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.6rem;margin-bottom:2rem;}
+.kp h3{font-size:.9rem;font-weight:800;color:var(--cyan);margin-bottom:1.1rem;display:flex;align-items:center;gap:.5rem;}
+.kp ul{list-style:none;}
+.kp li{display:flex;align-items:flex-start;gap:.75rem;padding:.6rem 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.875rem;color:var(--t2);line-height:1.6;}
+.kp li:last-child{border-bottom:none;}
+.kp li::before{content:'▸';color:var(--cyan);flex-shrink:0;margin-top:2px;}
+
+/* TABLE */
+.tw{overflow-x:auto;border-radius:12px;border:1px solid var(--border);margin-bottom:2rem;}
+table{width:100%;border-collapse:collapse;font-size:.85rem;}
+thead{background:rgba(0,120,212,.15);}
+th{padding:.9rem 1.2rem;text-align:left;font-weight:800;color:var(--cyan);white-space:nowrap;}
+td{padding:.75rem 1.2rem;color:var(--t2);border-top:1px solid rgba(255,255,255,.05);}
+tr:hover td{background:rgba(0,120,212,.05);}
+
+/* CODE */
+.code{background:#020d1a;border:1px solid rgba(0,120,212,.25);border-radius:14px;margin-bottom:1.5rem;overflow:hidden;}
+.code-header{background:rgba(0,120,212,.12);padding:.6rem 1.25rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(0,120,212,.2);}
+.code-lang{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--cyan);font-weight:600;}
+.code-dots{display:flex;gap:.4rem;}
+.code-dots span{width:10px;height:10px;border-radius:50%;}
+.code pre{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:#7dd3fc;line-height:1.75;padding:1.25rem 1.5rem;overflow-x:auto;}
+.kw{color:#c084fc;}.st{color:#86efac;}.cm{color:#374151;font-style:italic;}.fu{color:#67e8f9;}.nm{color:#fb923c;}
+
+/* DIAGRAM */
+.diagram{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;margin-bottom:2rem;}
+.diagram-title{font-size:.8rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:1.8rem;text-align:center;}
+
+/* FLOW */
+.flow{display:flex;align-items:center;justify-content:center;gap:.6rem;flex-wrap:wrap;}
+.fn{border-radius:10px;padding:.65rem 1rem;font-size:.78rem;font-weight:700;text-align:center;border:1px solid;white-space:nowrap;min-width:90px;}
+.fn-blue{background:rgba(0,120,212,.18);border-color:rgba(0,120,212,.5);color:#60a5fa;}
+.fn-cyan{background:rgba(0,180,216,.18);border-color:rgba(0,180,216,.5);color:var(--cyan);}
+.fn-green{background:rgba(16,185,129,.18);border-color:rgba(16,185,129,.5);color:var(--green);}
+.fn-orange{background:rgba(245,158,11,.18);border-color:rgba(245,158,11,.5);color:var(--orange);}
+.fn-purple{background:rgba(124,58,237,.18);border-color:rgba(124,58,237,.5);color:var(--purple);}
+.fn-pink{background:rgba(236,72,153,.18);border-color:rgba(236,72,153,.5);color:var(--pink);}
+.fa{color:var(--t3);font-size:1.2rem;font-weight:700;}
+
+/* VERTICAL FLOW */
+.vflow{display:flex;flex-direction:column;align-items:center;gap:0;}
+.vfn{border-radius:10px;padding:.7rem 1.4rem;font-size:.82rem;font-weight:700;text-align:center;border:1px solid;white-space:nowrap;min-width:200px;}
+.vfa{color:var(--t3);font-size:1.4rem;margin:4px 0;}
+
+/* ANALOGY BOX */
+.analogy{background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(236,72,153,.06));border:1px solid rgba(245,158,11,.3);border-radius:14px;padding:1.4rem;margin-bottom:1.8rem;}
+.analogy .label{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--orange);margin-bottom:.5rem;}
+.analogy p{font-size:.9rem;color:var(--t2);line-height:1.65;}
+
+/* TRY THIS */
+.try{background:linear-gradient(135deg,rgba(16,185,129,.08),rgba(0,180,216,.05));border:1px solid rgba(16,185,129,.3);border-radius:14px;padding:1.4rem;margin-bottom:1.8rem;}
+.try .label{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--green);margin-bottom:.6rem;display:flex;align-items:center;gap:.4rem;}
+.try ol{padding-left:1.4rem;font-size:.87rem;color:var(--t2);line-height:1.9;}
+
+/* DIVIDER */
+.divider{display:flex;align-items:center;gap:1rem;margin:2.2rem 0;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.divider span{font-size:.72rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;}
+
+/* ACCORDION */
+.acc{margin-bottom:.75rem;}
+.acc-h{width:100%;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.95rem 1.25rem;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:all .25s;text-align:left;}
+.acc-h:hover,.acc-h.open{border-color:rgba(0,120,212,.5);background:var(--card2);}
+.acc-h h4{font-size:.88rem;font-weight:700;color:var(--t1);}
+.acc-icon{color:var(--cyan);transition:transform .3s;font-size:1.1rem;}
+.acc-h.open .acc-icon{transform:rotate(180deg);}
+.acc-b{display:none;background:rgba(7,24,40,.7);border:1px solid var(--border);border-top:none;border-radius:0 0 12px 12px;padding:1.25rem 1.4rem;font-size:.875rem;color:var(--t2);line-height:1.7;}
+.acc-b.open{display:block;}
+
+/* ROADMAP */
+.rm{position:relative;padding-left:2.2rem;}
+.rm::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--blue),var(--cyan),var(--purple),var(--green));}
+.rm-item{position:relative;padding-bottom:2.5rem;}
+.rm-item::before{content:'';position:absolute;left:-1.75rem;top:7px;width:14px;height:14px;border-radius:50%;border:2px solid var(--bg);box-shadow:0 0 14px var(--glow);}
+.rm-item:nth-child(1)::before{background:var(--blue);}
+.rm-item:nth-child(2)::before{background:var(--cyan);}
+.rm-item:nth-child(3)::before{background:var(--purple);}
+.rm-item:nth-child(4)::before{background:var(--green);}
+.rm-item:nth-child(5)::before{background:var(--orange);}
+.rm-item:nth-child(6)::before{background:var(--pink);}
+.rm-item h4{font-size:1rem;font-weight:800;color:var(--t1);margin-bottom:.4rem;}
+.rm-item p{font-size:.875rem;color:var(--t2);line-height:1.65;}
+
+/* FORMULA */
+.formula{background:linear-gradient(135deg,rgba(0,120,212,.12),rgba(124,58,237,.1));border:1px solid rgba(0,120,212,.35);border-radius:12px;padding:1.4rem;text-align:center;margin-bottom:1.5rem;font-size:1.1rem;font-weight:700;}
+.formula span{color:var(--cyan);}
+.formula .eq{color:var(--green);}
+
+/* COMPARISON DIAGRAM */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem;}
+.compare-card{background:var(--card);border-radius:14px;padding:1.4rem;border:1px solid;}
+.compare-card.left{border-color:rgba(0,120,212,.4);}
+.compare-card.right{border-color:rgba(16,185,129,.4);}
+.compare-card h3{font-size:.9rem;font-weight:800;margin-bottom:.75rem;}
+.compare-card ul{list-style:none;font-size:.83rem;color:var(--t2);line-height:1.8;}
+.compare-card li{display:flex;align-items:flex-start;gap:.5rem;}
+.compare-card .tick{color:var(--green);}
+.compare-card .cross{color:var(--red);}
+
+/* LAYER DIAGRAM */
+.layer-stack{display:flex;flex-direction:column;gap:.5rem;margin-bottom:2rem;}
+.layer{border-radius:10px;padding:.9rem 1.5rem;display:flex;align-items:center;gap:1rem;font-size:.85rem;font-weight:600;border:1px solid;}
+.layer .li{font-size:1.3rem;}
+.layer-label{flex:1;}
+.layer-badge{font-size:.68rem;padding:.2rem .6rem;border-radius:100px;font-weight:700;background:rgba(255,255,255,.08);}
+.l1{background:rgba(0,120,212,.12);border-color:rgba(0,120,212,.4);color:#93c5fd;}
+.l2{background:rgba(0,180,216,.12);border-color:rgba(0,180,216,.4);color:var(--cyan);}
+.l3{background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.4);color:var(--green);}
+.l4{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.4);color:var(--orange);}
+.l5{background:rgba(124,58,237,.12);border-color:rgba(124,58,237,.4);color:var(--purple);}
+
+/* STEP BOX */
+.steps{counter-reset:step;display:flex;flex-direction:column;gap:1rem;margin-bottom:2rem;}
+.step{display:flex;gap:1rem;align-items:flex-start;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.3rem;transition:all .3s;}
+.step:hover{border-color:rgba(0,120,212,.45);transform:translateX(4px);}
+.step-num{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:800;flex-shrink:0;box-shadow:0 0 15px var(--glow);}
+.step-content h4{font-size:.88rem;font-weight:700;margin-bottom:.25rem;}
+.step-content p{font-size:.83rem;color:var(--t2);line-height:1.6;}
+
+/* FOOTER */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:3rem;text-align:center;color:var(--t3);font-size:.85rem;}
+
+/* MOBILE */
+.mob-btn{display:none;position:fixed;bottom:1.5rem;right:1.5rem;width:52px;height:52px;background:linear-gradient(135deg,var(--blue),var(--cyan));border:none;border-radius:50%;font-size:1.4rem;color:#fff;cursor:pointer;z-index:400;box-shadow:0 4px 20px var(--glow);}
+
+/* ANIMS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.8);}}
+.fi{opacity:0;transform:translateY(22px);transition:opacity .65s ease,transform .65s ease;}
+.fi.vis{opacity:1;transform:translateY(0);}
+
+@media(max-width:900px){
+  :root{--sw:0px;}
+  .sb{transform:translateX(-280px);}
+  .sb.open{transform:translateX(0);}
+  .main{margin-left:0;}
+  #prog{left:0;}
+  .ch{padding:3rem 1.5rem;}
+  .hero,.chap-map{padding:4rem 1.5rem;}
+  .mob-btn{display:flex;align-items:center;justify-content:center;}
+  .compare{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sb" id="sb">
+  <div class="sb-brand">
+    <div class="sb-logo">☁️</div>
+    <div><h2>Azure Data Engineering</h2><span>Complete Guide 2025</span></div>
+  </div>
+  <div class="sb-sec">Chapters</div>
+  <a href="#hero" onclick="cls()"><span>🏠</span> Home <em>00</em></a>
+  <a href="#ch1" onclick="cls()"><span>☁️</span> Cloud Computing <em>01</em></a>
+  <a href="#ch2" onclick="cls()"><span>🏗️</span> IaaS / PaaS / SaaS <em>02</em></a>
+  <a href="#ch3" onclick="cls()"><span>🛡️</span> Redundancy & HA <em>03</em></a>
+  <a href="#ch4" onclick="cls()"><span>🗄️</span> Azure SQL Database <em>04</em></a>
+  <a href="#ch5" onclick="cls()"><span>🌌</span> Azure Cosmos DB <em>05</em></a>
+  <a href="#ch6" onclick="cls()"><span>🏔️</span> Azure Data Lake <em>06</em></a>
+  <a href="#ch7" onclick="cls()"><span>⚡</span> Azure Event Hubs <em>07</em></a>
+  <a href="#ch8" onclick="cls()"><span>🔄</span> Azure Data Factory <em>08</em></a>
+  <a href="#ch9" onclick="cls()"><span>🧱</span> Azure Databricks <em>09</em></a>
+  <a href="#ch10" onclick="cls()"><span>🔬</span> Azure Synapse <em>10</em></a>
+  <a href="#ch11" onclick="cls()"><span>🚀</span> Career Roadmap <em>11</em></a>
+  <a href="#ch12" onclick="cls()"><span>🔐</span> Security & Key Vault <em>12</em></a>
+  <a href="#ch13" onclick="cls()"><span>🎤</span> Interview Q&A <em>13</em></a>
+  <a href="#ch14" onclick="cls()"><span>📋</span> Cheat Sheet <em>14</em></a>
+</aside>
+
+<div class="main">
+
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="hero">
+  <div class="badge">📘 Structured from Full 3-Hour YouTube Tutorial</div>
+  <h1>Azure Data Engineering<br/>Complete Study Guide</h1>
+  <p>Your one-stop, beginner-friendly companion for mastering all Azure data services — with real-world analogies, step-by-step guides, diagrams, and working code examples.</p>
+  <div class="stats">
+    <div><div class="stat-n">11</div><div class="stat-l">Chapters</div></div>
+    <div><div class="stat-n">3+</div><div class="stat-l">Hours of Content</div></div>
+    <div><div class="stat-n">10+</div><div class="stat-l">Azure Services</div></div>
+    <div><div class="stat-n">2025</div><div class="stat-l">Curriculum</div></div>
+  </div>
+  <div class="hero-cta">
+    <a class="btn1" href="#ch1">Start Learning →</a>
+    <a class="btn2" href="#chapter-map">All Chapters</a>
+  </div>
+</section>
+
+<!-- CHAPTER MAP -->
+<div class="chap-map" id="chapter-map">
+  <a class="map-card" href="#ch1"><div class="mi">☁️</div><div class="mn">Chapter 01</div><div class="mt">Cloud Computing Basics</div></a>
+  <a class="map-card" href="#ch2"><div class="mi">🏗️</div><div class="mn">Chapter 02</div><div class="mt">IaaS, PaaS & SaaS</div></a>
+  <a class="map-card" href="#ch3"><div class="mi">🛡️</div><div class="mn">Chapter 03</div><div class="mt">Fault Tolerance & Redundancy</div></a>
+  <a class="map-card" href="#ch4"><div class="mi">🗄️</div><div class="mn">Chapter 04</div><div class="mt">Azure SQL Database</div></a>
+  <a class="map-card" href="#ch5"><div class="mi">🌌</div><div class="mn">Chapter 05</div><div class="mt">Azure Cosmos DB</div></a>
+  <a class="map-card" href="#ch6"><div class="mi">🏔️</div><div class="mn">Chapter 06</div><div class="mt">Azure Data Lake</div></a>
+  <a class="map-card" href="#ch7"><div class="mi">⚡</div><div class="mn">Chapter 07</div><div class="mt">Azure Event Hubs</div></a>
+  <a class="map-card" href="#ch8"><div class="mi">🔄</div><div class="mn">Chapter 08</div><div class="mt">Azure Data Factory</div></a>
+  <a class="map-card" href="#ch9"><div class="mi">🧱</div><div class="mn">Chapter 09</div><div class="mt">Azure Databricks</div></a>
+  <a class="map-card" href="#ch10"><div class="mi">🔬</div><div class="mn">Chapter 10</div><div class="mt">Azure Synapse Analytics</div></a>
+  <a class="map-card" href="#ch11"><div class="mi">🚀</div><div class="mn">Chapter 11</div><div class="mt">Career Roadmap</div></a>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 1 — CLOUD COMPUTING
+══════════════════════════════════════════════ -->
+<section class="ch fi" id="ch1">
+  <div class="ch-head">
+    <div class="ch-num n-blue">01</div>
+    <div class="ch-title"><h2>☁️ What is Cloud Computing & Azure?</h2><p class="sub">Why Azure, what it is, and how to get started from zero</p></div>
+  </div>
+  <div class="tags"><span class="tag tb">Cloud Basics</span><span class="tag tc">Azure Intro</span><span class="tag tg">Beginner</span><span class="tag to">Free Account</span></div>
+
+  <div class="analogy">
+    <div class="label">💡 Real-World Analogy — Think of it Like Electricity</div>
+    <p>Before electricity grids existed, every factory had to build its own power plant. That was expensive and complex. Cloud computing is like an electricity grid — instead of building your own data centers (power plants), you just "plug in" to Azure's infrastructure and pay for what you use. No upfront cost, no maintenance, infinite scale.</p>
+  </div>
+
+  <div class="ibox ib-blue">
+    <div class="ib-icon">☁️</div>
+    <div class="ib-body">
+      <h4>Definition: Cloud Computing</h4>
+      <p>Cloud computing is the delivery of computing services — including servers, storage, databases, networking, software, analytics, and intelligence — over the internet ("the cloud") to offer faster innovation, flexible resources, and economies of scale. You pay only for cloud services you use, helping lower your operating costs.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>Why Azure Specifically?</span></div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="ci">📈</div>
+      <h3>Exponential Growth in 2025</h3>
+      <p>Azure's market share is growing faster than any other cloud provider in the data engineering space. The demand far exceeds the supply of qualified engineers, creating a massive salary and career opportunity right now.</p>
+    </div>
+    <div class="card">
+      <div class="ci">🏢</div>
+      <h3>Enterprise Adoption</h3>
+      <p>95% of Fortune 500 companies use Microsoft Azure. If you're targeting enterprise jobs — banking, healthcare, retail, manufacturing — Azure skills are non-negotiable and highly valued.</p>
+    </div>
+    <div class="card">
+      <div class="ci">🔗</div>
+      <h3>Microsoft Ecosystem</h3>
+      <p>Azure integrates natively with Microsoft tools most companies already use: Office 365, Teams, Power BI, and Active Directory. This makes Azure the natural cloud choice for existing Microsoft shops.</p>
+    </div>
+    <div class="card">
+      <div class="ci">🛡️</div>
+      <h3>Security & Compliance</h3>
+      <p>Azure meets 90+ compliance certifications including ISO, SOC, GDPR, HIPAA, and FedRAMP. This makes it the preferred choice for regulated industries like banking and healthcare.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>Core Azure Concepts — Every Beginner Must Know</span></div>
+
+  <div class="kp">
+    <h3>📌 Key Terminology — The Building Blocks</h3>
+    <ul>
+      <li><strong>Subscription:</strong> Your billing container in Azure. Everything you create gets billed to a subscription. You can have multiple subscriptions per account (e.g., Dev subscription, Production subscription).</li>
+      <li><strong>Resource Group:</strong> A logical container that holds related Azure resources. Think of it as a project folder — all resources for a project live together and can be managed/deleted as a unit.</li>
+      <li><strong>Resource:</strong> Any individual Azure service you create — a SQL database, a storage account, a virtual machine. Everything is a resource.</li>
+      <li><strong>Region:</strong> A physical geographic location where Azure data centers exist. E.g., "East US", "West Europe", "South India". You pick a region when creating resources — pick one close to your users for low latency.</li>
+      <li><strong>Availability Zone:</strong> Physical, separate data centers within the same region. Each zone has its own power, cooling, and networking. If one zone fails, others keep running.</li>
+      <li><strong>Azure Portal:</strong> The web-based UI at portal.azure.com to manage all your Azure resources visually. Free to access, works in any browser.</li>
+      <li><strong>Azure CLI:</strong> Command-line interface (az commands) to manage Azure programmatically from your terminal. Preferred by DevOps engineers and power users.</li>
+      <li><strong>ARM Templates / Bicep:</strong> Infrastructure as Code (IaC) way to define and deploy Azure resources via JSON/Bicep files. Used in enterprise environments for repeatable deployments.</li>
+    </ul>
+  </div>
+
+  <div class="diagram">
+    <div class="diagram-title">🗂️ Azure Hierarchy — How Resources Are Organized</div>
+    <div class="layer-stack">
+      <div class="layer l1"><span class="li">🏢</span><span class="layer-label">Azure Account (Root)</span><span class="layer-badge">Your Microsoft/Company Account</span></div>
+      <div class="layer l2"><span class="li">💳</span><span class="layer-label">Subscription</span><span class="layer-badge">Billing Unit — Free / Pay-as-you-go / Enterprise</span></div>
+      <div class="layer l3"><span class="li">📁</span><span class="layer-label">Resource Group</span><span class="layer-badge">Logical container — e.g., "my-project-rg"</span></div>
+      <div class="layer l4"><span class="li">⚙️</span><span class="layer-label">Resources</span><span class="layer-badge">SQL DB, Data Lake, Databricks, ADF, Cosmos DB...</span></div>
+    </div>
+  </div>
+
+  <div class="try">
+    <div class="label">🛠️ Try This — Create Your Free Azure Account</div>
+    <ol>
+      <li>Go to <strong>azure.microsoft.com/free</strong></li>
+      <li>Click "Start Free" and sign in with your Microsoft account (or create one)</li>
+      <li>Provide your payment card (for identity verification only — you won't be charged)</li>
+      <li>You get <strong>$200 free credit for 30 days</strong> + always-free tier services (12 months)</li>
+      <li>Go to <strong>portal.azure.com</strong> — explore the dashboard</li>
+      <li>Create your first Resource Group: Search "Resource Groups" → Create → Name it "azure-learning-rg" → Pick a region (e.g., East US) → Create</li>
+    </ol>
+  </div>
+
+  <div class="diagram">
+    <div class="diagram-title">🌍 Azure Global Infrastructure</div>
+    <div class="flow" style="gap:1.5rem;flex-wrap:wrap;">
+      <div style="text-align:center;">
+        <div class="fn fn-blue" style="margin-bottom:.5rem;">🌎 Americas</div>
+        <div style="font-size:.75rem;color:var(--t3);">East US, West US<br/>Brazil South, Canada...</div>
+      </div>
+      <div style="text-align:center;">
+        <div class="fn fn-cyan" style="margin-bottom:.5rem;">🌍 Europe</div>
+        <div style="font-size:.75rem;color:var(--t3);">West Europe, North Europe<br/>UK South, France Central...</div>
+      </div>
+      <div style="text-align:center;">
+        <div class="fn fn-green" style="margin-bottom:.5rem;">🌏 Asia Pacific</div>
+        <div style="font-size:.75rem;color:var(--t3);">South India, East Asia<br/>Japan East, Australia...</div>
+      </div>
+      <div style="text-align:center;">
+        <div class="fn fn-orange" style="margin-bottom:.5rem;">🏔️ Middle East & Africa</div>
+        <div style="font-size:.75rem;color:var(--t3);">UAE North, South Africa<br/>Qatar Central...</div>
+      </div>
+    </div>
+    <p style="text-align:center;color:var(--t3);font-size:.78rem;margin-top:1.2rem;">60+ regions globally • 3+ availability zones per region • 99.99% uptime SLA</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 2 — IaaS PaaS SaaS
+══════════════════════════════════════════════ -->
+<section class="ch fi" id="ch2">
+  <div class="ch-head">
+    <div class="ch-num n-cyan">02</div>
+    <div class="ch-title"><h2>🏗️ Cloud Service Models: IaaS, PaaS, SaaS</h2><p class="sub">Understanding what Azure manages vs. what you manage</p></div>
+  </div>
+  <div class="tags"><span class="tag tb">IaaS</span><span class="tag tc">PaaS</span><span class="tag tp">SaaS</span><span class="tag tg">Service Models</span></div>
+
+  <div class="analogy">
+    <div class="label">💡 Real-World Analogy — The Pizza Model</div>
+    <p><strong>Making pizza at home (On-Premise)</strong> — You buy the oven, dough, toppings, manage everything.<br/>
+    <strong>Pizza take-and-bake (IaaS)</strong> — You buy a pre-made dough from the store, add your own toppings, use your own oven.<br/>
+    <strong>Pizza delivery (PaaS)</strong> — You order ingredients pre-prepared, just assemble and eat. Delivery person manages the transport.<br/>
+    <strong>Restaurant pizza (SaaS)</strong> — You walk in, order, and eat. You manage nothing. You just consume.</p>
+  </div>
+
+  <div class="diagram">
+    <div class="diagram-title">📊 Responsibility Comparison — Who Manages What?</div>
+    <div class="tw" style="margin-bottom:0;">
+      <table>
+        <thead>
+          <tr><th>Layer</th><th>On-Premise</th><th>IaaS</th><th>PaaS</th><th>SaaS</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>🏗️ Physical Hardware</td><td>🔴 You</td><td>🟢 Azure</td><td>🟢 Azure</td><td>🟢 Azure</td></tr>
+          <tr><td>🌐 Network</td><td>🔴 You</td><td>🟢 Azure</td><td>🟢 Azure</td><td>🟢 Azure</td></tr>
+          <tr><td>💾 Storage</td><td>🔴 You</td><td>🟢 Azure</td><td>🟢 Azure</td><td>🟢 Azure</td></tr>
+          <tr><td>🖥️ Virtual Machines/OS</td><td>🔴 You</td><td>🔴 You</td><td>🟢 Azure</td><td>🟢 Azure</td></tr>
+          <tr><td>⚙️ Middleware/Runtime</td><td>🔴 You</td><td>🔴 You</td><td>🟢 Azure</td><td>🟢 Azure</td></tr>
+          <tr><td>📦 Application</td><td>🔴 You</td><td>🔴 You</td><td>🔴 You</td><td>🟢 Azure</td></tr>
+          <tr><td>📊 Data</td><td>🔴 You</td><td>🔴 You</td><td>🔴 You</td><td>🟢 Azure</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="ci">🖥️</div>
+      <h3>IaaS — Infrastructure as a Service</h3>
+      <p>You rent virtualized hardware from Azure. You install the OS, configure it, install your software, and manage scaling yourself. Maximum control, maximum responsibility.<br/><br/>
+      <strong>Azure Examples:</strong> Virtual Machines, Azure Virtual Network, Azure Load Balancer<br/><br/>
+      <strong>When to use:</strong> When you need full control over OS and software stack, lift-and-shift migrations from on-premise.</p>
+    </div>
+    <div class="card">
+      <div class="ci">🛠️</div>
+      <h3>PaaS — Platform as a Service</h3>
+      <p>Azure manages the infrastructure AND platform. You focus only on your application logic and data. No patching, no OS management, no capacity planning.<br/><br/>
+      <strong>Azure Examples:</strong> Azure SQL DB, Azure Data Factory, Databricks, Cosmos DB, App Service<br/><br/>
+      <strong>When to use:</strong> Most data engineering work happens here. Best for development speed and cost efficiency.</p>
+    </div>
+    <div class="card">
+      <div class="ci">📦</div>
+      <h3>SaaS — Software as a Service</h3>
+      <p>You use a complete application delivered over the internet. Provider manages everything including the software itself. You just configure and use it.<br/><br/>
+      <strong>Azure Examples:</strong> Microsoft 365, Power BI Service, Microsoft Teams, Dynamics 365<br/><br/>
+      <strong>When to use:</strong> Business tools — email, collaboration, analytics dashboards for end users.</p>
+    </div>
+  </div>
+
+  <div class="ibox ib-green">
+    <div class="ib-icon">💡</div>
+    <div class="ib-body">
+      <h4>As a Data Engineer — You Live in PaaS World</h4>
+      <p>Virtually every Azure data service a Data Engineer uses is PaaS: Data Factory, Databricks, Synapse, SQL Database, Cosmos DB, Data Lake, Event Hubs. You never manage servers. Azure patches, scales, and secures the platform for you. You focus 100% on building pipelines and transformations.</p>
+    </div>
+  </div>
+
+  <div class="diagram">
+    <div class="diagram-title">🗺️ Azure Services Mapped to Cloud Models</div>
+    <div class="flow" style="align-items:flex-start;gap:2rem;flex-wrap:wrap;">
+      <div style="text-align:center;flex:1;min-width:160px;">
+        <div class="fn fn-blue" style="margin-bottom:1rem;">IaaS</div>
+        <div style="display:flex;flex-direction:column;gap:.5rem;font-size:.78rem;color:var(--t2);">
+          <div class="fn fn-blue" style="font-size:.72rem;min-width:0;">🖥️ Virtual Machines</div>
+          <div class="fn fn-blue" style="font-size:.72rem;min-width:0;">🌐 Virtual Network</div>
+          <div class="fn fn-blue" style="font-size:.72rem;min-width:0;">⚖️ Load Balancer</div>
+        </div>
+      </div>
+      <div style="text-align:center;flex:1;min-width:160px;">
+        <div class="fn fn-cyan" style="margin-bottom:1rem;">PaaS</div>
+        <div style="display:flex;flex-direction:column;gap:.5rem;font-size:.78rem;color:var(--t2);">
+          <div class="fn fn-cyan" style="font-size:.72rem;min-width:0;">🔄 Data Factory</div>
+          <div class="fn fn-cyan" style="font-size:.72rem;min-width:0;">🧱 Databricks</div>
+          <div class="fn fn-cyan" style="font-size:.72rem;min-width:0;">🗄️ SQL Database</div>
+          <div class="fn fn-cyan" style="font-size:.72rem;min-width:0;">🌌 Cosmos DB</div>
+          <div class="fn fn-cyan" style="font-size:.72rem;min-width:0;">🏔️ Data Lake</div>
+          <div class="fn fn-cyan" style="font-size:.72rem;min-width:0;">⚡ Event Hubs</div>
+          <div class="fn fn-cyan" style="font-size:.72rem;min-width:0;">🔬 Synapse Analytics</div>
+        </div>
+      </div>
+      <div style="text-align:center;flex:1;min-width:160px;">
+        <div class="fn fn-green" style="margin-bottom:1rem;">SaaS</div>
+        <div style="display:flex;flex-direction:column;gap:.5rem;font-size:.78rem;color:var(--t2);">
+          <div class="fn fn-green" style="font-size:.72rem;min-width:0;">📊 Power BI Service</div>
+          <div class="fn fn-green" style="font-size:.72rem;min-width:0;">📧 Microsoft 365</div>
+          <div class="fn fn-green" style="font-size:.72rem;min-width:0;">💬 Teams</div>
+          <div class="fn fn-green" style="font-size:.72rem;min-width:0;">🏢 Dynamics 365</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 3 — REDUNDANCY
+══════════════════════════════════════════════ -->
+<section class="ch fi" id="ch3">
+  <div class="ch-head">
+    <div class="ch-num n-purple">03</div>
+    <div class="ch-title"><h2>🛡️ Data Fault Tolerance, Redundancy & High Availability</h2><p class="sub">How Azure ensures your data is never lost — even in disasters</p></div>
+  </div>
+  <div class="tags"><span class="tag tp">LRS</span><span class="tag tb">ZRS</span><span class="tag tc">GRS</span><span class="tag to">GZRS</span><span class="tag tg">High Availability</span></div>
+
+  <div class="analogy">
+    <div class="label">💡 Real-World Analogy — Photocopies</div>
+    <p>Imagine you have a very important contract document. If you store only 1 original — and the office burns down, it's gone forever.<br/>
+    <strong>LRS</strong> = 3 photocopies in the same filing cabinet in the same building.<br/>
+    <strong>ZRS</strong> = 3 copies in 3 different buildings in the same city.<br/>
+    <strong>GRS</strong> = 3 copies in your city + 3 copies in another city 500km away.<br/>
+    <strong>GZRS</strong> = 3 copies across 3 buildings in your city + 3 copies in another city. Maximum protection!</p>
+  </div>
+
+  <div class="ibox ib-blue">
+    <div class="ib-icon">🧠</div>
+    <div class="ib-body">
+      <h4>Why Does Redundancy Matter?</h4>
+      <p>Hardware fails. Earthquakes happen. Floods, fires, power outages — any of these can wipe out a data center. Azure's redundancy policies ensure your data survives these events automatically, without any action from you. This is a core promise of cloud computing: your data is safer in Azure than on any on-premise server.</p>
+    </div>
+  </div>
+
+  <div class="diagram">
+    <div class="diagram-title">🔄 Redundancy Types — Visual Comparison</div>
+
+    <!-- LRS -->
+    <div style="margin-bottom:2rem;">
+      <h4 style="color:var(--blue);margin-bottom:.8rem;font-size:.9rem;">📦 LRS — Locally Redundant Storage (3 copies, 1 data center)</h4>
+      <div class="flow" style="justify-content:flex-start;flex-wrap:wrap;gap:.5rem;">
+        <div class="fn fn-blue">🏢 Data Center A<br/><small>Copy 1</small></div>
+        <div class="fn fn-blue" style="opacity:.7;">🏢 Data Center A<br/><small>Copy 2</small></div>
+        <div class="fn fn-blue" style="opacity:.5;">🏢 Data Center A<br/><small>Copy 3</small></div>
+      </div>
+      <p style="font-size:.78rem;color:var(--t3);margin-top:.6rem;">⚠️ If this entire data center fails → All 3 copies are lost</p>
+    </div>
+
+    <!-- ZRS -->
+    <div style="margin-bottom:2rem;">
+      <h4 style="color:var(--orange);margin-bottom:.8rem;font-size:.9rem;">🏢 ZRS — Zone Redundant Storage (3 copies across 3 zones in same region)</h4>
+      <div class="flow" style="justify-content:flex-start;flex-wrap:wrap;gap:.5rem;">
+        <div class="fn fn-orange">🏢 Zone 1<br/><small>East US</small></div>
+        <div class="fa">+</div>
+        <div class="fn fn-orange">🏢 Zone 2<br/><small>East US</small></div>
+        <div class="fa">+</div>
+        <div class="fn fn-orange">🏢 Zone 3<br/><small>East US</small></div>
+      </div>
+      <p style="font-size:.78rem;color:var(--t3);margin-top:.6rem;">✅ If zone 1 fails (fire, flood) → Zones 2 & 3 still have your data</p>
+    </div>
+
+    <!-- GRS -->
+    <div style="margin-bottom:1rem;">
+      <h4 style="color:var(--cyan);margin-bottom:.8rem;font-size:.9rem;">🌍 GRS — Geo Redundant Storage (6 copies across 2 regions)</h4>
+      <div class="flow" style="justify-content:flex-start;flex-wrap:wrap;gap:1rem;">
+        <div style="text-align:center;">
+          <div style="font-size:.72rem;color:var(--t3);margin-bottom:.4rem;">PRIMARY REGION (East US)</div>
+          <div class="fn fn-cyan">📦 3 Copies<br/><small>LRS</small></div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.2rem;">
+          <div style="font-size:.68rem;color:var(--t3);">async replication</div>
+          <div class="fa">⟶</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:.72rem;color:var(--t3);margin-bottom:.4rem;">SECONDARY REGION (West US)</div>
+          <div class="fn fn-cyan" style="opacity:.7;">📦 3 Copies<br/><small>LRS</small></div>
+        </div>
+      </div>
+      <p style="font-size:.78rem;color:var(--t3);margin-top:.6rem;">✅ If entire East US region goes down → West US has your data. Default setting in Azure!</p>
+    </div>
+  </div>
+
+  <div class="tw">
+    <table>
+      <thead>
+        <tr><th>Type</th><th>Copies</th><th>Scope</th><th>Survives</th><th>Cost</th><th>Use Case</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong style="color:var(--blue)">LRS</strong></td><td>3</td><td>Single data center</td><td>Hardware failure</td><td>Lowest 💲</td><td>Dev/Test only</td></tr>
+        <tr><td><strong style="color:var(--orange)">ZRS</strong></td><td>3</td><td>3 zones, same region</td><td>Zone failure</td><td>Medium 💲💲</td><td>Production apps</td></tr>
+        <tr><td><strong style="color:var(--cyan)">GRS</strong></td><td>6</td><td>2 paired regions</td><td>Region outage</td><td>High 💲💲💲</td><td>Critical data</td></tr>
+        <tr><td><strong style="color:var(--purple)">GZRS</strong></td><td>6</td><td>3 zones + 2 regions</td><td>Zone + Region failure</td><td>Highest 💲💲💲💲</td><td>Maximum protection</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="kp">
+    <h3>📌 Key Concepts: Availability & SLA</h3>
+    <ul>
+      <li><strong>SLA (Service Level Agreement):</strong> Azure's promise on uptime. Most Azure PaaS services guarantee 99.9% to 99.99% availability per month. 99.99% = max ~52 minutes downtime per year.</li>
+      <li><strong>RTO (Recovery Time Objective):</strong> How quickly can the system recover after a failure? E.g., "We must be back online within 1 hour."</li>
+      <li><strong>RPO (Recovery Point Objective):</strong> How much data loss is acceptable? E.g., "We can afford to lose at most 5 minutes of data."</li>
+      <li><strong>Paired Regions:</strong> Every Azure region is paired with another region in the same geography. GRS always replicates to the paired region. E.g., East US ↔ West US, West Europe ↔ North Europe, South India ↔ Central India.</li>
+      <li><strong>Default in Azure:</strong> When creating a Storage Account, GRS is selected by default. Azure nudges you toward data safety.</li>
+    </ul>
+  </div>
+
+  <div class="try">
+    <div class="label">🛠️ Try This — See Redundancy Options in Action</div>
+    <ol>
+      <li>Go to Azure Portal → Search "Storage accounts" → Create</li>
+      <li>Fill basics: Resource Group, Storage account name (globally unique, lowercase), Region</li>
+      <li>Under "Redundancy" tab — you'll see the 4 options: LRS, ZRS, GRS, GZRS</li>
+      <li>Select GRS and scroll down — notice it shows you the secondary region paired with your primary</li>
+      <li>Observe the "Estimated monthly cost" change as you switch between tiers</li>
+      <li>Select LRS for learning (cheapest) → Review + Create</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 4 — AZURE SQL DB
+══════════════════════════════════════════════ -->
+<section class="ch fi" id="ch4">
+  <div class="ch-head">
+    <div class="ch-num n-green">04</div>
+    <div class="ch-title"><h2>🗄️ Azure SQL Database — Structured Data</h2><p class="sub">Fully managed relational database — the cloud version of SQL Server</p></div>
+  </div>
+  <div class="tags"><span class="tag tg">SQL</span><span class="tag tb">Relational</span><span class="tag tc">PaaS</span><span class="tag to">OLTP</span><span class="tag tp">Structured Data</span></div>
+
+  <div class="analogy">
+    <div class="label">💡 Real-World Analogy — Excel Sheet with Superpowers</div>
+    <p>Think of a database table like a very structured Excel spreadsheet — rows and columns, every column has a fixed type. But unlike Excel: it handles millions of rows, multiple users at the same time, transactions, backups, and querying in milliseconds. Azure SQL Database = this, without you managing any server.</p>
+  </div>
+
+  <div class="ibox ib-blue">
+    <div class="ib-icon">🗄️</div>
+    <div class="ib-body">
+      <h4>What is Azure SQL Database?</h4>
+      <p>Azure SQL Database is a fully managed, intelligent, scalable relational cloud database built on the SQL Server engine. You get all the power of SQL Server without managing any servers, OS patches, backups, or hardware. It's a PaaS service — pay for what you use.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>Key Features & Concepts</span></div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="ci">⚙️</div>
+      <h3>Serverless Tier</h3>
+      <p>Compute auto-scales based on workload demand and automatically pauses during inactive periods. <strong>You pay only when queries are running</strong>. Perfect for dev/test and intermittent workloads. Saves up to 70% cost vs always-on compute.</p>
+    </div>
+    <div class="card">
+      <div class="ci">🔥</div>
+      <h3>Built-in Intelligence</h3>
+      <p>Azure SQL DB has AI-powered features: Automatic index recommendations, Query Performance Insights, automatic backups, threat detection, and vulnerability assessments. It literally tells you how to make your queries faster.</p>
+    </div>
+    <div class="card">
+      <div class="ci">📏</div>
+      <h3>DTUs vs vCores</h3>
+      <p>Two pricing models: <strong>DTU (Database Transaction Units)</strong> — bundled compute+storage in fixed tiers. <strong>vCore</strong> — pick exact CPU/RAM separately. vCore is recommended for production (more control, Azure Hybrid Benefit applies).</p>
+    </div>
+    <div class="card">
+      <div class="ci">🔒</div>
+      <h3>Security Always On</h3>
+      <p>Data encrypted at rest (TDE) and in transit (TLS) by default. Firewall blocks all access until you explicitly whitelist IPs. Private Link for fully private connectivity. Microsoft Defender for SQL for threat detection.</p>
+    </div>
+    <div class="card">
+      <div class="ci">📸</div>
+      <h3>Automatic Backups</h3>
+      <p>Full backups every week, differential backups every 12 hours, transaction log backups every 5–12 minutes. Retention from 1–35 days. Point-in-time restore — recover to any second within the retention period!</p>
+    </div>
+    <div class="card">
+      <div class="ci">🌐</div>
+      <h3>Geo-Replication</h3>
+      <p>Create up to 4 readable secondary databases in any Azure region. If the primary goes down, you can manually failover to any secondary in seconds. For automatic failover — use Failover Groups.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>How to Create — Step by Step</span></div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content"><h4>Search & Start</h4><p>Portal → Search "SQL databases" → Click Create. Select your Subscription and Resource Group. Give your database a name (e.g., "mydb").</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content"><h4>Create a SQL Server (Logical Server)</h4><p>Click "Create new" server. Give it a unique name (e.g., "myserver-2025"). Set Server admin login and password. Pick a region (same as resource group). This is just a logical container — not an actual VM.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content"><h4>Choose Compute Tier</h4><p>Click "Configure database". Select "Serverless" under General Purpose for dev/test — this auto-pauses and saves money. Set min vCores = 0.5, max = 2. Auto-pause delay = 60 minutes.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content"><h4>Networking — Allow Your IP</h4><p>Under Networking tab → "Add current client IP address" = YES. This allows your machine to connect to the database. Also enable "Allow Azure services to access this server" for ADF access.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-content"><h4>Review + Create</h4><p>Review cost estimate. Free account gets 32 GB storage. Click Create. Wait ~2 minutes for deployment. You'll see "Deployment complete" in notifications.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-content"><h4>Query via Portal Editor</h4><p>Open the database → Click "Query editor (preview)" on the left panel → Login with your admin credentials → You can now run SQL directly in the browser!</p></div>
+    </div>
+  </div>
+
+  <div class="code">
+    <div class="code-header"><span class="code-lang">SQL — Azure SQL Database Examples</span><div class="code-dots"><span style="background:#ef4444;"></span><span style="background:#f59e0b;"></span><span style="background:#10b981;"></span></div></div>
+    <pre><span class="cm">-- Create a table</span>
+<span class="kw">CREATE TABLE</span> employees (
+    employee_id  <span class="kw">INT</span> <span class="kw">PRIMARY KEY</span> <span class="kw">IDENTITY</span>(<span class="nm">1</span>,<span class="nm">1</span>),
+    full_name    <span class="kw">NVARCHAR</span>(<span class="nm">100</span>) <span class="kw">NOT NULL</span>,
+    department   <span class="kw">NVARCHAR</span>(<span class="nm">50</span>),
+    salary       <span class="kw">DECIMAL</span>(<span class="nm">10</span>, <span class="nm">2</span>),
+    hire_date    <span class="kw">DATE</span>,
+    is_active    <span class="kw">BIT</span> <span class="kw">DEFAULT</span> <span class="nm">1</span>
+);
+
+<span class="cm">-- Insert data</span>
+<span class="kw">INSERT INTO</span> employees (full_name, department, salary, hire_date) <span class="kw">VALUES</span>
+    (<span class="st">'Ansh Sharma'</span>,  <span class="st">'Data Engineering'</span>, <span class="nm">85000</span>, <span class="st">'2024-01-15'</span>),
+    (<span class="st">'Priya Patel'</span>,  <span class="st">'Analytics'</span>,       <span class="nm">72000</span>, <span class="st">'2023-06-01'</span>),
+    (<span class="st">'Rahul Kumar'</span>,  <span class="st">'Data Science'</span>,    <span class="nm">95000</span>, <span class="st">'2022-11-20'</span>);
+
+<span class="cm">-- Query — Find all Data Engineering employees</span>
+<span class="kw">SELECT</span>
+    full_name,
+    salary,
+    DATEDIFF(<span class="fu">YEAR</span>, hire_date, <span class="fu">GETDATE</span>()) <span class="kw">AS</span> years_at_company
+<span class="kw">FROM</span> employees
+<span class="kw">WHERE</span> department = <span class="st">'Data Engineering'</span>
+  <span class="kw">AND</span> is_active = <span class="nm">1</span>
+<span class="kw">ORDER BY</span> salary <span class="kw">DESC</span>;</pre>
+  </div>
+
+  <div class="ibox ib-orange">
+    <div class="ib-icon">🔑</div>
+    <div class="ib-body">
+      <h4>Azure SQL DB vs On-Premise SQL Server — Key Differences</h4>
+      <ul>
+        <li>Same T-SQL dialect — all your SQL knowledge transfers directly</li>
+        <li>No server to manage: No patching, backup configuration, or hardware maintenance</li>
+        <li>Pay per second of compute (serverless tier) vs fixed server cost</li>
+        <li>Built-in HA: 99.99% SLA with automatic failover; on-prem needs you to set up Always On AG</li>
+        <li>Scaling takes seconds (slider in portal) vs hardware procurement weeks</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="try">
+    <div class="label">🛠️ Try This — Hands-On with Azure SQL Database</div>
+    <ol>
+      <li>Create your Azure SQL Database following steps above</li>
+      <li>Open Query Editor → Paste and run the CREATE TABLE SQL above</li>
+      <li>Insert the 3 sample employees using the INSERT statement</li>
+      <li>Run the SELECT query — verify you see Ansh Sharma with salary 85000</li>
+      <li>Add 5 more employees from different departments using INSERT</li>
+      <li>Bonus: Try <code style="color:var(--cyan)">SELECT COUNT(*) FROM employees GROUP BY department</code> to count per department</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 5 — COSMOS DB
+══════════════════════════════════════════════ -->
+<section class="ch fi" id="ch5">
+  <div class="ch-head">
+    <div class="ch-num n-orange">05</div>
+    <div class="ch-title"><h2>🌌 Azure Cosmos DB — Semi-Structured & NoSQL Data</h2><p class="sub">Globally distributed, multi-model database for modern apps</p></div>
+  </div>
+  <div class="tags"><span class="tag to">NoSQL</span><span class="tag tb">JSON</span><span class="tag tc">Multi-Model</span><span class="tag tp">Global Distribution</span><span class="tag tg">Key-Value</span></div>
+
+  <div class="analogy">
+    <div class="label">💡 Real-World Analogy — A Flexible Filing Cabinet</div>
+    <p>Imagine a SQL database is a rigid spreadsheet — every row must have the exact same columns. Cosmos DB is like a very smart filing cabinet where each folder (document) can have completely different fields. One folder for customer "John" might have [name, email, address], while another for customer "Priya" might have [name, phone, age, premium_member]. No fixed schema required!</p>
+  </div>
+
+  <div class="ibox ib-blue">
+    <div class="ib-icon">🌍</div>
+    <div class="ib-body">
+      <h4>What is Azure Cosmos DB?</h4>
+      <p>Azure Cosmos DB is Microsoft's globally distributed, multi-model, fully managed NoSQL database service. It's built for modern applications that need single-digit millisecond response times at any scale, anywhere in the world. Ask any Azure software engineer what they use for app data — the answer is Cosmos DB.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>Structured vs Semi-Structured Data</span></div>
+
+  <div class="compare">
+    <div class="compare-card left">
+      <h3 style="color:var(--blue);">🗄️ Structured Data (SQL DB)</h3>
+      <ul>
+        <li><span class="tick">✓</span> Fixed schema — same columns every row</li>
+        <li><span class="tick">✓</span> Rows and columns like a spreadsheet</li>
+        <li><span class="tick">✓</span> Strong data integrity (ACID)</li>
+        <li><span class="cross">✗</span> Schema changes are expensive</li>
+        <li><span class="cross">✗</span> Hard to store nested/variable data</li>
+      </ul>
+      <div class="code" style="margin-top:1rem;margin-bottom:0;">
+        <pre style="font-size:.72rem;padding:.75rem 1rem;">ID | Name  | Age | City
+ 1 | Ansh  |  25 | Mumbai
+ 2 | Priya |  30 | Delhi
+ <span class="cm">-- Every row has same columns</span></pre>
+      </div>
+    </div>
+    <div class="compare-card right">
+      <h3 style="color:var(--green);">🌌 Semi-Structured Data (Cosmos DB)</h3>
+      <ul>
+        <li><span class="tick">✓</span> Flexible schema — fields can vary</li>
+        <li><span class="tick">✓</span> JSON documents with nested data</li>
+        <li><span class="tick">✓</span> Easy to add new fields anytime</li>
+        <li><span class="tick">✓</span> Stores complex, nested structures</li>
+        <li><span class="cross">✗</span> Weaker consistency guarantees</li>
+      </ul>
+      <div class="code" style="margin-top:1rem;margin-bottom:0;">
+        <pre style="font-size:.72rem;padding:.75rem 1rem;">{<span class="st">"id"</span>:<span class="st">"1"</span>,<span class="st">"name"</span>:<span class="st">"Ansh"</span>,
+ <span class="st">"address"</span>:{<span class="st">"city"</span>:<span class="st">"Mumbai"</span>},
+ <span class="st">"orders"</span>:[<span class="st">"ord_1"</span>,<span class="st">"ord_2"</span>]}
+<span class="cm">-- Different structure per document</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"><span>Cosmos DB API Types — Pick Your Model</span></div>
+
+  <div class="acc">
+    <button class="acc-h" onclick="acc(this)">
+      <h4>🔵 Cosmos DB for NoSQL (Core API) — Recommended • Most Popular</h4>
+      <span class="acc-icon">▼</span>
+    </button>
+    <div class="acc-b">
+      <p>The native, default API. Stores data as <strong>JSON documents</strong> organized in Containers (similar to tables) within a Database. The killer feature: <strong>you query JSON data using SQL syntax!</strong></p>
+      <br/>
+      <div class="code">
+        <div class="code-header"><span class="code-lang">Cosmos DB NoSQL — Document + Query</span><div class="code-dots"><span style="background:#ef4444;"></span><span style="background:#f59e0b;"></span><span style="background:#10b981;"></span></div></div>
+        <pre><span class="cm">-- Data stored as JSON document:</span>
+{
+  <span class="st">"id"</span>: <span class="st">"customer_001"</span>,
+  <span class="st">"name"</span>: <span class="st">"Ansh Sharma"</span>,
+  <span class="st">"email"</span>: <span class="st">"ansh@example.com"</span>,
+  <span class="st">"city"</span>: <span class="st">"Mumbai"</span>,
+  <span class="st">"orders"</span>: [
+    { <span class="st">"order_id"</span>: <span class="st">"ORD-1"</span>, <span class="st">"amount"</span>: <span class="nm">2500</span> },
+    { <span class="st">"order_id"</span>: <span class="st">"ORD-2"</span>, <span class="st">"amount"</span>: <span class="nm">1800</span> }
+  ],
+  <span class="st">"is_premium"</span>: <span class="kw">true</span>
+}
+
+<span class="cm">-- Query this JSON with SQL-like syntax!</span>
+<span class="kw">SELECT</span> c.name, c.city, c.is_premium
+<span class="kw">FROM</span> c
+<span class="kw">WHERE</span> c.city = <span class="st">"Mumbai"</span> <span class="kw">AND</span> c.is_premium = <span class="kw">true</span></pre>
+      </div>
+      <div class="ibox ib-green" style="margin-top:.5rem;margin-bottom:0;">
+        <div class="ib-icon">⭐</div>
+        <div class="ib-body"><h4>Why This is Special</h4><p>Normally, NoSQL databases have their own complex query languages. Cosmos DB for NoSQL lets you use familiar SQL to query JSON — the best of both worlds. No new query language to learn!</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <button class="acc-h" onclick="acc(this)">
+      <h4>🟢 Cosmos DB for MongoDB — Migration-Friendly</h4>
+      <span class="acc-icon">▼</span>
+    </button>
+    <div class="acc-b">
+      <p>MongoDB-wire-protocol compatible API. If your application already uses MongoDB, you can <strong>point it to Cosmos DB without changing a single line of code</strong>. Uses BSON format. Cosmos DB infrastructure runs underneath with all its global distribution benefits.</p>
+      <div class="code">
+        <div class="code-header"><span class="code-lang">MongoDB API — Insert and Query</span><div class="code-dots"><span style="background:#ef4444;"></span><span style="background:#f59e0b;"></span><span style="background:#10b981;"></span></div></div>
+        <pre><span class="cm"># Python with PyMongo — same code works on Cosmos DB!</span>
+<span class="kw">from</span> pymongo <span class="kw">import</span> MongoClient
+
+client = <span class="fu">MongoClient</span>(<span class="st">"your-cosmos-mongodb-connection-string"</span>)
+db = client[<span class="st">"mydb"</span>]
+collection = db[<span class="st">"customers"</span>]
+
+<span class="cm"># Insert a document</span>
+collection.insert_one({
+    <span class="st">"customer_id"</span>: <span class="st">"C001"</span>,
+    <span class="st">"name"</span>: <span class="st">"Priya"</span>,
+    <span class="st">"preferences"</span>: [<span class="st">"electronics"</span>, <span class="st">"books"</span>]
+})
+
+<span class="cm"># Query</span>
+results = collection.find({<span class="st">"name"</span>: <span class="st">"Priya"</span>})</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <button class="acc-h" onclick="acc(this)">
+      <h4>🟡 Cosmos DB for Table — Key-Value Store</h4>
+      <span class="acc-icon">▼</span>
+    </button>
+    <div class="acc-b">
+      <p>Provides Azure Table Storage-compatible API but with Cosmos DB's global distribution and performance. You store data as <strong>key-value pairs</strong> — a PartitionKey + RowKey uniquely identifies each entity. Used when you need fast lookups by a known key.</p>
+      <div class="ibox ib-orange" style="margin-top:.75rem;margin-bottom:0;">
+        <div class="ib-icon">💡</div>
+        <div class="ib-body"><h4>When to Use Table API</h4><p>Configuration data, user session storage, product catalogs where you always look up by a known ID. Not for complex queries — just fast key-based retrieval.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <button class="acc-h" onclick="acc(this)">
+      <h4>🟣 Cosmos DB for Apache Gremlin — Graph Database</h4>
+      <span class="acc-icon">▼</span>
+    </button>
+    <div class="acc-b">
+      <p>Graph database model — data stored as <strong>Vertices (nodes)</strong> and <strong>Edges (relationships)</strong>. Perfect when relationships between data points are as important as the data itself.</p>
+      <br/>
+      <p><strong>Real examples:</strong> Social networks (User A follows User B), Recommendation engines (Customer bought Product X and Product Y), Fraud detection (Account A transferred to B transferred to C — spot money laundering chains).</p>
+      <div class="code">
+        <div class="code-header"><span class="code-lang">Gremlin Query Language</span><div class="code-dots"><span style="background:#ef4444;"></span><span style="background:#f59e0b;"></span><span style="background:#10b981;"></span></div></div>
+        <pre><span class="cm">// Find all friends of Ansh who live in Mumbai</span>
+g.V().has(<span class="st">'name'</span>, <span class="st">'Ansh'</span>)
+  .out(<span class="st">'knows'</span>)
+  .has(<span class="st">'city'</span>, <span class="st">'Mumbai'</span>)
+  .values(<span class="st">'name'</span>)</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <button class="acc-h" onclick="acc(this)">
+      <h4>🔵 Cosmos DB for Apache Cassandra — Wide Column Store</h4>
+      <span class="acc-icon">▼</span>
+    </button>
+    <div class="acc-b">
+      <p>Cassandra-wire-protocol compatible. <strong>Wide column store</strong> — data organized in column families. Excellent for time-series data, IoT readings, event logging. Very high write throughput. Good for existing Cassandra workloads migrating to managed cloud.</p>
+    </div>
+  </div>
+
+  <div class="acc">
+    <button class="acc-h" onclick="acc(this)">
+      <h4>🟤 Cosmos DB for PostgreSQL — Distributed SQL</h4>
+      <span class="acc-icon">▼</span>
+    </button>
+    <div class="acc-b">
+      <p>Distributed PostgreSQL powered by the Citus extension. Horizontal sharding of relational data across multiple nodes. Use standard PostgreSQL syntax and drivers. For workloads that need relational SQL but have outgrown a single PostgreSQL server's scale.</p>
+    </div>
+  </div>
+
+  <div style="margin-top:1.5rem;">
+    <div class="diagram">
+      <div class="diagram-title">🌍 Cosmos DB — Global Distribution How It Works</div>
+      <div class="flow" style="gap:1rem;flex-wrap:wrap;">
+        <div style="text-align:center;">
+          <div class="fn fn-blue" style="margin-bottom:.5rem;">✍️ Writes<br/>East US (Primary)</div>
+        </div>
+        <div class="fa">⟶</div>
+        <div style="display:flex;flex-direction:column;gap:.5rem;">
+          <div class="fn fn-cyan" style="font-size:.75rem;">📖 West Europe (Read)</div>
+          <div class="fn fn-cyan" style="font-size:.75rem;">📖 South India (Read)</div>
+          <div class="fn fn-cyan" style="font-size:.75rem;">📖 Japan East (Read)</div>
+        </div>
+      </div>
+      <p style="text-align:center;color:var(--t3);font-size:.78rem;margin-top:1rem;">Users in Europe read from West Europe → millisecond latency. Write goes to East US → async replicated to all read regions. Optional multi-region write for maximum availability.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 6 — DATA LAKE
+══════════════════════════════════════════════ -->
+<section class="ch fi" id="ch6">
+  <div class="ch-head">
+    <div class="ch-num n-pink">06</div>
+    <div class="ch-title"><h2>🏔️ Azure Data Lake Storage Gen2 — Unstructured & Big Data</h2><p class="sub">The massive, cheap, hierarchical storage backbone of every data pipeline</p></div>
+  </div>
+  <div class="tags"><span class="tag to">Unstructured</span><span class="tag tb">Big Data</span><span class="tag tc">Gen2</span><span class="tag tg">Blob Storage</span><span class="tag tp">Hierarchical</span></div>
+
+  <div class="analogy">
+    <div class="label">💡 Real-World Analogy — A Giant Smart Hard Drive in the Cloud</div>
+    <p>Azure Data Lake is like a massive Google Drive but designed for billions of files of any type — CSV, JSON, images, videos, Parquet, Delta, logs — at petabyte scale. Unlike a database, you don't predefine any schema. You just dump files in, organized in folders. Analytics tools (Databricks, Synapse) read and process them when needed.</p>
+  </div>
+
+  <div class="ibox ib-blue">
+    <div class="ib-icon">🏔️</div>
+    <div class="ib-body">
+      <h4>What is Azure Data Lake Storage (ADLS) Gen2?</h4>
+      <p>ADLS Gen2 = Azure Blob Storage (object storage) + Hierarchical Namespace (folder structure). It's the cheapest, most scalable storage you can use in Azure. It supports files of any format — CSV, JSON, Parquet, Delta, images, audio, video. The backbone of every modern Azure data engineering pipeline.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>ADLS Gen2 vs Blob Storage — What's Different?</span></div>
+
+  <div class="compare">
+    <div class="compare-card left" style="border-color:rgba(245,158,11,.4);">
+      <h3 style="color:var(--orange);">📦 Azure Blob Storage (Gen1/Regular)</h3>
+      <ul>
+        <li><span class="tick">✓</span> Flat namespace (no real folders)</li>
+        <li><span class="cross">✗</span> Renaming a folder = copy + delete (O(n) — slow!)</li>
+        <li><span class="cross">✗</span> No atomic directory operations</li>
+        <li><span class="cross">✗</span> No POSIX ACL (file-level permissions)</li>
+        <li><span class="tick">✓</span> Good for simple object/file storage</li>
+      </ul>
+    </div>
+    <div class="compare-card right" style="border-color:rgba(0,180,216,.4);">
+      <h3 style="color:var(--cyan);">🏔️ ADLS Gen2 (Hierarchical Namespace ON)</h3>
+      <ul>
+        <li><span class="tick">✓</span> True hierarchical folders (like a filesystem)</li>
+        <li><span class="tick">✓</span> Rename/delete folder = atomic O(1) — instant!</li>
+        <li><span class="tick">✓</span> POSIX ACLs — file & directory level permissions</li>
+        <li><span class="tick">✓</span> 10–60x faster for big data operations</li>
+        <li><span class="tick">✓</span> Native Databricks + Synapse integration</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="divider"><span>Storage Account Components — What's Inside?</span></div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="ci">📦</div>
+      <h3>Containers (Blob)</h3>
+      <p>The top-level bucket inside a storage account. Like the root folder. You create containers like "raw", "silver", "gold". Each container can have a different public/private access policy. With Hierarchical Namespace enabled, containers support full folder structures inside.</p>
+    </div>
+    <div class="card">
+      <div class="ci">📄</div>
+      <h3>Blobs (Files)</h3>
+      <p>Individual files stored inside containers. Three types: <strong>Block Blobs</strong> (text/binary data — most common), <strong>Append Blobs</strong> (log files — optimized for append operations), <strong>Page Blobs</strong> (VM disks — random read/write access).</p>
+    </div>
+    <div class="card">
+      <div class="ci">📨</div>
+      <h3>Queues</h3>
+      <p>Simple message queuing service. Stores short messages in FIFO order (max 64KB each). Used to decouple application components. E.g., when a file lands in Data Lake, add a message to the queue to trigger downstream processing.</p>
+    </div>
+    <div class="card">
+      <div class="ci">📋</div>
+      <h3>Tables</h3>
+      <p>NoSQL key-value storage inside a storage account. Cheaper than Cosmos DB Table API but with fewer features (no global distribution, no SLA guarantees). Good for storing app metadata, config data, simple lookup tables at low cost.</p>
+    </div>
+    <div class="card">
+      <div class="ci">🗂️</div>
+      <h3>File Shares (Azure Files)</h3>
+      <p>SMB-compatible cloud file shares. Mount as a network drive (Z: drive on Windows, /mnt/azurefiles on Linux). Great for lifting on-premise file shares to the cloud or sharing config files between multiple VMs/apps.</p>
+    </div>
+    <div class="card">
+      <div class="ci">💰</div>
+      <h3>Storage Tiers</h3>
+      <p><strong>Hot</strong>: Frequently accessed data (highest storage cost, lowest access cost). <strong>Cool</strong>: Infrequently accessed, stored ≥30 days. <strong>Cold</strong>: Rarely accessed, stored ≥90 days. <strong>Archive</strong>: Long-term backup, must rehydrate (hours) before access. Coldest = cheapest storage.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>The Medallion Architecture — Industry Standard Pattern</span></div>
+
+  <div class="diagram">
+    <div class="diagram-title">🏅 Bronze → Silver → Gold — Medallion Data Lake Pattern</div>
+    <div class="flow" style="align-items:stretch;gap:1.5rem;flex-wrap:wrap;">
+
+      <div style="flex:1;min-width:180px;background:rgba(180,80,0,.1);border:1px solid rgba(180,80,0,.4);border-radius:12px;padding:1.2rem;text-align:center;">
+        <div style="font-size:2rem;margin-bottom:.5rem;">🥉</div>
+        <div style="font-weight:800;color:#f97316;margin-bottom:.5rem;">BRONZE (Raw)</div>
+        <div style="font-size:.78rem;color:var(--t2);line-height:1.7;">
+          Raw data, as-is<br/>
+          No transformation<br/>
+          CSV, JSON, XML<br/>
+          Append-only<br/>
+          <em>Source of truth</em>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;font-size:1.5rem;color:var(--t3);">→</div>
+
+      <div style="flex:1;min-width:180px;background:rgba(150,150,150,.1);border:1px solid rgba(200,200,200,.25);border-radius:12px;padding:1.2rem;text-align:center;">
+        <div style="font-size:2rem;margin-bottom:.5rem;">🥈</div>
+        <div style="font-weight:800;color:#94a3b8;margin-bottom:.5rem;">SILVER (Clean)</div>
+        <div style="font-size:.78rem;color:var(--t2);line-height:1.7;">
+          Cleaned & validated<br/>
+          Duplicates removed<br/>
+          Types corrected<br/>
+          Parquet format<br/>
+          <em>Reliable, queryable</em>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;font-size:1.5rem;color:var(--t3);">→</div>
+
+      <div style="flex:1;min-width:180px;background:rgba(180,150,0,.1);border:1px solid rgba(240,200,0,.3);border-radius:12px;padding:1.2rem;text-align:center;">
+        <div style="font-size:2rem;margin-bottom:.5rem;">🥇</div>
+        <div style="font-weight:800;color:#fbbf24;margin-bottom:.5rem;">GOLD (Business)</div>
+        <div style="font-size:.78rem;color:var(--t2);line-height:1.7;">
+          Aggregated & joined<br/>
+          Business-ready KPIs<br/>
+          Delta / Star schema<br/>
+          Served to Power BI<br/>
+          <em>Decision-making</em>
+        </div>
+      </div>
+
+    </div>
+    <div style="margin-top:1.5rem;display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;font-size:.78rem;color:var(--t3);">
+      <span>Tool: ADF Copy Activity</span>
+      <span>→</span>
+      <span>Tool: Databricks PySpark</span>
+      <span>→</span>
+      <span>Tool: Databricks / Synapse SQL</span>
+    </div>
+  </div>
+
+  <div class="ibox ib-purple">
+    <div class="ib-icon">📁</div>
+    <div class="ib-body">
+      <h4>Recommended Folder Structure in ADLS</h4>
+      <ul>
+        <li><code style="color:var(--cyan);">/bronze/source_name/YYYY/MM/DD/filename.csv</code> — partition by date</li>
+        <li><code style="color:var(--cyan);">/silver/table_name/filename.parquet</code> — clean Parquet</li>
+        <li><code style="color:var(--cyan);">/gold/report_name/</code> — Delta tables for reporting</li>
+        <li>Always include date in path for time-partitioned datasets</li>
+        <li>Use Parquet (columnar, compressed) for Silver/Gold — 10x smaller than CSV, 100x faster to query</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="try">
+    <div class="label">🛠️ Try This — Upload Files to ADLS Gen2</div>
+    <ol>
+      <li>Create a Storage Account → Enable "Hierarchical namespace" (this makes it ADLS Gen2)</li>
+      <li>Go to the resource → Data Storage → Containers → "+ Container" → Name it "bronze" → Private access</li>
+      <li>Click the "bronze" container → Upload → Pick any CSV file from your computer</li>
+      <li>Create 2 more containers: "silver" and "gold"</li>
+      <li>Inside bronze, click "+ Add Directory" → name it "employees" → then upload your CSV inside it</li>
+      <li>Explore the "Storage browser" in the left menu — navigate your filesystem-like folder structure</li>
+      <li>Generate a SAS URL for the file — this is how other services temporarily access the file</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 7 — EVENT HUBS
+══════════════════════════════════════════════ -->
+<section class="ch fi" id="ch7">
+  <div class="ch-head">
+    <div class="ch-num n-blue">07</div>
+    <div class="ch-title"><h2>⚡ Azure Event Hubs — Real-Time Data Streaming</h2><p class="sub">Ingest millions of events per second for IoT, apps, and clickstreams</p></div>
+  </div>
+  <div class="tags"><span class="tag tb">Real-time</span><span class="tag tc">Streaming</span><span class="tag tp">Kafka Compatible</span><span class="tag to">IoT</span><span class="tag tg">Events</span></div>
+
+  <div class="analogy">
+    <div class="label">💡 Real-World Analogy — A Highway Toll Gate</div>
+    <p>Imagine millions of cars (data events) flowing on a highway. A toll gate (Event Hubs) sits at the entry point — it doesn't stop the cars, it just captures each car's info (license plate, time, lane). The cars keep moving. The toll gate stores the info temporarily and multiple systems (police database, billing system, traffic analytics) can pick it up later — at their own speed. Event Hubs is this toll gate for your data streams.</p>
+  </div>
+
+  <div class="ibox ib-blue">
+    <div class="ib-icon">⚡</div>
+    <div class="ib-body">
+      <h4>What is Azure Event Hubs?</h4>
+      <p>Azure Event Hubs is a <strong>fully managed, real-time data ingestion service</strong> (event streaming platform). It can receive and buffer millions of events per second from any source — IoT sensors, websites, mobile apps, databases — and makes them available to multiple downstream consumers in real-time.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>Core Architecture — How Events Flow</span></div>
+
+  <div class="diagram">
+    <div class="diagram-title">🌊 Event Hubs Complete Data Flow</div>
+    <div class="flow" style="gap:.75rem;flex-wrap:wrap;">
+      <div style="text-align:center;">
+        <div style="font-size:.72rem;color:var(--t3);margin-bottom:.4rem;">PRODUCERS (Sources)</div>
+        <div style="display:flex;flex-direction:column;gap:.3rem;">
+          <div class="fn fn-blue" style="font-size:.72rem;min-width:0;">🌡️ IoT Sensors</div>
+          <div class="fn fn-blue" style="font-size:.72rem;min-width:0;">🌐 Web Apps</div>
+          <div class="fn fn-blue" style="font-size:.72rem;min-width:0;">📱 Mobile Apps</div>
+          <div class="fn fn-blue" style="font-size:.72rem;min-width:0;">🔌 Kafka Producer</div>
+        </div>
+      </div>
+      <div class="fa" style="font-size:1.5rem;">→</div>
+      <div style="text-align:center;">
+        <div style="font-size:.72rem;color:var(--t3);margin-bottom:.4rem;">EVENT HUBS NAMESPACE</div>
+        <div class="fn fn-cyan" style="min-width:180px;padding:1rem;">
+          ⚡ Event Hub<br/>
+          <small>Partitions 1..N</small><br/>
+          <small>Retention: 1–90 days</small>
+        </div>
+      </div>
+      <div class="fa" style="font-size:1.5rem;">→</div>
+      <div style="text-align:center;">
+        <div style="font-size:.72rem;color:var(--t3);margin-bottom:.4rem;">CONSUMERS (Subscribers)</div>
+        <div style="display:flex;flex-direction:column;gap:.3rem;">
+          <div class="fn fn-green" style="font-size:.72rem;min-width:0;">🧱 Databricks Streaming</div>
+          <div class="fn fn-green" style="font-size:.72rem;min-width:0;">🔬 Stream Analytics</div>
+          <div class="fn fn-green" style="font-size:.72rem;min-width:0;">📊 Power BI Real-time</div>
+          <div class="fn fn-green" style="font-size:.72rem;min-width:0;">🏔️ Data Lake (Capture)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"><span>Key Concepts Explained</span></div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="ci">🗂️</div>
+      <h3>Namespace</h3>
+      <p>Container for Event Hubs. Like a SQL Server containing databases. You create one namespace per environment or application. Namespace has the pricing tier (Basic/Standard/Premium) and throughput settings. Inside a namespace, you create multiple Event Hubs (streams).</p>
+    </div>
+    <div class="card">
+      <div class="ci">⚡</div>
+      <h3>Event Hub (Topic)</h3>
+      <p>The actual stream. Similar to a Kafka topic. Each Event Hub is divided into partitions. Example: "weather-stream", "clickstream", "iot-sensors". One namespace can contain multiple Event Hubs for different data streams.</p>
+    </div>
+    <div class="card">
+      <div class="ci">🔀</div>
+      <h3>Partitions</h3>
+      <p>Each Event Hub is split into N partitions (1–32). Each partition = an ordered, immutable sequence of events. Multiple consumers read from different partitions in parallel → higher throughput. Partition count is set at creation time — cannot change later!</p>
+    </div>
+    <div class="card">
+      <div class="ci">⏱️</div>
+      <h3>Retention Period</h3>
+      <p>Events are NOT permanent. They're stored for a configurable period: 1 day (Basic), up to 7 days (Standard), up to 90 days (Premium). After this, events are automatically deleted. Event Hubs is a <strong>buffer/transit layer</strong>, not a storage solution.</p>
+    </div>
+    <div class="card">
+      <div class="ci">👥</div>
+      <h3>Consumer Groups</h3>
+      <p>Logical view of an Event Hub per consumer. Each consumer group maintains its own offset (reading position). Multiple applications can read the same events independently at their own pace — without interfering with each other. Default group: "$Default".</p>
+    </div>
+    <div class="card">
+      <div class="ci">📸</div>
+      <h3>Event Capture (Free Archive)</h3>
+      <p>Enable Capture to automatically save all streaming events to ADLS Gen2 or Blob Storage in Avro format — for long-term retention and batch reprocessing. Archive happens automatically every N minutes or M bytes — whichever comes first.</p>
+    </div>
+  </div>
+
+  <div class="diagram">
+    <div class="diagram-title">🔀 Partitions — Parallel Processing Explained</div>
+    <div style="overflow-x:auto;">
+      <table style="min-width:500px;">
+        <thead><tr><th>Partition</th><th>Sequence</th><th>Events (stored in order)</th><th>Consumer</th></tr></thead>
+        <tbody>
+          <tr><td style="color:var(--blue);">Partition 0</td><td>0→1→2→3→...</td><td>{"sensor":"A","temp":25} → {"sensor":"A","temp":26}...</td><td>Consumer 1</td></tr>
+          <tr><td style="color:var(--cyan);">Partition 1</td><td>0→1→2→3→...</td><td>{"sensor":"B","temp":31} → {"sensor":"B","temp":30}...</td><td>Consumer 2</td></tr>
+          <tr><td style="color:var(--green);">Partition 2</td><td>0→1→2→3→...</td><td>{"sensor":"C","temp":22} → {"sensor":"C","temp":23}...</td><td>Consumer 3</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:.78rem;color:var(--t3);margin-top:.75rem;">Each partition is read by one consumer group member. 3 partitions = 3 consumers reading in parallel = 3x throughput.</p>
+  </div>
+
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Create Event Hubs Namespace</h4><p>Portal → Search "Event Hubs" → Create → Choose pricing tier (Standard for production). Set Throughput Units (TUs) — 1 TU = 1 MB/s ingress, 2 MB/s egress. Can auto-inflate TUs.</p></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Create an Event Hub</h4><p>Inside namespace → + Event Hub → Name it (e.g., "weather-stream") → Partition count: 1 (learning) up to 32 (production) → Cleanup policy: Delete → Retention: 1–7 days.</p></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Send Test Events (Data Explorer)</h4><p>Open your Event Hub → Data Explorer → "Send Events" → Pick sample dataset (Weather, IoT, Custom JSON) → Click "Send". You'll see "Completed sending 1 event".</p></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content"><h4>View Events (Data Explorer)</h4><p>Data Explorer → "View Events" → Select partition and starting position → Click "Fetch". You'll see your events with Sequence Number, EnqueuedTime, and event body (JSON payload).</p></div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-content"><h4>Get Connection String</h4><p>Namespace → Shared Access Policies → RootManageSharedAccessKey → Copy Connection String. This is how producers/consumers authenticate. Store this in Azure Key Vault in production.</p></div></div>
+  </div>
+
+  <div class="code">
+    <div class="code-header"><span class="code-lang">Python — Send Events to Event Hubs</span><div class="code-dots"><span style="background:#ef4444;"></span><span style="background:#f59e0b;"></span><span style="background:#10b981;"></span></div></div>
+    <pre><span class="kw">import</span> asyncio
+<span class="kw">import</span> json
+<span class="kw">from</span> azure.eventhub.aio <span class="kw">import</span> EventHubProducerClient
+<span class="kw">from</span> azure.eventhub <span class="kw">import</span> EventData
+
+CONNECTION_STR = <span class="st">"Endpoint=sb://your-namespace.servicebus.windows.net/;..."</span>
+EVENTHUB_NAME  = <span class="st">"weather-stream"</span>
+
+<span class="kw">async def</span> <span class="fu">send_events</span>():
+    producer = EventHubProducerClient.from_connection_string(
+        conn_str=CONNECTION_STR,
+        eventhub_name=EVENTHUB_NAME
+    )
+    <span class="kw">async with</span> producer:
+        batch = <span class="kw">await</span> producer.create_batch()
+
+        <span class="cm"># Add weather events to batch</span>
+        <span class="kw">for</span> i <span class="kw">in</span> <span class="fu">range</span>(<span class="nm">10</span>):
+            event_data = {
+                <span class="st">"sensor_id"</span>: <span class="fu">f"sensor_{i}"</span>,
+                <span class="st">"temperature"</span>: <span class="nm">20</span> + i,
+                <span class="st">"city"</span>: <span class="st">"Mumbai"</span>
+            }
+            batch.add(EventData(json.dumps(event_data)))
+
+        <span class="kw">await</span> producer.send_batch(batch)
+        <span class="fu">print</span>(<span class="st">"✅ 10 events sent successfully!"</span>)
+
+asyncio.run(<span class="fu">send_events</span>())</pre>
+  </div>
+
+  <div class="ibox ib-orange">
+    <div class="ib-icon">🔄</div>
+    <div class="ib-body">
+      <h4>Event Hubs vs Azure Service Bus — What's the Difference?</h4>
+      <ul>
+        <li><strong>Event Hubs</strong>: High-volume telemetry/event streaming. Many producers → Event Hub → Many consumers. Events retained by time (not acknowledgement). Kafka-compatible.</li>
+        <li><strong>Service Bus</strong>: Enterprise messaging. Point-to-point or publish-subscribe. Messages deleted after successful consumer acknowledgement. Supports ordering guarantees, dead-letter queues. For transactional, reliable message delivery between services.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 8 — ADF
+══════════════════════════════════════════════ -->
+<section class="ch fi" id="ch8">
+  <div class="ch-head">
+    <div class="ch-num n-cyan">08</div>
+    <div class="ch-title"><h2>🔄 Azure Data Factory — ETL and Orchestration</h2><p class="sub">The workflow engine that orchestrates all your data movements and transformations</p></div>
+  </div>
+  <div class="tags"><span class="tag tc">ETL</span><span class="tag tb">Orchestration</span><span class="tag tg">Pipelines</span><span class="tag tp">Low-Code</span><span class="tag to">90+ Connectors</span></div>
+
+  <div class="analogy">
+    <div class="label">💡 Real-World Analogy — A Data Traffic Controller</div>
+    <p>Think of ADF as an airport traffic controller. Planes (data) come from many sources — SQL databases, APIs, files, SAP systems. The controller (ADF) directs each plane to the right runway (destination) at the right time (scheduled or triggered). The controller doesn't carry the passengers — it only orchestrates and routes. But without the controller, planes would crash or miss their gates.</p>
+  </div>
+
+  <div class="ibox ib-blue">
+    <div class="ib-icon">🏭</div>
+    <div class="ib-body">
+      <h4>What is Azure Data Factory?</h4>
+      <p>ADF is Azure's cloud-native data integration and ETL orchestration service. It connects to 90+ data sources (cloud and on-premise), moves data between them, triggers Databricks notebooks, runs SQL stored procedures, calls REST APIs, and schedules all of this on a timer or event-based trigger — all through a visual drag-and-drop interface.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>ADF Core Concepts — The Building Blocks</span></div>
+
+  <div class="diagram">
+    <div class="diagram-title">🏗️ ADF Architecture — All Components</div>
+    <div class="flow" style="gap:1.5rem;flex-wrap:wrap;align-items:flex-start;">
+      <div style="text-align:center;">
+        <div class="fn fn-blue" style="margin-bottom:.5rem;font-weight:800;">🔗 Linked Service</div>
+        <div style="font-size:.75rem;color:var(--t2);max-width:120px;">Connection to external system<br/>(credentials + endpoint)</div>
+      </div>
+      <div class="fa">→</div>
+      <div style="text-align:center;">
+        <div class="fn fn-cyan" style="margin-bottom:.5rem;font-weight:800;">📦 Dataset</div>
+        <div style="font-size:.75rem;color:var(--t2);max-width:120px;">Named reference to<br/>specific data location</div>
+      </div>
+      <div class="fa">→</div>
+      <div style="text-align:center;">
+        <div class="fn fn-green" style="margin-bottom:.5rem;font-weight:800;">⚙️ Activity</div>
+        <div style="font-size:.75rem;color:var(--t2);max-width:120px;">Single step<br/>(Copy, Notebook, SQL...)</div>
+      </div>
+      <div class="fa">→</div>
+      <div style="text-align:center;">
+        <div class="fn fn-orange" style="margin-bottom:.5rem;font-weight:800;">🔧 Pipeline</div>
+        <div style="font-size:.75rem;color:var(--t2);max-width:120px;">Group of activities<br/>in a workflow</div>
+      </div>
+      <div class="fa">→</div>
+      <div style="text-align:center;">
+        <div class="fn fn-purple" style="margin-bottom:.5rem;font-weight:800;">⏰ Trigger</div>
+        <div style="font-size:.75rem;color:var(--t2);max-width:120px;">When to run<br/>(schedule / event)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="kp">
+    <h3>📌 Core Components — Deep Explanations</h3>
+    <ul>
+      <li><strong>Linked Service:</strong> Stores the connection information to an external resource — like a connection string. Example: A Linked Service to your Azure SQL DB stores the server name, database name, username, and password (or managed identity). Define once, reuse in many datasets.</li>
+      <li><strong>Dataset:</strong> A named pointer to the specific data you want to use — references a Linked Service plus adds specifics like table name, file path, or container name. Think of it as "what data from where." Datasets are used as Source or Sink (destination) in Copy Activities.</li>
+      <li><strong>Copy Activity:</strong> The most fundamental ADF activity. Reads from a Source Dataset → writes to a Sink Dataset. Handles format conversion (CSV → Parquet), compression, schema mapping, and data type conversion automatically.</li>
+      <li><strong>Databricks Notebook Activity:</strong> Triggers an Azure Databricks notebook as a step in your pipeline. ADF waits for the notebook to finish, captures the output, and proceeds to the next activity. Used to run PySpark transformations from within an ADF pipeline.</li>
+      <li><strong>ForEach Activity:</strong> Loops over a collection (list of table names, list of files) and runs inner activities for each item. Used for processing multiple tables or files with the same pipeline logic.</li>
+      <li><strong>If Condition / Switch:</strong> Conditional branching in a pipeline. If today's date is a Monday, run full load; otherwise run incremental. Makes pipelines intelligent and dynamic.</li>
+      <li><strong>Web Activity:</strong> Calls any REST API endpoint. Used to call custom APIs, send Slack/Teams notifications, or trigger external systems as part of your pipeline.</li>
+      <li><strong>Stored Procedure Activity:</strong> Executes a SQL stored procedure in Azure SQL DB, Synapse, or SQL Server. Used for post-load transformations, upserts, and data quality checks.</li>
+    </ul>
+  </div>
+
+  <div class="divider"><span>Triggers — How Pipelines Get Invoked</span></div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="ci">📅</div>
+      <h3>Schedule Trigger</h3>
+      <p>Runs on a CRON-like schedule. E.g., "Every day at 2:00 AM", "Every Monday morning", "Every 4 hours". Most common trigger type for batch ETL pipelines. One trigger can run multiple pipelines.</p>
+    </div>
+    <div class="card">
+      <div class="ci">🪟</div>
+      <h3>Tumbling Window Trigger</h3>
+      <p>Time-based, stateful trigger. Processes data in fixed non-overlapping time windows. Tracks which windows ran successfully. If a window fails, it retries just that window — ideal for time-partitioned data processing (e.g., hourly data files).</p>
+    </div>
+    <div class="card">
+      <div class="ci">📁</div>
+      <h3>Storage Event Trigger</h3>
+      <p>Fires when a specific file event happens in ADLS Gen2 — e.g., "A new file was created in /raw/orders/ folder". Event-driven architecture — process data the instant it arrives. No polling, no wasted compute.</p>
+    </div>
+    <div class="card">
+      <div class="ci">↗️</div>
+      <h3>Custom Event Trigger</h3>
+      <p>Fires when an event is published to Azure Event Grid with specific event type/subject filters. Allows external systems to trigger ADF pipelines by publishing custom events.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>Building a Real Pipeline — Step by Step</span></div>
+
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Create ADF Instance</h4><p>Portal → Search "Data factories" → Create → Name it, pick region, leave defaults → Create. Open ADF Studio (separate web app at adf.azure.com).</p></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Create Linked Services</h4><p>ADF Studio → Manage tab → Linked Services → + New. Create one for Azure SQL DB (source) and one for Azure Data Lake Gen2 (sink). Test connection to verify credentials work.</p></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Create Datasets</h4><p>Author tab → Datasets → + New. Source Dataset: Azure SQL DB → pick linked service → select table (e.g., "employees"). Sink Dataset: ADLS Gen2 → pick linked service → set container path "/raw/employees/".</p></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content"><h4>Create Pipeline</h4><p>Author tab → Pipelines → + New Pipeline → Drag "Copy data" activity from Activities panel onto canvas. Set Source = SQL employees dataset. Set Sink = ADLS employees dataset.</p></div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-content"><h4>Configure Mapping</h4><p>In Copy activity → Mapping tab → "Import schemas" → Review column mappings. ADF auto-maps by column name. Adjust data types if needed (e.g., ensure Decimal columns stay Decimal).</p></div></div>
+    <div class="step"><div class="step-num">6</div><div class="step-content"><h4>Debug & Publish</h4><p>Click "Debug" to do a test run → Monitor tab shows live progress, rows copied, and any errors. Fix issues. Then click "Publish All" to save and enable the pipeline for production use.</p></div></div>
+    <div class="step"><div class="step-num">7</div><div class="step-content"><h4>Add a Trigger</h4><p>Pipeline → Add Trigger → New/Edit → Create Schedule Trigger (e.g., daily at midnight) → Apply. Now the pipeline runs automatically every night. Monitor runs in Monitor tab.</p></div></div>
+  </div>
+
+  <div class="ibox ib-green">
+    <div class="ib-icon">💡</div>
+    <div class="ib-body">
+      <h4>Pro Tip — Integration Runtime</h4>
+      <p>For cloud-to-cloud pipelines: use the default <strong>Azure IR</strong> (auto-managed, auto-scaling compute). For on-premise databases behind a firewall: install <strong>Self-Hosted IR</strong> on a machine inside your network. It acts as a secure bridge between your on-prem SQL Server and the cloud ADF. No firewall holes needed — outbound connection only.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 9 — DATABRICKS
+══════════════════════════════════════════════ -->
+<section class="ch fi" id="ch9">
+  <div class="ch-head">
+    <div class="ch-num n-purple">09</div>
+    <div class="ch-title"><h2>🧱 Azure Databricks — Spark-Powered Transformations</h2><p class="sub">The industry-standard engine for large-scale data processing and ML</p></div>
+  </div>
+  <div class="tags"><span class="tag tp">Apache Spark</span><span class="tag tb">PySpark</span><span class="tag tc">Delta Lake</span><span class="tag tg">Notebooks</span><span class="tag to">ML</span></div>
+
+  <div class="analogy">
+    <div class="label">💡 Real-World Analogy — A Supercharged Parallel Processing Factory</div>
+    <p>Imagine you have 1 billion rows of data to clean. On a single laptop, that takes 24 hours. Databricks is like a factory with thousands of workers (CPU cores) all working on different rows simultaneously. What takes 24 hours on one machine takes 3 minutes on a Databricks cluster with 100 nodes. Apache Spark is the coordination system that divides work among workers automatically.</p>
+  </div>
+
+  <div class="ibox ib-purple">
+    <div class="ib-icon">🔥</div>
+    <div class="ib-body">
+      <h4>What is Azure Databricks?</h4>
+      <p>Azure Databricks is a fully managed Apache Spark analytics platform created by the founders of Apache Spark. It's available as a first-party service in Azure (but owned by Databricks Inc., not Microsoft). It provides managed Spark clusters, collaborative notebooks, Delta Lake, and MLflow — all in one environment. The #1 tool for large-scale data transformation.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>Apache Spark — The Engine Behind Databricks</span></div>
+
+  <div class="kp">
+    <h3>📌 Understanding Apache Spark</h3>
+    <ul>
+      <li><strong>What is Spark?</strong> An open-source, distributed computing framework that processes large datasets in parallel across a cluster of machines. Up to 100x faster than Hadoop MapReduce for in-memory operations.</li>
+      <li><strong>Driver Node:</strong> The "brain" of a Spark cluster. Coordinates the work, distributes tasks to worker nodes, collects results. Your notebook code runs on the driver.</li>
+      <li><strong>Worker Nodes (Executors):</strong> The "muscles" — actually process data. Each worker has multiple CPU cores and memory slots for parallel processing. More workers = more parallelism = faster processing.</li>
+      <li><strong>DataFrame:</strong> The primary data structure in Spark. Like a distributed table/spreadsheet spread across all worker nodes. Operations on a DataFrame are lazily evaluated — Spark builds an execution plan first, then executes optimally.</li>
+      <li><strong>Lazy Evaluation:</strong> When you write transformations on a DataFrame (filter, join, group), Spark does NOT execute immediately. It builds a DAG (Directed Acyclic Graph) of operations and executes all at once when you call an action (show, count, write). This allows Spark to optimize the entire pipeline before running.</li>
+      <li><strong>Partitions:</strong> Spark divides your data into partitions (chunks). Each partition is processed by one CPU core in parallel. More partitions = more parallelism. Default partitioning = 200 partitions (configurable).</li>
+    </ul>
+  </div>
+
+  <div class="diagram">
+    <div class="diagram-title">⚙️ Databricks Cluster Architecture</div>
+    <div style="display:flex;gap:2rem;flex-wrap:wrap;justify-content:center;align-items:flex-start;">
+      <div style="text-align:center;max-width:200px;">
+        <div class="fn fn-blue" style="padding:1rem;margin-bottom:.5rem;">
+          🧠 Driver Node<br/>
+          <small>Your Notebook Code<br/>Spark Context<br/>Query Optimizer</small>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3rem;font-size:1.2rem;color:var(--t3);">
+        <span>⬆</span><span>tasks</span><span>⬇</span><span>results</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.4rem;">
+        <div class="fn fn-cyan" style="padding:.5rem .8rem;font-size:.75rem;">⚡ Worker 1 (4 cores, 16GB RAM)</div>
+        <div class="fn fn-cyan" style="padding:.5rem .8rem;font-size:.75rem;">⚡ Worker 2 (4 cores, 16GB RAM)</div>
+        <div class="fn fn-cyan" style="padding:.5rem .8rem;font-size:.75rem;">⚡ Worker 3 (4 cores, 16GB RAM)</div>
+        <div class="fn fn-cyan" style="padding:.5rem .8rem;font-size:.75rem;opacity:.6;">⚡ Worker N (autoscale...)</div>
+      </div>
+    </div>
+    <p style="text-align:center;color:var(--t3);font-size:.78rem;margin-top:1rem;">All workers process different partitions of data simultaneously. Results merged back at driver.</p>
+  </div>
+
+  <div class="divider"><span>Delta Lake — ACID Transactions on Your Data Lake</span></div>
+
+  <div class="ibox ib-cyan">
+    <div class="ib-icon">🔷</div>
+    <div class="ib-body">
+      <h4>What is Delta Lake?</h4>
+      <p>Delta Lake is an open-source storage layer that brings database-like ACID transactions to your data lake. A Delta table = Parquet files + a transaction log (folder called <code>_delta_log</code>). This log records every change — insert, update, delete — enabling time travel, ACID guarantees, and schema enforcement on a data lake.</p>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="ci">⏰</div>
+      <h3>Time Travel</h3>
+      <p>Query historical versions of your data. E.g., "Show me the table as it was 3 days ago." Useful for debugging, auditing, and recovering from bad data loads. <code style="color:var(--cyan);">SELECT * FROM delta.`/path` VERSION AS OF 5</code></p>
+    </div>
+    <div class="card">
+      <div class="ci">🔀</div>
+      <h3>MERGE / UPSERT</h3>
+      <p>Update existing records and insert new ones in a single atomic operation — just like SQL MERGE. Impossible with plain Parquet files. Critical for incremental data loads, CDC (Change Data Capture) patterns.</p>
+    </div>
+    <div class="card">
+      <div class="ci">📋</div>
+      <h3>Schema Enforcement</h3>
+      <p>Delta tables reject writes that don't match the table schema by default. No more silent data corruption from unexpected columns or type mismatches. Schema evolution is explicit and controlled.</p>
+    </div>
+    <div class="card">
+      <div class="ci">🎯</div>
+      <h3>Z-Ordering (Optimization)</h3>
+      <p>Physically rearrange data in files by specific columns to speed up queries that filter on those columns. Combined with data skipping — Databricks can skip reading 99% of files for narrow queries. Dramatically speeds up analytics.</p>
+    </div>
+  </div>
+
+  <div class="code">
+    <div class="code-header"><span class="code-lang">PySpark — Bronze → Silver → Gold Pipeline</span><div class="code-dots"><span style="background:#ef4444;"></span><span style="background:#f59e0b;"></span><span style="background:#10b981;"></span></div></div>
+    <pre><span class="kw">from</span> pyspark.sql <span class="kw">import</span> SparkSession
+<span class="kw">from</span> pyspark.sql.functions <span class="kw">import</span> col, trim, upper, to_date, year, current_timestamp
+
+<span class="cm"># ════════════════════════════════════════
+# STEP 1 — BRONZE: Read raw CSV from ADLS
+# ════════════════════════════════════════</span>
+df_raw = spark.read \
+    .option(<span class="st">"header"</span>, <span class="st">"true"</span>) \
+    .option(<span class="st">"inferSchema"</span>, <span class="st">"true"</span>) \
+    .csv(<span class="st">"abfss://bronze@mystorageacct.dfs.core.windows.net/employees/"</span>)
+
+<span class="fu">print</span>(<span class="st">f"Raw rows: {df_raw.count()}"</span>)
+df_raw.printSchema()
+
+<span class="cm"># ════════════════════════════════════════
+# STEP 2 — SILVER: Clean and Transform
+# ════════════════════════════════════════</span>
+df_silver = df_raw \
+    .filter(col(<span class="st">"salary"</span>).isNotNull()) \
+    .filter(col(<span class="st">"salary"</span>) > <span class="nm">0</span>) \
+    .withColumn(<span class="st">"full_name"</span>, <span class="fu">trim</span>(<span class="fu">upper</span>(col(<span class="st">"full_name"</span>)))) \
+    .withColumn(<span class="st">"hire_year"</span>, <span class="fu">year</span>(<span class="fu">to_date</span>(col(<span class="st">"hire_date"</span>), <span class="st">"yyyy-MM-dd"</span>))) \
+    .withColumn(<span class="st">"processed_at"</span>, <span class="fu">current_timestamp</span>()) \
+    .dropDuplicates([<span class="st">"employee_id"</span>])
+
+<span class="cm"># Write as Delta table to Silver layer</span>
+df_silver.write \
+    .format(<span class="st">"delta"</span>) \
+    .mode(<span class="st">"overwrite"</span>) \
+    .save(<span class="st">"abfss://silver@mystorageacct.dfs.core.windows.net/employees/"</span>)
+
+<span class="cm"># ════════════════════════════════════════
+# STEP 3 — GOLD: Aggregate for Business
+# ════════════════════════════════════════</span>
+df_gold = df_silver \
+    .groupBy(<span class="st">"department"</span>, <span class="st">"hire_year"</span>) \
+    .agg(
+        F.count(<span class="st">"*"</span>).<span class="fu">alias</span>(<span class="st">"headcount"</span>),
+        F.avg(<span class="st">"salary"</span>).<span class="fu">alias</span>(<span class="st">"avg_salary"</span>),
+        F.max(<span class="st">"salary"</span>).<span class="fu">alias</span>(<span class="st">"max_salary"</span>)
+    )
+
+<span class="cm"># Write to Gold as Delta — optimized for Power BI</span>
+df_gold.write \
+    .format(<span class="st">"delta"</span>) \
+    .mode(<span class="st">"overwrite"</span>) \
+    .option(<span class="st">"overwriteSchema"</span>, <span class="st">"true"</span>) \
+    .save(<span class="st">"abfss://gold@mystorageacct.dfs.core.windows.net/dept_summary/"</span>)
+
+<span class="fu">print</span>(<span class="st">"✅ Full pipeline complete!"</span>)</pre>
+  </div>
+
+  <div class="code">
+    <div class="code-header"><span class="code-lang">Delta Lake — Time Travel & MERGE Operations</span><div class="code-dots"><span style="background:#ef4444;"></span><span style="background:#f59e0b;"></span><span style="background:#10b981;"></span></div></div>
+    <pre><span class="cm"># --- Time Travel: see data as of version 3 ---</span>
+df_old = spark.read \
+    .format(<span class="st">"delta"</span>) \
+    .option(<span class="st">"versionAsOf"</span>, <span class="nm">3</span>) \
+    .load(<span class="st">"abfss://silver@mystorageacct.dfs.core.windows.net/employees/"</span>)
+
+<span class="cm"># --- See table history ---</span>
+<span class="fu">display</span>(spark.sql(<span class="st">"DESCRIBE HISTORY delta.`/mnt/silver/employees/`"</span>))
+
+<span class="cm"># --- MERGE / UPSERT: update existing, insert new ---</span>
+<span class="kw">from</span> delta.tables <span class="kw">import</span> DeltaTable
+
+target = DeltaTable.<span class="fu">forPath</span>(spark, <span class="st">"/mnt/silver/employees/"</span>)
+source = spark.read.format(<span class="st">"delta"</span>).load(<span class="st">"/mnt/bronze/new_employees/"</span>)
+
+target.alias(<span class="st">"tgt"</span>).<span class="fu">merge</span>(
+    source.alias(<span class="st">"src"</span>),
+    <span class="st">"tgt.employee_id = src.employee_id"</span>  <span class="cm"># match condition</span>
+).<span class="fu">whenMatchedUpdateAll</span>() \    <span class="cm"># update if exists</span>
+ .<span class="fu">whenNotMatchedInsertAll</span>() \  <span class="cm"># insert if new</span>
+ .<span class="fu">execute</span>()</pre>
+  </div>
+
+  <div class="try">
+    <div class="label">🛠️ Try This — Create Your First Databricks Cluster & Notebook</div>
+    <ol>
+      <li>Portal → Search "Azure Databricks" → Create workspace (Standard tier) → Launch Workspace</li>
+      <li>Left sidebar → "Compute" → Create Cluster → Name it "learning-cluster" → Single node → Runtime: 13.x LTS (Spark 3.x) → Node type: Standard_DS3_v2 → Create</li>
+      <li>Left sidebar → "New" → Notebook → Name it "bronze_to_silver" → Language: Python</li>
+      <li>In Cell 1, run: <code style="color:var(--cyan);">print(spark.version)</code> → You should see the Spark version</li>
+      <li>Create a simple DataFrame: <code style="color:var(--cyan);">df = spark.createDataFrame([(1,"Ansh",85000),(2,"Priya",72000)], ["id","name","salary"])</code></li>
+      <li>Run <code style="color:var(--cyan);">display(df)</code> — see your table rendered beautifully</li>
+      <li>Explore the "Data" tab in Databricks — this is your Unity Catalog / metastore</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 10 — SYNAPSE
+══════════════════════════════════════════════ -->
+<section class="ch fi" id="ch10">
+  <div class="ch-head">
+    <div class="ch-num n-green">10</div>
+    <div class="ch-title"><h2>🔬 Azure Synapse Analytics — End-to-End Data Warehouse</h2><p class="sub">Unified analytics combining ADF + Spark + SQL Data Warehouse</p></div>
+  </div>
+  <div class="tags"><span class="tag tg">Data Warehouse</span><span class="tag tb">Serverless SQL</span><span class="tag tc">Dedicated SQL</span><span class="tag tp">Synapse Spark</span><span class="tag to">Lakehouse</span></div>
+
+  <div class="formula">
+    <span>ADF (Pipelines)</span> &nbsp;+&nbsp; <span>Spark Notebooks</span> &nbsp;+&nbsp; <span>SQL Data Warehouse</span> &nbsp;= <span class="eq">Azure Synapse Analytics</span>
+  </div>
+
+  <div class="analogy">
+    <div class="label">💡 Real-World Analogy — A Complete Data Engineering Department in One Tool</div>
+    <p>If ADF is the data truck driver (moves data), Databricks is the data factory (transforms data), and SQL Database is the reporting system — Synapse Analytics is like having your own data department with all these roles working under one roof, using shared resources, and talking to each other natively. No separate tools, no glue code between systems.</p>
+  </div>
+
+  <div class="ibox ib-blue">
+    <div class="ib-icon">🔬</div>
+    <div class="ib-body">
+      <h4>What is Azure Synapse Analytics?</h4>
+      <p>Synapse Analytics is Microsoft's end-to-end analytics platform that unifies data integration (built-in ADF pipelines), big data analytics (Spark pools), enterprise data warehousing (Dedicated SQL Pool + Serverless SQL Pool), and data exploration — all accessible from a single workspace called Synapse Studio.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>The Four Pillars of Synapse</span></div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="ci">🏭</div>
+      <h3>Synapse Pipelines (ADF)</h3>
+      <p>Full Azure Data Factory capabilities built right into Synapse Studio. Create pipelines, linked services, datasets, triggers. No need to create a separate ADF resource if you're already using Synapse. All ADF features available natively.</p>
+    </div>
+    <div class="card">
+      <div class="ci">⚡</div>
+      <h3>Apache Spark Pool</h3>
+      <p>Managed Apache Spark clusters. Write PySpark, SQL, Scala, .NET notebooks. Tight integration with ADLS Gen2 and Synapse SQL pools. Auto-pause when idle. Can read/write to Dedicated SQL Pool directly using fast Synapse Connector (no JDBC bottleneck).</p>
+    </div>
+    <div class="card">
+      <div class="ci">🔍</div>
+      <h3>Serverless SQL Pool</h3>
+      <p>Query your Data Lake with standard T-SQL — without loading data into a database! Uses OPENROWSET to read Parquet/CSV/JSON files directly from ADLS. Pay per TB scanned. Zero infrastructure to manage. Perfect for ad-hoc analysis and the lakehouse pattern.</p>
+    </div>
+    <div class="card">
+      <div class="ci">🏋️</div>
+      <h3>Dedicated SQL Pool</h3>
+      <p>The massively parallel processing (MPP) data warehouse engine. Previously called "SQL Data Warehouse". Pre-provisioned DWUs (Data Warehouse Units). High performance for large-scale, consistent analytical workloads. Source for Power BI dashboards.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>Serverless SQL Pool — Query Your Data Lake with T-SQL</span></div>
+
+  <div class="ibox ib-cyan">
+    <div class="ib-icon">💡</div>
+    <div class="ib-body">
+      <h4>Why Serverless SQL Pool is a Game Changer</h4>
+      <p>Imagine you have 5TB of Parquet files in your Data Lake. Normally you'd need to load them into a database first (time-consuming, storage cost). With Serverless SQL Pool, you just write a SELECT statement pointing at the files — Synapse reads and processes them in-place. No data movement. Pay only for the bytes scanned. This enables the <strong>Lakehouse pattern</strong> — analytics directly on the lake.</p>
+    </div>
+  </div>
+
+  <div class="code">
+    <div class="code-header"><span class="code-lang">Serverless SQL Pool — Query Parquet Files in ADLS</span><div class="code-dots"><span style="background:#ef4444;"></span><span style="background:#f59e0b;"></span><span style="background:#10b981;"></span></div></div>
+    <pre><span class="cm">-- Query a single Parquet file in Data Lake directly!</span>
+<span class="kw">SELECT</span> TOP <span class="nm">100</span>
+    full_name,
+    department,
+    salary,
+    hire_year
+<span class="kw">FROM</span>
+    <span class="fu">OPENROWSET</span>(
+        BULK <span class="st">'https://mystorageacct.dfs.core.windows.net/silver/employees/*.parquet'</span>,
+        FORMAT = <span class="st">'PARQUET'</span>
+    ) <span class="kw">AS</span> [result]
+<span class="kw">WHERE</span> department = <span class="st">'Data Engineering'</span>
+<span class="kw">ORDER BY</span> salary <span class="kw">DESC</span>;
+
+<span class="cm">-- Create an External Table (reusable view over file)</span>
+<span class="kw">CREATE</span> <span class="kw">EXTERNAL TABLE</span> employees_external (
+    employee_id  <span class="kw">INT</span>,
+    full_name    <span class="kw">NVARCHAR</span>(<span class="nm">100</span>),
+    department   <span class="kw">NVARCHAR</span>(<span class="nm">50</span>),
+    salary       <span class="kw">FLOAT</span>,
+    hire_year    <span class="kw">INT</span>
+)
+<span class="kw">WITH</span> (
+    LOCATION = <span class="st">'/silver/employees/*.parquet'</span>,
+    DATA_SOURCE = my_data_lake,
+    FILE_FORMAT = parquet_format
+);
+
+<span class="cm">-- Now query it like a regular table — forever!</span>
+<span class="kw">SELECT</span> department, <span class="fu">AVG</span>(salary) <span class="kw">AS</span> avg_salary
+<span class="kw">FROM</span> employees_external
+<span class="kw">GROUP BY</span> department;</pre>
+  </div>
+
+  <div class="divider"><span>Serverless vs Dedicated — When to Use Which</span></div>
+
+  <div class="tw">
+    <table>
+      <thead>
+        <tr><th>Feature</th><th>Serverless SQL Pool</th><th>Dedicated SQL Pool</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Billing</td><td>💲 Per TB scanned (pay-as-you-query)</td><td>💲💲💲 Per DWU-hour (always running)</td></tr>
+        <tr><td>Data Location</td><td>Files stay in Data Lake (ADLS)</td><td>Data loaded into warehouse storage</td></tr>
+        <tr><td>Schema</td><td>Schema-on-read (define at query time)</td><td>Schema-on-write (define upfront)</td></tr>
+        <tr><td>Performance</td><td>Good for ad-hoc, not optimized for BI</td><td>Optimal for repeated BI queries</td></tr>
+        <tr><td>Data Loading</td><td>No loading needed — query files directly</td><td>Load via COPY/PolyBase/ADF pipeline</td></tr>
+        <tr><td>Startup Time</td><td>Instant</td><td>Minutes if paused (remember to pause!)</td></tr>
+        <tr><td>Best For</td><td>Exploration, Lakehouse, infrequent queries</td><td>Production dashboards, Power BI</td></tr>
+        <tr><td>Max Scale</td><td>Unlimited (auto-scales)</td><td>DW100c to DW30000c</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="kp">
+    <h3>📌 Dedicated SQL Pool — Key Concepts</h3>
+    <ul>
+      <li><strong>DWU (Data Warehouse Units):</strong> Combined measure of CPU, memory, and IO resources. DW100c = minimum. DW30000c = maximum (30 nodes, 60 distributions). You can scale up/down or pause/resume via slider — billing stops when paused.</li>
+      <li><strong>Distribution:</strong> How data is split across 60 compute nodes. Three strategies: Hash (distribute by a column value — best for large join tables), Round-Robin (evenly spread — best for staging/loading), Replicated (copy to all nodes — best for small lookup/dimension tables).</li>
+      <li><strong>Columnstore Index:</strong> Default index type in Dedicated SQL Pool. Stores data column-by-column instead of row-by-row. 5–10x query performance improvement. 5–10x storage compression. Always use Clustered Columnstore Index for fact tables.</li>
+      <li><strong>PolyBase / COPY Command:</strong> How you load external data (from ADLS) into Dedicated SQL Pool. COPY command is the modern way — highly parallel, fast loading of CSV/Parquet from ADLS to your warehouse tables.</li>
+      <li><strong>Statistics:</strong> Metadata about data distribution in columns. SQL Pool uses statistics to create optimal query execution plans. Update statistics after loading new data for best performance.</li>
+    </ul>
+  </div>
+
+  <div class="diagram">
+    <div class="diagram-title">🏗️ Complete Modern Azure Data Architecture</div>
+    <div class="vflow" style="align-items:center;">
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-bottom:.4rem;">
+        <div class="fn fn-blue" style="font-size:.75rem;">🌡️ IoT Sensors</div>
+        <div class="fn fn-blue" style="font-size:.75rem;">🗄️ SQL Databases</div>
+        <div class="fn fn-blue" style="font-size:.75rem;">📦 REST APIs</div>
+        <div class="fn fn-blue" style="font-size:.75rem;">📄 File Shares</div>
+      </div>
+      <div class="vfa">▼</div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-bottom:.4rem;">
+        <div class="vfn fn-cyan" style="font-size:.8rem;">⚡ Event Hubs<br/><small>Real-time ingestion</small></div>
+        <div class="vfn fn-cyan" style="font-size:.8rem;">🔄 ADF Pipelines<br/><small>Batch ingestion</small></div>
+      </div>
+      <div class="vfa">▼</div>
+      <div class="vfn fn-orange" style="margin-bottom:.4rem;font-size:.8rem;">🏔️ Azure Data Lake Gen2<br/><small>🥉 Bronze (Raw) → 🥈 Silver (Clean) → 🥇 Gold (Curated)</small></div>
+      <div class="vfa">▼</div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-bottom:.4rem;">
+        <div class="vfn fn-purple" style="font-size:.8rem;">🧱 Azure Databricks<br/><small>PySpark Transformations<br/>Delta Lake / ML</small></div>
+        <div class="vfn fn-green" style="font-size:.8rem;">🔬 Synapse Analytics<br/><small>Serverless SQL &<br/>Dedicated SQL Pool</small></div>
+      </div>
+      <div class="vfa">▼</div>
+      <div class="vfn fn-pink" style="font-size:.8rem;">📊 Power BI / Dashboards / Data Science</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 11 — CAREER ROADMAP
+══════════════════════════════════════════════ -->
+<!-- NAV EXTRA ITEMS injected via JS below -->
+
+<section class="ch fi" id="ch11">
+  <div class="ch-head">
+    <div class="ch-num n-pink">11</div>
+    <div class="ch-title"><h2>🚀 Career Roadmap — Becoming an Azure Data Engineer</h2><p class="sub">Your actionable 20-week path from zero to interview-ready</p></div>
+  </div>
+  <div class="tags"><span class="tag to">Career</span><span class="tag tb">Roadmap</span><span class="tag tg">Interviews</span><span class="tag tc">DP-203</span><span class="tag tp">Projects</span></div>
+
+  <div class="ibox ib-blue">
+    <div class="ib-icon">🎯</div>
+    <div class="ib-body">
+      <h4>The Core Trio — No Shortcuts</h4>
+      <p>Master these three and you're interview-ready for 90% of Azure Data Engineering roles: <strong>Azure Data Factory</strong> (orchestration) + <strong>Azure Databricks</strong> (transformation) + <strong>Azure Synapse Analytics</strong> (warehousing). Everything else is secondary. These three power almost every enterprise Azure data stack.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>20-Week Learning Roadmap</span></div>
+
+  <div class="rm">
+    <div class="rm-item">
+      <h4>📘 Week 1–2 — Azure Fundamentals</h4>
+      <p>Create free Azure account. Complete this full notes guide chapter by chapter with hands-on practice. Understand IaaS/PaaS/SaaS, resource groups, redundancy. Create SQL DB, Cosmos DB container, ADLS Gen2, and Event Hub. Get comfortable with Azure Portal navigation.</p>
+    </div>
+    <div class="rm-item">
+      <h4>🔄 Week 3–6 — Azure Data Factory Deep Dive</h4>
+      <p>Watch a dedicated ADF full course (3–5 hours). Build pipelines daily: Copy Activity, ForEach loops, Web Activity, triggers. Build a project: Copy data from a public REST API → ADLS bronze. Add a Schedule Trigger to run nightly. Learn Self-Hosted IR for on-premise scenarios.</p>
+    </div>
+    <div class="rm-item">
+      <h4>🧱 Week 7–11 — Azure Databricks + PySpark</h4>
+      <p>Complete Databricks getting started path. Master PySpark DataFrames — read, filter, join, aggregate, write. Learn Delta Lake — create Delta tables, time travel, MERGE operations. Build a full Bronze→Silver→Gold medallion pipeline. Connect Databricks to ADLS using service principal or managed identity.</p>
+    </div>
+    <div class="rm-item">
+      <h4>🔬 Week 12–15 — Azure Synapse Analytics</h4>
+      <p>Watch dedicated Synapse full course (4+ hours covering Serverless SQL + Dedicated SQL Pool). Practice OPENROWSET queries on your Data Lake. Load data into Dedicated SQL Pool using COPY command. Build a star schema in dedicated pool. Connect Power BI to Synapse for reporting.</p>
+    </div>
+    <div class="rm-item">
+      <h4>⚡ Week 16–17 — Real-time Streaming</h4>
+      <p>Learn Databricks Structured Streaming — read from Event Hubs, process in micro-batches, write to Delta Lake. Explore Azure Stream Analytics for windowing queries (tumbling/sliding windows). Build an end-to-end real-time pipeline: Event Hub → Databricks Streaming → Delta → Synapse → Power BI RT dashboard.</p>
+    </div>
+    <div class="rm-item">
+      <h4>🏆 Week 18–20 — Projects + Interview Prep</h4>
+      <p>Build 2–3 portfolio projects (E2E pipelines on GitHub with README and architecture diagrams). Practice DP-203 exam questions. Network on LinkedIn — post about what you've built. Apply for Azure Data Engineer roles. You're ready — just show up!</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>Interview Topics — Must Know</span></div>
+
+  <div class="tw">
+    <table>
+      <thead>
+        <tr><th>Topic Area</th><th>Must Know Concepts</th><th>Depth Level</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>ADF</td><td>Linked Services, Datasets, Activities, Triggers, IR types, ForEach, error handling, incremental load patterns</td><td>⭐⭐⭐⭐⭐</td></tr>
+        <tr><td>Databricks / Spark</td><td>PySpark DataFrames, Delta Lake, MERGE, partitioning, broadcast joins, cluster types, MLflow basics</td><td>⭐⭐⭐⭐⭐</td></tr>
+        <tr><td>Synapse SQL</td><td>Serverless vs Dedicated, OPENROWSET, External Tables, distribution strategies, columnstore index, PolyBase vs COPY</td><td>⭐⭐⭐⭐⭐</td></tr>
+        <tr><td>ADLS Gen2</td><td>Hierarchical namespace, Access Tiers, ACLs vs RBAC, Medallion Architecture, SAS tokens, Managed Identity</td><td>⭐⭐⭐⭐</td></tr>
+        <tr><td>Event Hubs</td><td>Partitions, Consumer Groups, Retention, Kafka compatibility, Capture to ADLS</td><td>⭐⭐⭐</td></tr>
+        <tr><td>Cosmos DB</td><td>API types, partition key selection, RU/s, consistency levels, Synapse Link</td><td>⭐⭐⭐</td></tr>
+        <tr><td>SQL Database</td><td>T-SQL, indexes, stored procedures, geo-replication, serverless vs provisioned</td><td>⭐⭐⭐</td></tr>
+        <tr><td>Security</td><td>Managed Identity, Key Vault, RBAC, Private Endpoints, TDE, Column-level security</td><td>⭐⭐⭐⭐</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"><span>Top Azure Services Priority Table</span></div>
+
+  <div class="tw">
+    <table>
+      <thead>
+        <tr><th>Priority</th><th>Service</th><th>Role</th><th>Importance</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>🔴 MUST</td><td>Azure Data Factory</td><td>Orchestration / ETL</td><td>⭐⭐⭐⭐⭐</td></tr>
+        <tr><td>🔴 MUST</td><td>Azure Databricks</td><td>Spark Transformations</td><td>⭐⭐⭐⭐⭐</td></tr>
+        <tr><td>🔴 MUST</td><td>Azure Synapse Analytics</td><td>Data Warehousing</td><td>⭐⭐⭐⭐⭐</td></tr>
+        <tr><td>🟡 IMPORTANT</td><td>Azure Data Lake Gen2</td><td>Storage Backbone</td><td>⭐⭐⭐⭐</td></tr>
+        <tr><td>🟡 IMPORTANT</td><td>Azure SQL Database</td><td>Relational / OLTP</td><td>⭐⭐⭐⭐</td></tr>
+        <tr><td>🟡 IMPORTANT</td><td>Azure Key Vault</td><td>Secrets / Security</td><td>⭐⭐⭐⭐</td></tr>
+        <tr><td>🟢 GOOD TO KNOW</td><td>Azure Cosmos DB</td><td>NoSQL / App Data</td><td>⭐⭐⭐</td></tr>
+        <tr><td>🟢 GOOD TO KNOW</td><td>Azure Event Hubs</td><td>Real-time Ingestion</td><td>⭐⭐⭐</td></tr>
+        <tr><td>🟢 GOOD TO KNOW</td><td>Azure Stream Analytics</td><td>Real-time Processing</td><td>⭐⭐</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ibox ib-green">
+    <div class="ib-icon">🏆</div>
+    <div class="ib-body">
+      <h4>DP-203 — Azure Data Engineer Associate Certification</h4>
+      <ul>
+        <li>The official Microsoft certification for Azure Data Engineers</li>
+        <li>Covers: ADF, Databricks, Synapse Analytics, Data Lake, Streaming, SQL</li>
+        <li>Exam format: ~60 questions, multiple choice + case studies, 2.5 hours</li>
+        <li>Highly valuable to employers — differentiates your resume significantly</li>
+        <li>Study resources: Microsoft Learn (free), Udemy DP-203 courses, practice tests</li>
+        <li>Cost: ~$165 USD (discounts available with Microsoft Learn free practice assessments)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card" style="border-color:rgba(0,120,212,.4);">
+      <div class="ci">💼</div>
+      <h3>Portfolio Projects to Build</h3>
+      <p>1. <strong>End-to-End Batch Pipeline:</strong> REST API → ADF Copy → ADLS Bronze → Databricks (Bronze→Silver→Gold) → Synapse SQL → Power BI<br/><br/>
+      2. <strong>Real-Time Streaming:</strong> Event Hub Producer (Python) → Databricks Structured Streaming → Delta Lake → Power BI Real-Time<br/><br/>
+      3. <strong>Incremental Load Pipeline:</strong> ADF with watermark → Databricks MERGE (CDC pattern) → Synapse DWH</p>
+    </div>
+    <div class="card" style="border-color:rgba(16,185,129,.4);">
+      <div class="ci">🌟</div>
+      <h3>What Industry Uses</h3>
+      <p><strong>90% of enterprises:</strong> ADF + Databricks + Synapse (dedicated pool)<br/><br/>
+      <strong>Modern Lakehouse companies:</strong> ADF + Databricks + Delta Lake + Synapse Serverless<br/><br/>
+      <strong>Real-time first:</strong> Event Hubs + Databricks Streaming + Delta + Serverless SQL<br/><br/>
+      <strong>All of the above:</strong> Azure Key Vault (secrets), Managed Identity (auth), Azure Monitor + Log Analytics (monitoring)</p>
+    </div>
+    <div class="card" style="border-color:rgba(124,58,237,.4);">
+      <div class="ci">📢</div>
+      <h3>Final Advice</h3>
+      <p>The instructor's words: <em>"Once you complete ADF + Databricks + Synapse videos and build real projects — just sit in interviews. Trust me — you will DM me on LinkedIn saying thanks. The supply of skilled Azure data engineers is very low. Your value will be high. Happy Learning! 🚀"</em></p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     BONUS CHAPTER 12 — AZURE SECURITY
+══════════════════════════════════════════════ -->
+<section class="ch fi" id="ch12">
+  <div class="ch-head">
+    <div class="ch-num n-cyan">12</div>
+    <div class="ch-title"><h2>🔐 Azure Security — Key Vault, Managed Identity & RBAC</h2><p class="sub">How to keep your pipelines secure in production — no hardcoded passwords!</p></div>
+  </div>
+  <div class="tags"><span class="tag tc">Key Vault</span><span class="tag tb">Managed Identity</span><span class="tag tg">RBAC</span><span class="tag tp">Secrets</span><span class="tag to">TDE</span></div>
+
+  <div class="analogy">
+    <div class="label">💡 Real-World Analogy — A Bank Locker for Your Passwords</div>
+    <p>Hardcoding a database password in your ADF Linked Service or Databricks config is like writing your ATM PIN on a sticky note and taping it to your card. Azure Key Vault is a bank locker — it stores your secrets (passwords, connection strings, API keys) securely, and only authorized services are given the key to the locker. Your code never sees the actual secret.</p>
+  </div>
+
+  <div class="ibox ib-blue">
+    <div class="ib-icon">🔐</div>
+    <div class="ib-body">
+      <h4>The Three Security Pillars</h4>
+      <p><strong>1. Azure Key Vault</strong> — stores secrets (passwords, connection strings, certificates, encryption keys) centrally and securely.<br/>
+      <strong>2. Managed Identity</strong> — gives Azure services an identity (like a user account) so they can authenticate to other services without any passwords at all.<br/>
+      <strong>3. RBAC (Role-Based Access Control)</strong> — controls who can access what, using built-in roles like Reader, Contributor, Owner applied to specific resources.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>Azure Key Vault — Deep Dive</span></div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="ci">🗝️</div>
+      <h3>Secrets</h3>
+      <p>Store passwords, connection strings, API keys, and any sensitive string values. Versioned — every update creates a new version; old versions are kept. Applications always reference by secret name, Key Vault serves the latest version automatically.</p>
+    </div>
+    <div class="card">
+      <div class="ci">🔑</div>
+      <h3>Keys</h3>
+      <p>Cryptographic keys for encryption/decryption operations. Stored in FIPS 140-2 validated HSMs (Hardware Security Modules). Used for Transparent Data Encryption (TDE) on SQL databases, Azure Storage encryption, and wrapping/unwrapping data keys.</p>
+    </div>
+    <div class="card">
+      <div class="ci">📜</div>
+      <h3>Certificates</h3>
+      <p>Manages TLS/SSL certificates with automatic renewal support. Integrates with certificate authorities like DigiCert and GlobalSign. No more manually renewing certificates — Key Vault handles the lifecycle automatically.</p>
+    </div>
+    <div class="card">
+      <div class="ci">📋</div>
+      <h3>Access Policies vs RBAC</h3>
+      <p>Two models to grant access to Key Vault contents: <strong>Vault Access Policy</strong> (legacy — grants access per identity to all secrets/keys/certs in the vault) and <strong>Azure RBAC</strong> (recommended — fine-grained, grant access at individual secret level using built-in roles like "Key Vault Secrets User").</p>
+    </div>
+    <div class="card">
+      <div class="ci">📝</div>
+      <h3>Audit Logging</h3>
+      <p>Every access to Key Vault is logged — who accessed which secret, at what time, from which IP. Logs go to Azure Monitor / Log Analytics. Essential for compliance auditing and security investigations.</p>
+    </div>
+    <div class="card">
+      <div class="ci">🌐</div>
+      <h3>Private Endpoint</h3>
+      <p>By default, Key Vault is accessible over the internet. In production, add a Private Endpoint — Key Vault gets a private IP in your VNet. All traffic stays on the Azure backbone, never leaves your network. Enable "Public network access: Disabled" after adding private endpoint.</p>
+    </div>
+  </div>
+
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Create Key Vault</h4><p>Portal → Search "Key vaults" → Create → Name (globally unique, e.g., "myproject-kv-2025") → Region (same as your other resources) → Pricing tier: Standard → Review + Create.</p></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Store a Secret</h4><p>Open Key Vault → Objects → Secrets → "+ Generate/Import" → Upload options: Manual → Name: "sql-db-password" → Value: your actual password → Create. The actual value is now stored securely.</p></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Grant ADF Access to Key Vault</h4><p>Key Vault → Access control (IAM) → + Add role assignment → Role: "Key Vault Secrets User" → Members: Select your ADF managed identity (same name as your ADF resource). Now ADF can read secrets without any password.</p></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content"><h4>Reference Secret in ADF Linked Service</h4><p>In ADF Studio → Create Linked Service → Instead of typing the password → Click "Azure Key Vault" toggle → Select your Key Vault → Select secret name "sql-db-password". ADF fetches the password at runtime — no credential in ADF config!</p></div></div>
+  </div>
+
+  <div class="divider"><span>Managed Identity — Zero-Password Authentication</span></div>
+
+  <div class="ibox ib-purple">
+    <div class="ib-icon">🤖</div>
+    <div class="ib-body">
+      <h4>What is Managed Identity?</h4>
+      <p>A Managed Identity is an automatically managed service account in Azure Active Directory. Azure services (ADF, Databricks, Synapse, App Service) can be assigned a managed identity — they use it to authenticate to other Azure services without any passwords, secrets, or certificate management. Azure manages the credential rotation completely automatically. This is the recommended authentication approach for all Azure-to-Azure connections.</p>
+    </div>
+  </div>
+
+  <div class="compare">
+    <div class="compare-card left" style="border-color:rgba(239,68,68,.4);">
+      <h3 style="color:var(--red);">❌ Without Managed Identity (Bad Practice)</h3>
+      <ul>
+        <li><span class="cross">✗</span> Store password in code / config file</li>
+        <li><span class="cross">✗</span> Password can be accidentally committed to Git</li>
+        <li><span class="cross">✗</span> Must manually rotate credentials</li>
+        <li><span class="cross">✗</span> Password visible in ADF Linked Service JSON</li>
+        <li><span class="cross">✗</span> Security audit failures, compliance issues</li>
+      </ul>
+      <div class="code" style="margin-top:1rem;margin-bottom:0;">
+        <pre style="font-size:.72rem;padding:.75rem 1rem;"><span class="cm"># ❌ NEVER do this!</span>
+conn_str = <span class="st">"Server=myserver;Database=mydb;
+User=admin;Password=MyP@ssw0rd123;"</span></pre>
+      </div>
+    </div>
+    <div class="compare-card right" style="border-color:rgba(16,185,129,.4);">
+      <h3 style="color:var(--green);">✅ With Managed Identity (Best Practice)</h3>
+      <ul>
+        <li><span class="tick">✓</span> No password anywhere — identity-based auth</li>
+        <li><span class="tick">✓</span> Credentials managed and rotated by Azure</li>
+        <li><span class="tick">✓</span> Nothing to commit to Git accidentally</span></li>
+        <li><span class="tick">✓</span> RBAC-based access control</li>
+        <li><span class="tick">✓</span> Passes all security audits</li>
+      </ul>
+      <div class="code" style="margin-top:1rem;margin-bottom:0;">
+        <pre style="font-size:.72rem;padding:.75rem 1rem;"><span class="cm"># ✅ Managed Identity — no password!</span>
+<span class="kw">from</span> azure.identity <span class="kw">import</span> <span class="fu">ManagedIdentityCredential</span>
+credential = <span class="fu">ManagedIdentityCredential</span>()
+<span class="cm"># Azure handles authentication automatically</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="diagram">
+    <div class="diagram-title">🔐 Managed Identity Authentication Flow</div>
+    <div class="flow" style="gap:.75rem;flex-wrap:wrap;">
+      <div class="fn fn-cyan">🔄 ADF Pipeline<br/><small>Has Managed Identity</small></div>
+      <div class="fa">→ "who am I?"</div>
+      <div class="fn fn-blue">🔑 Azure AD<br/><small>Issues token</small></div>
+      <div class="fa">token →</div>
+      <div class="fn fn-green">🏔️ ADLS Gen2<br/><small>Verifies token via RBAC</small></div>
+    </div>
+    <p style="text-align:center;color:var(--t3);font-size:.78rem;margin-top:1rem;">No password exchanged at any point. Azure AD handles all authentication. Token expires automatically and is refreshed by Azure.</p>
+  </div>
+
+  <div class="divider"><span>RBAC — Role-Based Access Control</span></div>
+
+  <div class="kp">
+    <h3>📌 Most Important RBAC Roles for Data Engineers</h3>
+    <ul>
+      <li><strong>Owner:</strong> Full access — can manage resources AND assign roles to others. Only grant to project leads or administrators.</li>
+      <li><strong>Contributor:</strong> Can create and manage all Azure resources but CANNOT assign roles. Typical role for data engineers in a dev environment.</li>
+      <li><strong>Reader:</strong> Read-only access to resources. Good for auditors and monitoring dashboards.</li>
+      <li><strong>Storage Blob Data Contributor:</strong> Read, write, delete blobs in ADLS/Storage. Grant this to ADF, Databricks for ADLS access.</li>
+      <li><strong>Storage Blob Data Reader:</strong> Read-only blob access. Grant to Synapse Serverless SQL Pool to query Data Lake files.</li>
+      <li><strong>Key Vault Secrets User:</strong> Read secret values from Key Vault. Grant to ADF, Databricks, App Services.</li>
+      <li><strong>Key Vault Administrator:</strong> Full management of keys, secrets, certificates. Grant only to infrastructure team.</li>
+      <li><strong>SQL DB Contributor / SQL Server Contributor:</strong> Manage Azure SQL resources but cannot manage access or security.</li>
+    </ul>
+  </div>
+
+  <div class="code">
+    <div class="code-header"><span class="code-lang">Python — Access Key Vault Secret Using Managed Identity (No Password!)</span><div class="code-dots"><span style="background:#ef4444;"></span><span style="background:#f59e0b;"></span><span style="background:#10b981;"></span></div></div>
+    <pre><span class="kw">from</span> azure.keyvault.secrets <span class="kw">import</span> SecretClient
+<span class="kw">from</span> azure.identity <span class="kw">import</span> ManagedIdentityCredential, DefaultAzureCredential
+
+<span class="cm"># DefaultAzureCredential tries Managed Identity first,
+# then falls back to dev credentials — works everywhere!</span>
+credential = <span class="fu">DefaultAzureCredential</span>()
+
+key_vault_url = <span class="st">"https://myproject-kv-2025.vault.azure.net/"</span>
+client = <span class="fu">SecretClient</span>(vault_url=key_vault_url, credential=credential)
+
+<span class="cm"># Retrieve the secret — no password in code anywhere!</span>
+secret = client.<span class="fu">get_secret</span>(<span class="st">"sql-db-password"</span>)
+db_password = secret.value
+
+<span class="fu">print</span>(<span class="st">f"Secret retrieved successfully (length: {len(db_password)} chars)"</span>)
+<span class="cm"># ✅ Use db_password to connect to SQL DB
+# ✅ Nothing is hardcoded. No credentials in Git.</span></pre>
+  </div>
+
+  <div class="try">
+    <div class="label">🛠️ Try This — Secure ADF with Key Vault</div>
+    <ol>
+      <li>Create a Key Vault → Store your SQL DB password as a secret named "sql-connection-string"</li>
+      <li>In ADF → Manage → Linked Services → Edit your SQL DB linked service</li>
+      <li>Find the password field → Click the lock icon → Select "Azure Key Vault"</li>
+      <li>Choose your Key Vault and secret name → Save</li>
+      <li>ADF Studio → Manage → Managed Identities (verify it exists — it's auto-created)</li>
+      <li>In Key Vault → Access control (IAM) → + Add → Role: "Key Vault Secrets User" → Select ADF managed identity</li>
+      <li>Run a Debug pipeline — ADF fetches the password from Key Vault silently at runtime!</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     BONUS CHAPTER 13 — INTERVIEW Q&A
+══════════════════════════════════════════════ -->
+<section class="ch fi" id="ch13">
+  <div class="ch-head">
+    <div class="ch-num n-orange">13</div>
+    <div class="ch-title"><h2>🎤 Interview Questions & Answers — Chapter-wise</h2><p class="sub">Real interview questions asked at top companies — answered clearly</p></div>
+  </div>
+  <div class="tags"><span class="tag to">Interview Prep</span><span class="tag tb">Q&amp;A</span><span class="tag tc">DP-203</span><span class="tag tg">Scenario-Based</span></div>
+
+  <div class="ibox ib-blue">
+    <div class="ib-icon">🎯</div>
+    <div class="ib-body">
+      <h4>How to Use This Section</h4>
+      <p>These are real questions asked at companies like TCS, Infosys, Capgemini, Wipro, Microsoft, and startups in Azure data engineering interviews. For each question — first try answering yourself, then check the answer. Focus on the <strong>why</strong>, not just the <strong>what</strong>.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>☁️ Cloud & Fundamentals</span></div>
+
+  <div class="acc">
+    <button class="acc-h" onclick="acc(this)"><h4>Q1. What is the difference between IaaS, PaaS, and SaaS? Give Azure examples.</h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b">
+      <p><strong>IaaS (Infrastructure as a Service):</strong> You rent virtualized hardware. You manage OS, runtime, and app. You have full control but full responsibility. <em>Azure Example: Azure Virtual Machines.</em></p>
+      <br/><p><strong>PaaS (Platform as a Service):</strong> Azure manages infrastructure AND the platform (OS, runtime, middleware). You only manage your app and data. Lower maintenance overhead. <em>Azure Example: Azure SQL Database, Azure Data Factory, Databricks.</em></p>
+      <br/><p><strong>SaaS (Software as a Service):</strong> The complete application is delivered over the internet. You just configure and use it. <em>Azure Example: Power BI Service, Microsoft 365.</em></p>
+      <br/><p><strong>Key point:</strong> As a Data Engineer, you primarily use PaaS services — ADF, Databricks, Synapse, SQL DB, Cosmos DB. You never manage VMs or servers.</p>
+    </div>
+  </div>
+
+  <div class="acc">
+    <button class="acc-h" onclick="acc(this)"><h4>Q2. What is LRS, ZRS, and GRS? When would you choose each?</h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b">
+      <p><strong>LRS (Locally Redundant Storage):</strong> 3 copies within one data center. Cheapest. Survives hardware failure but NOT a data center outage. Use only for dev/test or easily reproducible data (e.g., raw downloads that can be re-pulled).</p>
+      <br/><p><strong>ZRS (Zone Redundant Storage):</strong> 3 copies across 3 availability zones in the same region. Survives a full zone/building failure. Use for production apps needing HA within a region.</p>
+      <br/><p><strong>GRS (Geo Redundant Storage):</strong> 3 copies in primary region + 3 copies async-replicated to a paired secondary region (e.g., East US → West US). Survives an entire regional outage. Default Azure selection and recommended for any business-critical data.</p>
+      <br/><p><strong>Interview tip:</strong> "In production I always use GRS for critical data. LRS only for ephemeral/temp storage to save costs."</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>🗄️ Azure SQL Database</span></div>
+
+  <div class="acc">
+    <button class="acc-h" onclick="acc(this)"><h4>Q3. What is the difference between Azure SQL Database and SQL on Azure VM?</h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b">
+      <p><strong>Azure SQL Database (PaaS):</strong> Fully managed. Azure patches, backs up, monitors, scales the database automatically. You manage only schema and data. Built-in HA, 99.99% SLA. No OS access. Best for new, cloud-native applications.</p>
+      <br/><p><strong>SQL on Azure VM (IaaS):</strong> SQL Server installed on a Virtual Machine. You manage the OS, SQL Server installation, patching, and backups. Full control including SA-level access. Best for lift-and-shift migrations from on-premise that need specific SQL Server features not available in SQL DB.</p>
+      <br/><p><strong>Key difference:</strong> Management responsibility. Data engineers typically prefer SQL DB (PaaS) — less operational overhead, focus on queries not server management.</p>
+    </div>
+  </div>
+
+  <div class="acc">
+    <button class="acc-h" onclick="acc(this)"><h4>Q4. What is Serverless compute tier in Azure SQL Database?</h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b">
+      <p>Serverless is a compute tier where compute auto-scales based on workload and <strong>automatically pauses when the database is idle</strong> (configurable delay, e.g., 60 minutes). You pay only for compute seconds when queries are actually running — billing stops completely during pause.</p>
+      <br/><p><strong>When to use:</strong> Development databases, applications with unpredictable or intermittent usage patterns. A database used only during business hours can pause overnight and on weekends — reducing cost by up to 70%.</p>
+      <br/><p><strong>Trade-off:</strong> First query after auto-pause has a "cold start" latency of ~10–60 seconds while compute provisions. Not suitable for latency-sensitive production apps. Use General Purpose or Business Critical tier for always-on production.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>🌌 Azure Cosmos DB</span></div>
+
+  <div class="acc">
+    <button class="acc-h" onclick="acc(this)"><h4>Q5. How is Cosmos DB different from Azure SQL Database? When would you pick one over the other?</h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b">
+      <p><strong>Azure SQL DB:</strong> Relational, fixed schema, ACID transactions, T-SQL, best for structured transactional data (orders, employees, inventory).</p>
+      <br/><p><strong>Cosmos DB:</strong> NoSQL, schema-flexible, JSON documents/key-value/graph, globally distributed, millisecond latency at any scale, best for semi-structured app data (user profiles, product catalogs, IoT events, session data).</p>
+      <br/><p><strong>Choose SQL DB when:</strong> Data is highly structured, relationships between entities matter (joins needed), strong consistency and ACID required (e.g., financial transactions).</p>
+      <br/><p><strong>Choose Cosmos DB when:</strong> Data structure varies per document, global distribution needed, single-digit ms latency regardless of scale, schema evolves frequently (e.g., e-commerce product catalog with different attributes per category).</p>
+    </div>
+  </div>
+
+  <div class="acc">
+    <button class="acc-h" onclick="acc(this)"><h4>Q6. What is a partition key in Cosmos DB and why is it important?</h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b">
+      <p>The partition key is a property in your documents that Cosmos DB uses to <strong>physically distribute data across partitions</strong>. All documents with the same partition key value go to the same logical partition.</p>
+      <br/><p><strong>Why it matters:</strong> Most queries should filter by partition key — this allows Cosmos DB to query only one partition (partition key query) instead of scanning all partitions (cross-partition query). Cross-partition queries are slower and cost more RUs.</p>
+      <br/><p><strong>Good partition key:</strong> Has high cardinality (many unique values), distributes data evenly, and is included in most queries. Example: <code style="color:var(--cyan);">/userId</code> for a social app, <code style="color:var(--cyan);">/country</code> for a global app.</p>
+      <br/><p><strong>Bad partition key:</strong> A boolean (only 2 values — all data in 2 partitions), a status field with few values, or a field never used in queries.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>🏔️ Azure Data Lake</span></div>
+
+  <div class="acc">
+    <button class="acc-h" onclick="acc(this)"><h4>Q7. What is the difference between ADLS Gen1 and Gen2? Why was Gen2 introduced?</h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b">
+      <p><strong>ADLS Gen1</strong> was a standalone data lake service with Hadoop-compatible file system (HDFS). It was separate from Azure Blob Storage, had its own management, and was more expensive.</p>
+      <br/><p><strong>ADLS Gen2</strong> is built on top of Azure Blob Storage with the <strong>Hierarchical Namespace (HNS) feature enabled</strong>. This gives Blob Storage true folder-like semantics — atomic rename/delete of directories, POSIX ACLs, and much faster big data operations.</p>
+      <br/><p><strong>Why Gen2 wins:</strong> Same Blob Storage pricing (cheaper), unified management, better performance, POSIX ACLs for fine-grained access, native integration with ADF, Databricks, and Synapse. ADLS Gen1 was retired in Feb 2024 — all new workloads use Gen2.</p>
+    </div>
+  </div>
+
+  <div class="acc">
+    <button class="acc-h" onclick="acc(this)"><h4>Q8. Explain the Medallion Architecture (Bronze-Silver-Gold). Why use it?</h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b">
+      <p>Medallion Architecture is a data design pattern that organizes data into three quality layers in the Data Lake:</p>
+      <br/><p><strong>🥉 Bronze (Raw):</strong> Exact copy of source data, no transformation. Append-only. Preserves original data forever. Allows reprocessing from scratch if logic changes.</p>
+      <br/><p><strong>🥈 Silver (Cleaned):</strong> Validated, standardized, deduplicated, correctly typed data. Empty values handled. Business rules applied. Stored as Parquet or Delta. Queryable by data scientists and analysts.</p>
+      <br/><p><strong>🥇 Gold (Aggregated):</strong> Business-level aggregations, KPIs, dimensional models. Optimized for reporting tools. Served to Power BI and data consumers.</p>
+      <br/><p><strong>Why use it:</strong> Each layer serves a different audience and purpose. If a transformation bug is found, you can reprocess from Bronze without re-ingesting from source. Data quality improves at each layer. Teams can work independently on different layers.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>⚡ Azure Event Hubs</span></div>
+
+  <div class="acc">
+    <button class="acc-h" onclick="acc(this)"><h4>Q9. What are partitions in Event Hubs? How do they affect throughput?</h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b">
+      <p>Each Event Hub is divided into N partitions (1–32). Each partition is an ordered, immutable log of events. Events are distributed across partitions by a partition key or round-robin.</p>
+      <br/><p><strong>How they affect throughput:</strong> Each partition can handle up to 1 MB/s ingress and 2 MB/s egress (with Standard tier). Multiple consumers read different partitions in parallel. So: <strong>3 partitions = 3 MB/s max ingress + 3 consumer readers working in parallel</strong>.</p>
+      <br/><p><strong>Important:</strong> Partition count is set at hub creation and CANNOT be changed later. Plan capacity upfront. For production, 4–8 partitions is common. More partitions = more parallelism but also higher minimum cost.</p>
+    </div>
+  </div>
+
+  <div class="acc">
+    <button class="acc-h" onclick="acc(this)"><h4>Q10. Event Hubs vs Azure Service Bus — when to use which?</h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b">
+      <p><strong>Event Hubs</strong> — Use for high-volume event streaming and telemetry: IoT sensor data, clickstream, app logs. Many producers, many consumers. Events retained by time (not delivery acknowledgement). Kafka-compatible. Best for: data pipelines, analytics, monitoring.</p>
+      <br/><p><strong>Azure Service Bus</strong> — Use for enterprise message brokering between services. Point-to-point queues or publish-subscribe topics. Messages deleted only after consumer explicitly acknowledges receipt. Supports dead-letter queues, message ordering, transactions, duplicate detection. Best for: microservices communication, order processing, reliable task queuing.</p>
+      <br/><p><strong>Simple rule:</strong> Event Hubs = "I want to stream and analyze lots of data." Service Bus = "I need reliable, guaranteed delivery of messages between specific services."</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>🔄 Azure Data Factory</span></div>
+
+  <div class="acc">
+    <button class="acc-h" onclick="acc(this)"><h4>Q11. How would you implement an incremental load in ADF?</h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b">
+      <p>Incremental load copies only new or changed records since the last run — instead of copying the full dataset every time. Here's the pattern:</p>
+      <br/><ol style="padding-left:1.4rem;font-size:.875rem;color:var(--t2);line-height:1.9;">
+        <li><strong>Watermark table:</strong> Create a small SQL table in your database to store the last load timestamp/ID: <code style="color:var(--cyan);">CREATE TABLE watermark (table_name VARCHAR(50), last_value DATETIME)</code></li>
+        <li><strong>Lookup Activity:</strong> Before Copy — read the current watermark value from the watermark table.</li>
+        <li><strong>Copy Activity:</strong> Use the watermark as a filter in the source query: <code style="color:var(--cyan);">SELECT * FROM orders WHERE updated_at > '@{activity('GetWatermark').output.firstRow.last_value}'</code></li>
+        <li><strong>Stored Procedure Activity:</strong> After Copy — update the watermark table with the max timestamp from the current batch.</li>
+        <li><strong>Schedule Trigger:</strong> Run this pipeline every hour/day to get incremental data continuously.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="acc">
+    <button class="acc-h" onclick="acc(this)"><h4>Q12. What is the difference between Azure IR and Self-Hosted IR in ADF?</h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b">
+      <p><strong>Azure Integration Runtime (Azure IR):</strong> Fully managed, auto-scaling compute provided by Microsoft for cloud-to-cloud data movement and transformations. No setup needed — just select it in your Linked Service. Auto-selects the region closest to your data source for optimal performance. Cannot access on-premise resources or private endpoints directly.</p>
+      <br/><p><strong>Self-Hosted Integration Runtime (SHIR):</strong> Software you install on a Windows machine inside your corporate network (behind the firewall). Acts as a bridge between your private on-premise SQL Server/Oracle/SAP and ADF in the cloud. Uses outbound HTTPS connection only — no inbound firewall rules needed. Can also access VNet-integrated resources in Azure.</p>
+      <br/><p><strong>When to use SHIR:</strong> Any on-premise data source, private database servers, custom connectors, or resources not accessible from the public internet.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>🧱 Azure Databricks</span></div>
+
+  <div class="acc">
+    <button class="acc-h" onclick="acc(this)"><h4>Q13. What is Delta Lake and how is it different from plain Parquet?</h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b">
+      <p><strong>Plain Parquet:</strong> Columnar file format — great for analytics but no ACID guarantees. Cannot do UPDATE or DELETE on Parquet files. No version history. Two concurrent writers can corrupt data. No way to enforce schema on new writes.</p>
+      <br/><p><strong>Delta Lake:</strong> Parquet files + a transaction log (<code style="color:var(--cyan);">_delta_log</code> folder). The transaction log records every operation atomically. This gives Delta tables:</p>
+      <ul style="padding-left:1.4rem;font-size:.875rem;color:var(--t2);line-height:1.8;margin-top:.5rem;">
+        <li><strong>ACID Transactions:</strong> Concurrent readers and writers don't corrupt data</li>
+        <li><strong>Time Travel:</strong> Query any historical version by version number or timestamp</li>
+        <li><strong>MERGE/UPSERT:</strong> Update or insert records in a single statement — impossible with Parquet</li>
+        <li><strong>Schema Enforcement:</strong> Rejects writes that break the schema</li>
+        <li><strong>Schema Evolution:</strong> Safely add new columns to existing tables</li>
+        <li><strong>Audit History:</strong> Full record of who did what and when</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="acc">
+    <button class="acc-h" onclick="acc(this)"><h4>Q14. What is lazy evaluation in Apache Spark? Why does it matter?</h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b">
+      <p><strong>Lazy evaluation</strong> means Spark doesn't execute DataFrame transformations immediately when you call them. Instead, it builds a logical plan (DAG — Directed Acyclic Graph) of all the transformations. Execution only happens when you call an <strong>action</strong> (like <code style="color:var(--cyan);">.count()</code>, <code style="color:var(--cyan);">.show()</code>, <code style="color:var(--cyan);">.write()</code>).</p>
+      <br/><p><strong>Why it matters — Optimization:</strong> Spark's Catalyst optimizer can see the entire transformation chain before executing. It can reorder operations, push filters earlier (partition pruning), eliminate unnecessary steps, and choose the best join strategy. Results in significantly faster execution than if each step ran immediately.</p>
+      <br/><p><strong>Practical example:</strong> If you filter early in the chain, Spark's optimizer will push that filter to the scan — reading much less data. With eager evaluation, you'd read all data first, then filter.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>🔬 Azure Synapse Analytics</span></div>
+
+  <div class="acc">
+    <button class="acc-h" onclick="acc(this)"><h4>Q15. What are distribution strategies in Dedicated SQL Pool? When to use Hash vs Round-Robin vs Replicated?</h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b">
+      <p>Dedicated SQL Pool distributes table data across 60 compute nodes. The distribution strategy determines how rows are spread across these nodes.</p>
+      <br/><p><strong>Hash Distribution:</strong> Rows are distributed based on a hash of a specific column value. Rows with the same column value always go to the same node. Best for large fact tables that are frequently joined — joining two hash-distributed tables on the same key avoids data movement (all matching rows are on the same node). <em>Rule: Use on the column most used in JOIN conditions.</em></p>
+      <br/><p><strong>Round-Robin:</strong> Rows distributed evenly in a round-robin fashion regardless of values. Simplest, no data skew, but joins require data movement (shuffle). Best for staging/temp tables where data is loaded then immediately transformed.</p>
+      <br/><p><strong>Replicated:</strong> Full copy of the table on every compute node. No data movement needed for any join. Best for small dimension tables (under 2 GB) that are frequently joined with fact tables.</p>
+    </div>
+  </div>
+
+  <div class="acc">
+    <button class="acc-h" onclick="acc(this)"><h4>Q16. How does Serverless SQL Pool differ from Dedicated SQL Pool in Synapse?</h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b">
+      <p><strong>Serverless SQL Pool:</strong> Queries data directly in Azure Data Lake using OPENROWSET — data stays in the lake, nothing loaded. Pay per TB scanned (~$5/TB). Auto-scales, no infrastructure to manage. Best for ad-hoc exploration, lakehouse pattern, infrequent queries on large datasets.</p>
+      <br/><p><strong>Dedicated SQL Pool:</strong> Data is physically loaded into a provisioned warehouse (DWH). Pre-allocated compute (DWUs). Consistent, high performance for repeated queries used by BI tools. Pay per DWU-hour regardless of query volume. <strong>Remember to PAUSE when not in use</strong> — billing continues even when idle.</p>
+      <br/><p><strong>Exam tip:</strong> Serverless = query in place (schema-on-read). Dedicated = load then query (schema-on-write). Most modern architectures use both: Serverless for exploration, Dedicated for Power BI production dashboards.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>🔐 Security</span></div>
+
+  <div class="acc">
+    <button class="acc-h" onclick="acc(this)"><h4>Q17. What is Managed Identity and why should you use it instead of Service Principal with client secret?</h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b">
+      <p><strong>Service Principal with client secret:</strong> You create an app registration in Azure AD, generate a client secret (password), and store it somewhere (Key Vault or config). You must manually rotate secrets before expiry, manage secret storage, and handle credential leakage risks.</p>
+      <br/><p><strong>Managed Identity:</strong> Azure automatically creates and manages an identity for your service (ADF, Databricks, App Service). No password, no secret to manage, no rotation needed. Azure handles credential lifecycle completely. You simply grant RBAC roles to the identity.</p>
+      <br/><p><strong>Why Managed Identity wins:</strong> Zero credential management overhead. No risk of accidentally committing secrets to Git. Works seamlessly within Azure's RBAC system. Passes security audits easily. Use Managed Identity for all Azure-to-Azure connections. Use Service Principal only for non-Azure systems or automated pipelines outside Azure.</p>
+    </div>
+  </div>
+
+  <div class="acc">
+    <button class="acc-h" onclick="acc(this)"><h4>Q18. What is the difference between RBAC and Key Vault Access Policies?</h4><span class="acc-icon">▼</span></button>
+    <div class="acc-b">
+      <p><strong>Key Vault Access Policies (Legacy):</strong> Per-vault permission model. Grant an identity (user/SP/MI) access to ALL secrets, ALL keys, or ALL certificates in the vault with specific operations (Get, List, Set, Delete). Binary — you either have access to all secrets or none. Cannot grant access to a specific secret only.</p>
+      <br/><p><strong>Azure RBAC for Key Vault (Recommended):</strong> Uses standard Azure RBAC roles at different scopes. You can grant "Key Vault Secrets User" role to an identity at the vault level (all secrets) OR at an individual secret level (one specific secret only). Integrated with Azure Policy, PIM, and all standard Azure governance tooling.</p>
+      <br/><p><strong>Recommendation:</strong> Always use Azure RBAC for Key Vault in new deployments. It provides least-privilege access (principle of minimal permission) and is consistent with all other Azure resource access control.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     BONUS CHAPTER 14 — QUICK REFERENCE CHEAT SHEET
+══════════════════════════════════════════════ -->
+<section class="ch fi" id="ch14">
+  <div class="ch-head">
+    <div class="ch-num n-green">14</div>
+    <div class="ch-title"><h2>📋 Quick Reference Cheat Sheet — All Azure Services at a Glance</h2><p class="sub">Your one-page reference for every Azure data service summary, use-case, and key terms</p></div>
+  </div>
+  <div class="tags"><span class="tag tg">Cheat Sheet</span><span class="tag tb">Quick Reference</span><span class="tag tc">Revision</span></div>
+
+  <div class="tw">
+    <table>
+      <thead>
+        <tr><th>Service</th><th>Type</th><th>Purpose</th><th>Data Type</th><th>Key Concept</th><th>Analogly</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong style="color:var(--blue)">Azure SQL Database</strong></td>
+          <td>PaaS</td>
+          <td>Relational OLTP database</td>
+          <td>Structured</td>
+          <td>T-SQL, ACID, Serverless tier, Geo-replication</td>
+          <td>Excel with superpowers in the cloud</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--cyan)">Azure Cosmos DB</strong></td>
+          <td>PaaS</td>
+          <td>Globally distributed NoSQL</td>
+          <td>Semi-structured</td>
+          <td>6 APIs, partition key, RU/s, global distribution</td>
+          <td>Flexible filing cabinet with folders worldwide</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--orange)">Azure Data Lake Gen2</strong></td>
+          <td>PaaS</td>
+          <td>Big data file storage</td>
+          <td>Any (unstructured)</td>
+          <td>Hierarchical Namespace, Medallion, Parquet, Delta</td>
+          <td>Giant hard drive for any file type</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--yellow)">Azure Event Hubs</strong></td>
+          <td>PaaS</td>
+          <td>Real-time event streaming</td>
+          <td>Events/Messages</td>
+          <td>Partitions, consumer groups, retention, Kafka-compat</td>
+          <td>Highway toll gate capturing every car's data</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--green)">Azure Data Factory</strong></td>
+          <td>PaaS</td>
+          <td>ETL orchestration</td>
+          <td>Any (moves between)</td>
+          <td>Linked Services, Datasets, Activities, Pipelines, Triggers</td>
+          <td>Airport traffic controller for data</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--purple)">Azure Databricks</strong></td>
+          <td>PaaS</td>
+          <td>Spark data processing & ML</td>
+          <td>Any (processes large scale)</td>
+          <td>PySpark, Delta Lake, Driver/Workers, Lazy eval, MERGE</td>
+          <td>Supercharged parallel processing factory</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--cyan)">Azure Synapse Analytics</strong></td>
+          <td>PaaS</td>
+          <td>End-to-end analytics + DWH</td>
+          <td>Any</td>
+          <td>Serverless SQL Pool, Dedicated SQL Pool, Synapse Spark</td>
+          <td>Complete data department under one roof</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--pink)">Azure Key Vault</strong></td>
+          <td>PaaS</td>
+          <td>Secrets & key management</td>
+          <td>Secrets/Keys/Certs</td>
+          <td>Secrets, Keys, Certificates, RBAC, Managed Identity</td>
+          <td>Bank locker for your passwords</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--blue)">Azure Monitor</strong></td>
+          <td>PaaS</td>
+          <td>Observability & alerting</td>
+          <td>Metrics/Logs</td>
+          <td>Log Analytics, Alerts, Dashboards, Workbooks</td>
+          <td>CCTV system for your Azure resources</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"><span>Key Commands & Code Snippets — Quick Copy</span></div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="ci">🐍</div>
+      <h3>PySpark — Essential Operations</h3>
+      <div class="code" style="margin-top:.75rem;margin-bottom:0;">
+        <pre style="font-size:.72rem;padding:.75rem 1rem;"><span class="cm"># Read CSV</span>
+df = spark.read.option(<span class="st">"header"</span>,<span class="st">"true"</span>).csv(<span class="st">"/path/"</span>)
+<span class="cm"># Filter</span>
+df.filter(col(<span class="st">"salary"</span>) > <span class="nm">50000</span>)
+<span class="cm"># Group + Aggregate</span>
+df.groupBy(<span class="st">"dept"</span>).agg(F.avg(<span class="st">"salary"</span>))
+<span class="cm"># Write Delta</span>
+df.write.format(<span class="st">"delta"</span>).mode(<span class="st">"overwrite"</span>).save(<span class="st">"/silver/"</span>)
+<span class="cm"># Time Travel</span>
+spark.read.option(<span class="st">"versionAsOf"</span>,<span class="nm">3</span>).format(<span class="st">"delta"</span>).load(<span class="st">"/"</span>)
+<span class="cm"># MERGE</span>
+target.alias(<span class="st">"t"</span>).merge(src.alias(<span class="st">"s"</span>),<span class="st">"t.id=s.id"</span>)\
+  .whenMatchedUpdateAll().whenNotMatchedInsertAll().execute()</pre>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ci">🗃️</div>
+      <h3>Synapse Serverless SQL — Quick Queries</h3>
+      <div class="code" style="margin-top:.75rem;margin-bottom:0;">
+        <pre style="font-size:.72rem;padding:.75rem 1rem;"><span class="cm">-- Query Parquet directly</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span>
+  <span class="fu">OPENROWSET</span>(BULK <span class="st">'https://lake.dfs.core.windows.net/silver/*.parquet'</span>,
+  FORMAT=<span class="st">'PARQUET'</span>) <span class="kw">AS</span> [r]
+<span class="kw">WHERE</span> r.department = <span class="st">'HR'</span>;
+
+<span class="cm">-- Query CSV</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span>
+  <span class="fu">OPENROWSET</span>(BULK <span class="st">'https://lake.dfs.core.windows.net/raw/*.csv'</span>,
+  FORMAT=<span class="st">'CSV'</span>, FIRSTROW=<span class="nm">2</span>, FIELDTERMINATOR=<span class="st">','</span>) <span class="kw">AS</span> [r];</pre>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ci">🔐</div>
+      <h3>Key Vault — Python SDK</h3>
+      <div class="code" style="margin-top:.75rem;margin-bottom:0;">
+        <pre style="font-size:.72rem;padding:.75rem 1rem;"><span class="kw">from</span> azure.keyvault.secrets <span class="kw">import</span> SecretClient
+<span class="kw">from</span> azure.identity <span class="kw">import</span> DefaultAzureCredential
+
+client = <span class="fu">SecretClient</span>(
+  vault_url=<span class="st">"https://mykv.vault.azure.net/"</span>,
+  credential=<span class="fu">DefaultAzureCredential</span>()
+)
+<span class="cm"># Get secret</span>
+secret = client.<span class="fu">get_secret</span>(<span class="st">"my-secret"</span>)
+value = secret.value
+<span class="cm"># List secrets</span>
+<span class="kw">for</span> s <span class="kw">in</span> client.<span class="fu">list_properties_of_secrets</span>():
+    <span class="fu">print</span>(s.name)</pre>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ci">⚡</div>
+      <h3>Event Hubs — Python Producer</h3>
+      <div class="code" style="margin-top:.75rem;margin-bottom:0;">
+        <pre style="font-size:.72rem;padding:.75rem 1rem;"><span class="kw">from</span> azure.eventhub <span class="kw">import</span> EventHubProducerClient, EventData
+producer = EventHubProducerClient.from_connection_string(
+  conn_str=<span class="st">"Endpoint=sb://..."</span>,
+  eventhub_name=<span class="st">"my-hub"</span>
+)
+<span class="kw">with</span> producer:
+  batch = producer.create_batch()
+  batch.add(EventData(<span class="st">'{"temp":25,"city":"Mumbai"}'</span>))
+  producer.send_batch(batch)</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"><span>Decision Trees — Pick the Right Azure Service</span></div>
+
+  <div class="diagram">
+    <div class="diagram-title">🤔 Which Storage Service Should I Use?</div>
+    <div style="font-size:.85rem;color:var(--t2);line-height:1.9;">
+      <p><strong style="color:var(--t1);">Is your data structured (rows & columns with fixed schema)?</strong></p>
+      <p style="padding-left:1.5rem;">→ YES, and need ACID/transactions → <strong style="color:var(--blue);">Azure SQL Database</strong></p>
+      <p style="padding-left:1.5rem;">→ YES, and massive DWH analytics → <strong style="color:var(--green);">Synapse Dedicated SQL Pool</strong></p>
+      <br/>
+      <p><strong style="color:var(--t1);">Is your data semi-structured (JSON, key-value)?</strong></p>
+      <p style="padding-left:1.5rem;">→ YES, app data, global users, need SQL query on JSON → <strong style="color:var(--cyan);">Cosmos DB for NoSQL</strong></p>
+      <p style="padding-left:1.5rem;">→ YES, migrating from MongoDB → <strong style="color:var(--cyan);">Cosmos DB for MongoDB</strong></p>
+      <p style="padding-left:1.5rem;">→ YES, simple key-value lookups, low cost → <strong style="color:var(--orange);">Storage Account Tables</strong></p>
+      <br/>
+      <p><strong style="color:var(--t1);">Is your data files (CSV, Parquet, JSON, images, logs) at large scale?</strong></p>
+      <p style="padding-left:1.5rem;">→ YES → <strong style="color:var(--orange);">Azure Data Lake Storage Gen2</strong></p>
+      <br/>
+      <p><strong style="color:var(--t1);">Is your data streaming / real-time events?</strong></p>
+      <p style="padding-left:1.5rem;">→ YES, high volume telemetry → <strong style="color:var(--yellow);">Azure Event Hubs</strong></p>
+      <p style="padding-left:1.5rem;">→ YES, reliable service-to-service messages → <strong style="color:var(--blue);">Azure Service Bus</strong></p>
+    </div>
+  </div>
+
+  <div class="diagram">
+    <div class="diagram-title">🤔 Which Processing Service Should I Use?</div>
+    <div style="font-size:.85rem;color:var(--t2);line-height:1.9;">
+      <p><strong style="color:var(--t1);">Do you need to move/copy data between systems (ETL)?</strong></p>
+      <p style="padding-left:1.5rem;">→ YES, visual low-code, schedule-based → <strong style="color:var(--green);">Azure Data Factory</strong></p>
+      <br/>
+      <p><strong style="color:var(--t1);">Do you need to transform/process large-scale data?</strong></p>
+      <p style="padding-left:1.5rem;">→ YES, Spark, Python, ML → <strong style="color:var(--purple);">Azure Databricks</strong></p>
+      <p style="padding-left:1.5rem;">→ YES, T-SQL on Data Lake files → <strong style="color:var(--cyan);">Synapse Serverless SQL Pool</strong></p>
+      <br/>
+      <p><strong style="color:var(--t1);">Do you need real-time stream processing?</strong></p>
+      <p style="padding-left:1.5rem;">→ YES, windowing/aggregation, SQL-like → <strong style="color:var(--blue);">Azure Stream Analytics</strong></p>
+      <p style="padding-left:1.5rem;">→ YES, complex processing, joins, ML → <strong style="color:var(--purple);">Databricks Structured Streaming</strong></p>
+      <br/>
+      <p><strong style="color:var(--t1);">Do you need a complete data warehouse?</strong></p>
+      <p style="padding-left:1.5rem;">→ YES → <strong style="color:var(--green);">Synapse Dedicated SQL Pool</strong></p>
+    </div>
+  </div>
+
+  <div class="divider"><span>Common Mistakes Beginners Make — Avoid These!</span></div>
+
+  <div class="kp">
+    <h3>⚠️ Don'ts — Learn from Others' Mistakes</h3>
+    <ul>
+      <li><strong>DON'T hardcode passwords</strong> in ADF Linked Services or Databricks config. Always use Key Vault + Managed Identity.</li>
+      <li><strong>DON'T leave Dedicated SQL Pool running</strong> when not in use. It bills per DWU-hour — always PAUSE after use. An idle DW1000c costs ~$2,400/month!</li>
+      <li><strong>DON'T use LRS for production</strong> critical data. Use at minimum ZRS. For disaster recovery, use GRS.</li>
+      <li><strong>DON'T use inferSchema on large CSV files</strong> in Spark — it reads the entire file twice (once to infer, once to process). Always define schema explicitly with StructType for production jobs.</li>
+      <li><strong>DON'T call .count() or .show() frequently in production</strong> Spark code — these are actions that trigger full computation. Use sampling or explain() for debugging.</li>
+      <li><strong>DON'T choose a bad Cosmos DB partition key</strong> — a key with few unique values (like boolean or status field) will create "hot partitions" and throttle your throughput.</li>
+      <li><strong>DON'T store files directly in the container root</strong> of ADLS — always use folders. Flat structure causes performance issues and management nightmares at scale.</li>
+      <li><strong>DON'T ignore the Medallion Architecture</strong> — storing everything in one container without Bronze/Silver/Gold layers makes debugging, reprocessing, and access control extremely difficult.</li>
+    </ul>
+  </div>
+
+  <div class="ibox ib-green">
+    <div class="ib-icon">🌟</div>
+    <div class="ib-body">
+      <h4>✅ The Golden Rules of Azure Data Engineering</h4>
+      <ul>
+        <li>🔐 <strong>Security first:</strong> Managed Identity for auth, Key Vault for secrets, Private Endpoints for network isolation</li>
+        <li>🏔️ <strong>Data Lake is your foundation:</strong> Store everything raw in Bronze, never delete raw data</li>
+        <li>⚡ <strong>Prefer Delta over Parquet:</strong> ACID, time travel, and MERGE are worth the small overhead</li>
+        <li>🔄 <strong>ADF orchestrates, Databricks transforms:</strong> Don't try to do heavy computation in ADF — use Databricks Notebook Activity</li>
+        <li>💰 <strong>Cost-awareness:</strong> Pause Dedicated SQL Pool, use Serverless SQL for exploration, use LRS for temp data</li>
+        <li>📈 <strong>Monitor everything:</strong> Enable ADF monitoring, Databricks cluster event logs, Azure Monitor alerts on cost and failures</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div style="font-size:2rem;margin-bottom:.75rem;">☁️</div>
+  <div style="font-weight:800;color:var(--t1);margin-bottom:.4rem;font-size:1.1rem;">Azure Data Engineering — Complete Study Guide 2025</div>
+  <div style="margin-bottom:1rem;">Compiled from 3-hour YouTube tutorial transcription • Expanded with Interview Q&amp;A, Security, and Quick Reference</div>
+  <div style="display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;color:var(--t2);">
+    <span>📘 14 Chapters</span>
+    <span>🛠️ 40+ Hands-on Steps</span>
+    <span>💻 20+ Code Examples</span>
+    <span>🗺️ 25+ Diagrams</span>
+    <span>🎤 18 Interview Q&amp;As</span>
+    <span>📋 Quick Ref Cheat Sheet</span>
+  </div>
+</footer>
+
+</div><!-- main -->
+
+<button class="mob-btn" id="mobBtn" onclick="toggleSb()">☰</button>
+
+<script>
+// Progress
+window.addEventListener('scroll',()=>{
+  const pct = window.scrollY/(document.documentElement.scrollHeight-window.innerHeight);
+  document.getElementById('prog').style.transform=`scaleX(${pct})`;
+});
+
+// Fade-in on scroll
+const fi = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');}});
+},{threshold:.05});
+document.querySelectorAll('.fi').forEach(el=>fi.observe(el));
+
+// Active nav
+const secs = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.sb a');
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const id=e.target.id;
+      navLinks.forEach(a=>{
+        a.classList.toggle('active',a.getAttribute('href')==='#'+id);
+      });
+    }
+  });
+},{threshold:.25});
+secs.forEach(s=>io.observe(s));
+
+// Accordion
+function acc(header){
+  const body=header.nextElementSibling;
+  const wasOpen=header.classList.contains('open');
+  document.querySelectorAll('.acc-h').forEach(h=>{h.classList.remove('open');h.nextElementSibling.classList.remove('open');});
+  if(!wasOpen){header.classList.add('open');body.classList.add('open');}
+}
+
+// Sidebar mobile
+function toggleSb(){document.getElementById('sb').classList.toggle('open');}
+function cls(){document.getElementById('sb').classList.remove('open');}
+
+// Close sidebar on outside click (mobile)
+document.addEventListener('click',e=>{
+  const sb=document.getElementById('sb');
+  const btn=document.getElementById('mobBtn');
+  if(window.innerWidth<=900 && !sb.contains(e.target) && !btn.contains(e.target)){
+    sb.classList.remove('open');
+  }
+});
+</script>
+</body>
+</html>

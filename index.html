@@ -224,6 +224,12 @@
 <div class="toc-item toc-level-2"><a href="#153-key-takeaways" onclick="closeMenu()">15.3 Key Takeaways</a></div>
 <div class="toc-item toc-level-2"><a href="#154-final-statement" onclick="closeMenu()">15.4 Final Statement</a></div>
 <div class="toc-item toc-level-2"><a href="#155-references" onclick="closeMenu()">15.5 References</a></div>
+
+
+
+<div class="sidebar-title" style="margin-top: 30px; border-top: 1px solid var(--border); padding-top: 20px; font-size: 1rem;"><a href="layman_guide.html" style="color: #fbbf24; text-decoration: none; display: flex; align-items: center; gap: 8px;">🎓 Interview Guide ➔</a></div>
+<div class="toc-item toc-level-1"><a href="qa_part1.html">📝 Q&A Part 1 (Q1-Q10)</a></div>
+<div class="toc-item toc-level-1"><a href="qa_part2.html">📝 Q&A Part 2 (Q11-Q30)</a></div>
 </nav>
 
 <div class="main-content">
@@ -1690,42 +1696,10 @@ if alerts_to_create:
 <tr><td>9</td><td>Django REST Framework Documentation — <code class="inline-code">django-rest-framework.org</code></td><td>Backend API and ORM framework</td></tr>
 <tr><td>10</td><td>Financial Action Task Force (FATF) — <em>"Money Laundering Typologies Report"</em></td><td>Typology definitions (Structuring, Mule, Round-Trip)</td></tr></div>
     </section>
-</div>
+
+
+    
+
+    </div>
 
 <script>
-  const sidebar = document.getElementById('sidebar');
-  const overlay = document.querySelector('.sidebar-overlay');
-  
-  function toggleMenu() {
-    sidebar.classList.toggle('open');
-    overlay.classList.toggle('open');
-    if (sidebar.classList.contains('open')) {
-      document.body.style.overflow = 'hidden'; 
-    } else {
-      document.body.style.overflow = '';
-    }
-  }
-  
-  function closeMenu() {
-    sidebar.classList.remove('open');
-    overlay.classList.remove('open');
-    document.body.style.overflow = '';
-  }
-
-  mermaid.initialize({
-    startOnLoad: true,
-    theme: 'dark',
-    securityLevel: 'loose',
-    themeVariables: {
-      fontFamily: 'Inter',
-      primaryColor: '#171d2b',
-      primaryTextColor: '#f8fafc',
-      primaryBorderColor: '#60a5fa',
-      lineColor: '#60a5fa',
-      secondaryColor: '#0f1524',
-      tertiaryColor: '#060913'
-    }
-  });
-</script>
-</body>
-</html>

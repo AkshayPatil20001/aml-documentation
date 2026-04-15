@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Akshay's Learning Hub — Azure & AML Projects</title>
+<meta name="description" content="A personal knowledge hub for Azure Data Engineering and AML project documentation, interview guides, and study notes."/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:     #04111f;
+  --bg2:    #071828;
+  --bg3:    #0a1f35;
+  --card:   #0d2240;
+  --card2:  #102a4a;
+  --blue:   #0078d4;
+  --cyan:   #00b4d8;
+  --purple: #7c3aed;
+  --green:  #10b981;
+  --orange: #f59e0b;
+  --pink:   #ec4899;
+  --red:    #ef4444;
+  --yellow: #fbbf24;
+  --t1:     #e2e8f0;
+  --t2:     #94a3b8;
+  --t3:     #64748b;
+  --border: rgba(0,120,212,0.18);
+  --glow:   rgba(0,120,212,0.35);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--t1);
+  line-height:1.7;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+
+/* ── ANIMATED BG ORBS ── */
+.orb {
+  position:fixed;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:0;
+  animation:drift 12s ease-in-out infinite alternate;
+}
+.orb1 {
+  width:600px; height:600px;
+  background:radial-gradient(circle,rgba(0,120,212,.13) 0%,transparent 70%);
+  top:-150px; left:-150px;
+  animation-delay:0s;
+}
+.orb2 {
+  width:500px; height:500px;
+  background:radial-gradient(circle,rgba(124,58,237,.1) 0%,transparent 70%);
+  bottom:-100px; right:-100px;
+  animation-delay:4s;
+}
+.orb3 {
+  width:350px; height:350px;
+  background:radial-gradient(circle,rgba(0,180,216,.07) 0%,transparent 70%);
+  top:40%; left:50%;
+  transform:translateX(-50%);
+  animation-delay:8s;
+}
+@keyframes drift {
+  from { transform:translate(0,0) scale(1); }
+  to   { transform:translate(30px,40px) scale(1.08); }
+}
+
+/* ── NOISE TEXTURE ── */
+body::after {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity:.025;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* ── WRAPPER ── */
+.wrapper { position:relative; z-index:1; max-width:1200px; margin:0 auto; padding:0 2rem; }
+
+/* ── NAVBAR ── */
+nav {
+  position:fixed; top:0; left:0; right:0;
+  height:64px;
+  background:rgba(4,17,31,.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center;
+  z-index:200;
+}
+.nav-inner {
+  max-width:1200px; margin:0 auto; padding:0 2rem;
+  width:100%;
+  display:flex; align-items:center; gap:1rem;
+}
+.nav-logo {
+  display:flex; align-items:center; gap:.7rem;
+  text-decoration:none;
+}
+.nav-logo-icon {
+  width:38px; height:38px;
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.1rem;
+  box-shadow:0 0 18px var(--glow);
+}
+.nav-logo-text { font-size:.9rem; font-weight:800; color:var(--t1); }
+.nav-logo-text span { color:var(--cyan); }
+.nav-tagline { font-size:.72rem; color:var(--t3); margin-left:auto; font-family:'JetBrains Mono',monospace; }
+
+/* ── HERO ── */
+.hero {
+  min-height:100vh;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center;
+  padding:8rem 2rem 5rem;
+  position:relative;
+  overflow:hidden;
+}
+.hero-badge {
+  display:inline-flex; align-items:center; gap:.5rem;
+  padding:.4rem 1.1rem;
+  background:rgba(0,120,212,.1);
+  border:1px solid rgba(0,120,212,.45);
+  border-radius:100px;
+  font-size:.72rem; font-weight:700;
+  color:var(--cyan); letter-spacing:.07em;
+  margin-bottom:2rem;
+  animation:fadeUp .7s ease both;
+  position:relative;
+}
+.hero-badge::before {
+  content:'';
+  width:7px; height:7px;
+  background:var(--cyan); border-radius:50%;
+  animation:pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.5;transform:scale(.7);} }
+
+.hero h1 {
+  font-family:'Outfit',sans-serif;
+  font-size:clamp(2.8rem,6vw,5.5rem);
+  font-weight:900;
+  line-height:1.05;
+  margin-bottom:1.5rem;
+  background:linear-gradient(135deg,#fff 0%,#90e0ff 45%,var(--blue) 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:fadeUp .8s .1s ease both;
+  position:relative;
+}
+.hero h1 em {
+  font-style:normal;
+  background:linear-gradient(135deg,var(--cyan),var(--purple));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero-sub {
+  font-size:1.1rem;
+  color:var(--t2);
+  max-width:580px;
+  margin-bottom:3rem;
+  animation:fadeUp .8s .2s ease both;
+  position:relative;
+}
+
+/* ── STATS ROW ── */
+.hero-stats {
+  display:flex; gap:3.5rem; flex-wrap:wrap;
+  justify-content:center;
+  margin-bottom:3.5rem;
+  animation:fadeUp .8s .3s ease both;
+  position:relative;
+}
+.stat { text-align:center; }
+.stat-n {
+  font-size:2.5rem; font-weight:900;
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.stat-l { font-size:.68rem; color:var(--t3); text-transform:uppercase; letter-spacing:.1em; margin-top:.2rem; }
+
+/* ── SCROLL CTA ── */
+.scroll-hint {
+  animation:fadeUp .8s .45s ease both;
+  position:relative;
+  display:flex; flex-direction:column; align-items:center; gap:.4rem;
+  color:var(--t3); font-size:.75rem; letter-spacing:.06em; text-transform:uppercase;
+}
+.scroll-hint .arrow {
+  width:28px; height:28px;
+  border:1px solid var(--border);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  animation:bounce 2s infinite;
+}
+@keyframes bounce {
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(6px);}
+}
+
+/* ── SECTION LABEL ── */
+.sec-label {
+  display:flex; align-items:center; gap:1rem;
+  margin-bottom:2.5rem;
+}
+.sec-line { flex:1; height:1px; background:var(--border); }
+.sec-text {
+  font-size:.65rem; font-weight:800; text-transform:uppercase;
+  letter-spacing:.15em; color:var(--t3);
+  white-space:nowrap;
+}
+
+/* ── SECTION TITLES ── */
+.sec-title {
+  font-family:'Outfit',sans-serif;
+  font-size:clamp(1.8rem,3.5vw,2.6rem);
+  font-weight:800;
+  margin-bottom:.75rem;
+  color:var(--t1);
+}
+.sec-title span { color:var(--cyan); }
+.sec-desc { color:var(--t2); font-size:.95rem; max-width:520px; margin-bottom:3rem; }
+
+/* ── SECTION PADDING ── */
+.section { padding:6rem 0; }
+
+/* ── BIG CARDS (main two) ── */
+.big-cards {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:2rem;
+  margin-bottom:1.5rem;
+}
+.big-card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:2.5rem;
+  text-decoration:none;
+  color:inherit;
+  position:relative;
+  overflow:hidden;
+  transition:all .35s cubic-bezier(.22,1,.36,1);
+  display:flex; flex-direction:column;
+}
+.big-card::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  opacity:0;
+  transition:opacity .35s;
+}
+.big-card.azure::before  { background:linear-gradient(135deg,rgba(0,120,212,.1),rgba(0,180,216,.05)); }
+.big-card.aml::before    { background:linear-gradient(135deg,rgba(124,58,237,.1),rgba(236,72,153,.05)); }
+.big-card:hover { transform:translateY(-8px); box-shadow:0 25px 60px rgba(0,0,0,.4),0 0 40px var(--glow); }
+.big-card:hover::before { opacity:1; }
+.big-card:hover { border-color:rgba(0,120,212,.5); }
+.big-card.aml:hover { border-color:rgba(124,58,237,.5); box-shadow:0 25px 60px rgba(0,0,0,.4),0 0 40px rgba(124,58,237,.3); }
+
+.card-top {
+  display:flex; align-items:flex-start; justify-content:space-between;
+  margin-bottom:1.8rem;
+}
+.card-icon {
+  width:64px; height:64px;
+  border-radius:18px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.8rem;
+  flex-shrink:0;
+}
+.azure .card-icon { background:linear-gradient(135deg,rgba(0,120,212,.25),rgba(0,180,216,.15)); box-shadow:0 0 20px rgba(0,120,212,.2); }
+.aml   .card-icon { background:linear-gradient(135deg,rgba(124,58,237,.25),rgba(236,72,153,.15)); box-shadow:0 0 20px rgba(124,58,237,.2); }
+
+.card-badge {
+  font-size:.62rem; font-weight:800; text-transform:uppercase;
+  letter-spacing:.1em; padding:.3rem .75rem;
+  border-radius:100px; border:1px solid;
+  white-space:nowrap;
+}
+.azure .card-badge { background:rgba(0,120,212,.1); border-color:rgba(0,120,212,.4); color:var(--cyan); }
+.aml   .card-badge { background:rgba(124,58,237,.1); border-color:rgba(124,58,237,.4); color:#a78bfa; }
+
+.card-title {
+  font-family:'Outfit',sans-serif;
+  font-size:1.7rem; font-weight:800;
+  margin-bottom:.6rem; line-height:1.2;
+}
+.card-desc { font-size:.88rem; color:var(--t2); line-height:1.7; margin-bottom:2rem; flex:1; }
+
+.card-stats {
+  display:flex; gap:1.5rem; flex-wrap:wrap;
+  margin-bottom:2rem;
+}
+.cs { text-align:left; }
+.cs-n { font-size:1.4rem; font-weight:900; }
+.azure .cs-n { color:var(--cyan); }
+.aml   .cs-n { color:#a78bfa; }
+.cs-l { font-size:.62rem; color:var(--t3); text-transform:uppercase; letter-spacing:.08em; }
+
+.card-cta {
+  display:inline-flex; align-items:center; gap:.6rem;
+  padding:.8rem 1.6rem;
+  border-radius:12px;
+  font-size:.85rem; font-weight:700;
+  transition:all .25s;
+  border:1px solid transparent;
+  width:fit-content;
+  position:relative; z-index:1;
+  text-decoration:none;
+  color:#fff;
+}
+.azure .card-cta {
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  box-shadow:0 0 25px var(--glow);
+}
+.azure .card-cta:hover { transform:translateY(-2px); box-shadow:0 0 40px var(--glow),0 8px 25px rgba(0,0,0,.3); }
+.aml .card-cta {
+  background:linear-gradient(135deg,var(--purple),var(--pink));
+  box-shadow:0 0 25px rgba(124,58,237,.3);
+}
+.aml .card-cta:hover { transform:translateY(-2px); box-shadow:0 0 40px rgba(124,58,237,.4),0 8px 25px rgba(0,0,0,.3); }
+
+.card-arrow { transition:transform .25s; }
+.big-card:hover .card-arrow { transform:translateX(4px); }
+
+/* ── SMALL RESOURCE CARDS ── */
+.small-cards {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:1.25rem;
+}
+.small-card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:1.6rem;
+  text-decoration:none;
+  color:inherit;
+  transition:all .3s;
+  position:relative;
+  overflow:hidden;
+  display:block;
+}
+.small-card::before {
+  content:'';
+  position:absolute; inset:0;
+  opacity:0; transition:opacity .3s;
+}
+.small-card:hover { transform:translateY(-5px); }
+.small-card:hover::before { opacity:1; }
+
+.sc-green::before { background:linear-gradient(135deg,rgba(16,185,129,.08),transparent); }
+.sc-green:hover   { border-color:rgba(16,185,129,.5); box-shadow:0 12px 35px rgba(0,0,0,.3),0 0 20px rgba(16,185,129,.2); }
+
+.sc-icon {
+  width:46px; height:46px;
+  border-radius:13px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.3rem;
+  margin-bottom:1rem;
+  position:relative;
+}
+.sc-green .sc-icon { background:rgba(16,185,129,.15); }
+
+.sc-tag {
+  font-size:.6rem; font-weight:800; text-transform:uppercase;
+  letter-spacing:.09em; padding:.2rem .6rem;
+  border-radius:100px; margin-bottom:.7rem; display:inline-block;
+}
+.sc-green .sc-tag { background:rgba(16,185,129,.12); color:var(--green); border:1px solid rgba(16,185,129,.3); }
+
+.sc-title { font-size:.95rem; font-weight:800; margin-bottom:.4rem; color:var(--t1); }
+.sc-desc  { font-size:.8rem; color:var(--t2); line-height:1.6; }
+.sc-link  {
+  display:inline-flex; align-items:center; gap:.4rem;
+  margin-top:1rem;
+  font-size:.78rem; font-weight:700;
+  text-decoration:none;
+  transition:gap .2s;
+  position:relative; z-index:1;
+}
+.sc-green .sc-link { color:var(--green); }
+.small-card:hover .sc-link { gap:.7rem; }
+
+
+
+/* ── FOOTER ── */
+footer {
+  background:var(--bg2);
+  border-top:1px solid var(--border);
+  padding:3rem 2rem;
+  text-align:center;
+  color:var(--t3);
+  font-size:.82rem;
+  position:relative; z-index:1;
+}
+footer strong { color:var(--cyan); }
+.footer-links {
+  display:flex; gap:1.5rem; justify-content:center;
+  flex-wrap:wrap;
+  margin-top:1rem;
+}
+.footer-links a {
+  color:var(--t3); text-decoration:none;
+  font-size:.78rem;
+  transition:color .2s;
+}
+.footer-links a:hover { color:var(--cyan); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from{opacity:0;transform:translateY(28px);} to{opacity:1;transform:translateY(0);} }
+.fi { opacity:0; transform:translateY(22px); transition:opacity .7s ease, transform .7s ease; }
+.fi.vis { opacity:1; transform:translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px) {
+  .big-cards { grid-template-columns:1fr; }
+  .hero { padding:7rem 1.5rem 4rem; }
+  .section { padding:4rem 0; }
+  .wrapper { padding:0 1.2rem; }
+  .hero-stats { gap:2rem; }
+}
+@media(max-width:600px) {
+  .small-cards { grid-template-columns:1fr; }
+  nav .nav-tagline { display:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── ORBS ── -->
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<!-- ── NAVBAR ── -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">
+      <div class="nav-logo-icon">🧠</div>
+      <div class="nav-logo-text">Akshay's <span>Learning Hub</span></div>
+    </a>
+    <div class="nav-tagline">// Data Engineering &amp; AI</div>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-badge">✨ Personal Knowledge Base — 2025</div>
+
+  <h1>All My <em>Learnings</em><br/>In One Place</h1>
+  <p class="hero-sub">
+    Your personal hub for Azure Data Engineering notes, AML project documentation,
+    and interview preparation guides — curated and ready to explore.
+  </p>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-n">11</div>
+      <div class="stat-l">Azure Chapters</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n">15</div>
+      <div class="stat-l">AML Chapters</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n">3+</div>
+      <div class="stat-l">Hours of Content</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n">2</div>
+      <div class="stat-l">Core Projects</div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Explore your resources</span>
+    <div class="arrow">↓</div>
+  </div>
+</section>
+
+<!-- ═══ MAIN RESOURCES ═══ -->
+<section class="section">
+  <div class="wrapper">
+    <div class="sec-label">
+      <div class="sec-line"></div>
+      <div class="sec-text">📚 Core Resources</div>
+      <div class="sec-line"></div>
+    </div>
+    <h2 class="sec-title fi">My <span>Projects</span> &amp; Tutorials</h2>
+    <p class="sec-desc fi">Click on any card to dive into the full learning material.</p>
+
+    <!-- BIG CARDS -->
+    <div class="big-cards fi">
+
+      <!-- AZURE CARD -->
+      <a class="big-card azure" href="Azure_Data_Engineering_Notes.html" id="azure-tutorial-card">
+        <div class="card-top">
+          <div class="card-icon">☁️</div>
+          <div class="card-badge">Tutorial Notes</div>
+        </div>
+        <div class="card-title">Azure Data Engineering</div>
+        <div class="card-desc">
+          Complete beginner-to-intermediate guide synthesized from a 3-hour YouTube tutorial.
+          Covers Cloud Computing basics, IaaS/PaaS/SaaS, Azure SQL, Cosmos DB, Data Lake,
+          Event Hubs, ADF, Databricks, Synapse Analytics, Security &amp; more — all with
+          real-world analogies, diagrams, and hands-on steps.
+        </div>
+        <div class="card-stats">
+          <div class="cs">
+            <div class="cs-n">11</div>
+            <div class="cs-l">Chapters</div>
+          </div>
+          <div class="cs">
+            <div class="cs-n">10+</div>
+            <div class="cs-l">Azure Services</div>
+          </div>
+          <div class="cs">
+            <div class="cs-n">3+</div>
+            <div class="cs-l">Hours Content</div>
+          </div>
+        </div>
+        <div class="card-cta" id="azure-cta-btn">
+          Open Azure Tutorial <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <!-- AML CARD -->
+      <a class="big-card aml" href="index.html" id="aml-project-card">
+        <div class="card-top">
+          <div class="card-icon">🔬</div>
+          <div class="card-badge">Final Project</div>
+        </div>
+        <div class="card-title">AML Detection System</div>
+        <div class="card-desc">
+          In-depth technical documentation for the AI-powered Anti-Money Laundering
+          detection project. Covers the complete pipeline from data ingestion and
+          feature engineering to Isolation Forest ML, RAG-based SAR generation,
+          and Django REST API architecture.
+        </div>
+        <div class="card-stats">
+          <div class="cs">
+            <div class="cs-n">15</div>
+            <div class="cs-l">Chapters</div>
+          </div>
+          <div class="cs">
+            <div class="cs-n">95%</div>
+            <div class="cs-l">False Pos. Reduced</div>
+          </div>
+          <div class="cs">
+            <div class="cs-n">RAG</div>
+            <div class="cs-l">AI Reports</div>
+          </div>
+        </div>
+        <div class="card-cta" id="aml-cta-btn">
+          Open AML Project <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+    </div><!-- /big-cards -->
+
+    <!-- SMALL CARD -->
+    <div class="small-cards fi">
+
+      <a class="small-card sc-green" href="layman_guide.html" id="layman-guide-card">
+        <div class="sc-icon">🎓</div>
+        <div class="sc-tag">Interview Guide</div>
+        <div class="sc-title">Layman's Interview Guide</div>
+        <div class="sc-desc">Project explained in simple language — perfect for interview prep and quick revision.</div>
+        <div class="sc-link">Read Guide <span>→</span></div>
+      </a>
+
+    </div><!-- /small-cards -->
+  </div>
+</section>
+
+
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <p>Built for <strong>Akshay Patil</strong> — CDAC Data Engineering &amp; AI Portfolio • 2025</p>
+  <div class="footer-links">
+    <a href="Azure_Data_Engineering_Notes.html" id="footer-azure">☁️ Azure Tutorial</a>
+    <a href="index.html" id="footer-aml">🔬 AML Project</a>
+    <a href="layman_guide.html" id="footer-guide">🎓 Interview Guide</a>
+  </div>
+</footer>
+
+<script>
+// Intersection Observer for scroll animations
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('vis'); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
