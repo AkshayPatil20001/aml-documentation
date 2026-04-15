@@ -2,1704 +2,608 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-<meta name="theme-color" content="#060913"/>
-<title>AML Detection System — Mobile First Book</title>
-<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Akshay's Learning Hub — Azure & AML Projects</title>
+<meta name="description" content="A personal knowledge hub for Azure Data Engineering and AML project documentation, interview guides, and study notes."/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --bg-main: #060913;
-    --bg-sidebar: #0f1524;
-    --surface: #171d2b;
-    --accent: #60a5fa;
-    --accent-glow: rgba(96, 165, 250, 0.4);
-    --gold: #fbbf24;
-    --text-main: #cbd5e1;
-    --text-heading: #f8fafc;
-    --border: rgba(255, 255, 255, 0.08);
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  html { scroll-behavior: smooth; font-size: 16px; }
-  body { 
-    background: var(--bg-main); color: var(--text-main); 
-    font-family: 'Inter', sans-serif; line-height: 1.7;
-    display: flex; overflow-x: hidden; width: 100vw;
-  }
+:root {
+  --bg:     #04111f;
+  --bg2:    #071828;
+  --bg3:    #0a1f35;
+  --card:   #0d2240;
+  --card2:  #102a4a;
+  --blue:   #0078d4;
+  --cyan:   #00b4d8;
+  --purple: #7c3aed;
+  --green:  #10b981;
+  --orange: #f59e0b;
+  --pink:   #ec4899;
+  --red:    #ef4444;
+  --yellow: #fbbf24;
+  --t1:     #e2e8f0;
+  --t2:     #94a3b8;
+  --t3:     #64748b;
+  --border: rgba(0,120,212,0.18);
+  --glow:   rgba(0,120,212,0.35);
+}
 
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--t1);
+  line-height:1.7;
+  overflow-x:hidden;
+  min-height:100vh;
+}
 
-  .mobile-topbar {
-    display: none; position: fixed; top: 0; left: 0; right: 0; height: 60px;
-    background: rgba(15, 21, 36, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-    z-index: 2000; border-bottom: 1px solid var(--border); align-items: center; padding: 0 20px; justify-content: space-between;
-  }
-  .menu-btn { background: none; border: none; color: #fff; font-size: 28px; cursor: pointer; padding: 5px; transition: transform 0.2s; }
-  .menu-btn:active { transform: scale(0.9); }
-  .mobile-title { color: #fff; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 1.1rem; letter-spacing: 1px; }
+/* ── ANIMATED BG ORBS ── */
+.orb {
+  position:fixed;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:0;
+  animation:drift 12s ease-in-out infinite alternate;
+}
+.orb1 {
+  width:600px; height:600px;
+  background:radial-gradient(circle,rgba(0,120,212,.13) 0%,transparent 70%);
+  top:-150px; left:-150px;
+  animation-delay:0s;
+}
+.orb2 {
+  width:500px; height:500px;
+  background:radial-gradient(circle,rgba(124,58,237,.1) 0%,transparent 70%);
+  bottom:-100px; right:-100px;
+  animation-delay:4s;
+}
+.orb3 {
+  width:350px; height:350px;
+  background:radial-gradient(circle,rgba(0,180,216,.07) 0%,transparent 70%);
+  top:40%; left:50%;
+  transform:translateX(-50%);
+  animation-delay:8s;
+}
+@keyframes drift {
+  from { transform:translate(0,0) scale(1); }
+  to   { transform:translate(30px,40px) scale(1.08); }
+}
 
-  .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 1000; opacity: 0; transition: opacity 0.3s; }
+/* ── NOISE TEXTURE ── */
+body::after {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity:.025;
+  pointer-events:none;
+  z-index:0;
+}
 
-  .sidebar { width: 320px; height: 100vh; position: fixed; top: 0; left: 0; background: var(--bg-sidebar); border-right: 1px solid var(--border); padding: 40px 20px 100px; overflow-y: auto; z-index: 1001; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-  .sidebar-title { font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 700; color: #fff; margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
-  .toc-item a { text-decoration: none; color: #94a3b8; font-size: 0.9rem; display: block; padding: 10px 12px; border-radius: 8px; transition: 0.2s; }
-  .toc-level-1 a { font-weight: 600; color: var(--text-heading); margin-top: 15px; font-family: 'Outfit', sans-serif; font-size: 1rem; }
-  .toc-level-2 a { font-size: 0.85rem; padding-left: 20px; }
-  .toc-item a:hover, .toc-item a:active { background: rgba(96, 165, 250, 0.1); color: var(--accent); }
+/* ── WRAPPER ── */
+.wrapper { position:relative; z-index:1; max-width:1200px; margin:0 auto; padding:0 2rem; }
 
-  .main-content { margin-left: 320px; flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; position: relative; }
-  
-  .ambient-glow { position: absolute; top: 5%; left: 50%; transform: translateX(-50%); width: 600px; height: 600px; background: radial-gradient(circle, rgba(96, 165, 250, 0.15) 0%, rgba(0,0,0,0) 70%); pointer-events: none; z-index: -1; border-radius: 50%; }
+/* ── NAVBAR ── */
+nav {
+  position:fixed; top:0; left:0; right:0;
+  height:64px;
+  background:rgba(4,17,31,.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center;
+  z-index:200;
+}
+.nav-inner {
+  max-width:1200px; margin:0 auto; padding:0 2rem;
+  width:100%;
+  display:flex; align-items:center; gap:1rem;
+}
+.nav-logo {
+  display:flex; align-items:center; gap:.7rem;
+  text-decoration:none;
+}
+.nav-logo-icon {
+  width:38px; height:38px;
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.1rem;
+  box-shadow:0 0 18px var(--glow);
+}
+.nav-logo-text { font-size:.9rem; font-weight:800; color:var(--t1); }
+.nav-logo-text span { color:var(--cyan); }
+.nav-tagline { font-size:.72rem; color:var(--t3); margin-left:auto; font-family:'JetBrains Mono',monospace; }
 
-  .title-page { width: 100%; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 5%; }
-  .title-badge { background: rgba(96, 165, 250, 0.1); border: 1px solid var(--accent); color: var(--accent); font-family: 'Outfit', sans-serif; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; padding: 8px 20px; border-radius: 30px; margin-bottom: 25px; box-shadow: 0 0 20px var(--accent-glow); }
-  .title-page h1 { font-family: 'Outfit', sans-serif; font-size: clamp(2.2rem, 7vw, 4.5rem); font-weight: 800; line-height: 1.15; color: #fff; max-width: 900px; margin-bottom: 20px; }
-  .title-page .subtitle { font-size: clamp(1rem, 3vw, 1.15rem); color: #94a3b8; max-width: 600px; }
-  
-  .problem-card { background: rgba(23, 29, 43, 0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border); border-left: 4px solid var(--gold); border-radius: 16px; padding: 30px; max-width: 800px; text-align: left; margin-top: 40px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); width: 100%; }
-  .problem-card h2 { font-family: 'Outfit', sans-serif; color: var(--gold); margin-bottom: 15px; font-size: 1.1rem; letter-spacing: 1px; text-transform: uppercase; }
+/* ── HERO ── */
+.hero {
+  min-height:100vh;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center;
+  padding:8rem 2rem 5rem;
+  position:relative;
+  overflow:hidden;
+}
+.hero-badge {
+  display:inline-flex; align-items:center; gap:.5rem;
+  padding:.4rem 1.1rem;
+  background:rgba(0,120,212,.1);
+  border:1px solid rgba(0,120,212,.45);
+  border-radius:100px;
+  font-size:.72rem; font-weight:700;
+  color:var(--cyan); letter-spacing:.07em;
+  margin-bottom:2rem;
+  animation:fadeUp .7s ease both;
+  position:relative;
+}
+.hero-badge::before {
+  content:'';
+  width:7px; height:7px;
+  background:var(--cyan); border-radius:50%;
+  animation:pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.5;transform:scale(.7);} }
 
-  .chapter { width: 100%; max-width: 850px; padding: 60px 5%; border-top: 1px solid var(--border); }
-  .chapter-header { margin-bottom: 30px; }
-  .chapter-label { font-family: 'Outfit', sans-serif; font-size: 0.8rem; letter-spacing: 3px; color: var(--accent); text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 8px; }
-  .chapter-main-title { font-family: 'Outfit', sans-serif; font-size: clamp(2rem, 6vw, 2.8rem); color: #ffffff; font-weight: 700; line-height: 1.2; }
-  
-  .chapter-body h1 { font-family: 'Outfit', sans-serif; font-size: clamp(1.5rem, 5vw, 1.8rem); color: #fff; margin: 40px 0 20px; line-height: 1.3; }
-  .chapter-body h2 { font-family: 'Outfit', sans-serif; font-size: clamp(1.3rem, 4vw, 1.5rem); color: var(--accent); margin: 35px 0 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; line-height: 1.3; }
-  .chapter-body h3 { font-family: 'Outfit', sans-serif; font-size: 1.15rem; color: var(--gold); margin: 25px 0 10px; }
-  .chapter-body p { margin-bottom: 20px; font-size: clamp(1rem, 2.5vw, 1.05rem); color: #cbd5e1; }
-  .chapter-body ul, .chapter-body ol { margin: 20px 0 20px 20px; color: #cbd5e1; font-size: clamp(1rem, 2.5vw, 1.05rem); }
-  .chapter-body li { margin-bottom: 12px; }
-  .chapter-body strong { color: #ffffff; font-weight: 600; }
-  .inline-code { font-family: 'Fira Code', monospace; color: #93c5fd; background: rgba(96, 165, 250, 0.15); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; word-break: break-word; }
-  
-  .code-wrapper { width: 100%; overflow-x: auto; background: #0a0d14; border: 1px solid var(--border); border-radius: 12px; margin: 25px 0; }
-  .chapter-body pre { padding: 20px; margin: 0; display: inline-block; min-width: 100%; }
-  .chapter-body pre code { font-family: 'Fira Code', monospace; font-size: 0.85rem; color: #e2e8f0; line-height: 1.5; }
+.hero h1 {
+  font-family:'Outfit',sans-serif;
+  font-size:clamp(2.8rem,6vw,5.5rem);
+  font-weight:900;
+  line-height:1.05;
+  margin-bottom:1.5rem;
+  background:linear-gradient(135deg,#fff 0%,#90e0ff 45%,var(--blue) 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:fadeUp .8s .1s ease both;
+  position:relative;
+}
+.hero h1 em {
+  font-style:normal;
+  background:linear-gradient(135deg,var(--cyan),var(--purple));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero-sub {
+  font-size:1.1rem;
+  color:var(--t2);
+  max-width:580px;
+  margin-bottom:3rem;
+  animation:fadeUp .8s .2s ease both;
+  position:relative;
+}
 
-  .table-responsive { width: 100%; overflow-x: auto; margin: 25px 0; border: 1px solid var(--border); border-radius: 12px; -webkit-overflow-scrolling: touch; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-  table { width: 100%; min-width: 600px; border-collapse: collapse; }
-  th { background: var(--surface); color: var(--accent); padding: 14px 16px; text-align: left; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.95rem; }
-  td { padding: 12px 16px; border-top: 1px solid var(--border); color: #94a3b8; font-size: 0.95rem; }
-  tr:hover td { background: rgba(255,255,255,0.02); color: #fff; }
+/* ── STATS ROW ── */
+.hero-stats {
+  display:flex; gap:3.5rem; flex-wrap:wrap;
+  justify-content:center;
+  margin-bottom:3.5rem;
+  animation:fadeUp .8s .3s ease both;
+  position:relative;
+}
+.stat { text-align:center; }
+.stat-n {
+  font-size:2.5rem; font-weight:900;
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.stat-l { font-size:.68rem; color:var(--t3); text-transform:uppercase; letter-spacing:.1em; margin-top:.2rem; }
 
-  .mermaid { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin: 35px 0; overflow-x: auto; -webkit-overflow-scrolling: touch; display: flex; justify-content: center; width: 100%; }
-  .mermaid svg { max-width: 100% !important; height: auto !important; }
+/* ── SCROLL CTA ── */
+.scroll-hint {
+  animation:fadeUp .8s .45s ease both;
+  position:relative;
+  display:flex; flex-direction:column; align-items:center; gap:.4rem;
+  color:var(--t3); font-size:.75rem; letter-spacing:.06em; text-transform:uppercase;
+}
+.scroll-hint .arrow {
+  width:28px; height:28px;
+  border:1px solid var(--border);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  animation:bounce 2s infinite;
+}
+@keyframes bounce {
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(6px);}
+}
 
-  @media (max-width: 950px) {
-    .sidebar { transform: translateX(-100%); width: 300px; padding-top: 80px; box-shadow: 5px 0 25px rgba(0,0,0,0.5); }
-    .sidebar.open { transform: translateX(0); }
-    .sidebar-overlay.open { display: block; opacity: 1; }
-    
-    .mobile-topbar { display: flex; }
-    .main-content { margin-left: 0; padding-top: 60px; width: 100%; }
-    
-    .title-page { min-height: calc(100vh - 60px); padding-top: 40px; }
-    .ambient-glow { width: 300px; height: 300px; }
-    .problem-card { padding: 25px 20px; margin-top: 30px; }
-    
-    .chapter { padding: 50px 20px; border-top: none; position: relative; }
-    .chapter::before { content: ''; position: absolute; top: 0; left: 20px; right: 20px; height: 1px; background: var(--border); }
-    
-    th, td { padding: 12px 14px; font-size: 0.9rem; }
-  }
-  
-  @media (max-width: 380px) {
-    .chapter-main-title { font-size: 1.8rem; }
-    .sidebar { width: 280px; }
-  }
+/* ── SECTION LABEL ── */
+.sec-label {
+  display:flex; align-items:center; gap:1rem;
+  margin-bottom:2.5rem;
+}
+.sec-line { flex:1; height:1px; background:var(--border); }
+.sec-text {
+  font-size:.65rem; font-weight:800; text-transform:uppercase;
+  letter-spacing:.15em; color:var(--t3);
+  white-space:nowrap;
+}
+
+/* ── SECTION TITLES ── */
+.sec-title {
+  font-family:'Outfit',sans-serif;
+  font-size:clamp(1.8rem,3.5vw,2.6rem);
+  font-weight:800;
+  margin-bottom:.75rem;
+  color:var(--t1);
+}
+.sec-title span { color:var(--cyan); }
+.sec-desc { color:var(--t2); font-size:.95rem; max-width:520px; margin-bottom:3rem; }
+
+/* ── SECTION PADDING ── */
+.section { padding:6rem 0; }
+
+/* ── BIG CARDS (main two) ── */
+.big-cards {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:2rem;
+  margin-bottom:1.5rem;
+}
+.big-card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:2.5rem;
+  text-decoration:none;
+  color:inherit;
+  position:relative;
+  overflow:hidden;
+  transition:all .35s cubic-bezier(.22,1,.36,1);
+  display:flex; flex-direction:column;
+}
+.big-card::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  opacity:0;
+  transition:opacity .35s;
+}
+.big-card.azure::before  { background:linear-gradient(135deg,rgba(0,120,212,.1),rgba(0,180,216,.05)); }
+.big-card.aml::before    { background:linear-gradient(135deg,rgba(124,58,237,.1),rgba(236,72,153,.05)); }
+.big-card:hover { transform:translateY(-8px); box-shadow:0 25px 60px rgba(0,0,0,.4),0 0 40px var(--glow); }
+.big-card:hover::before { opacity:1; }
+.big-card:hover { border-color:rgba(0,120,212,.5); }
+.big-card.aml:hover { border-color:rgba(124,58,237,.5); box-shadow:0 25px 60px rgba(0,0,0,.4),0 0 40px rgba(124,58,237,.3); }
+
+.card-top {
+  display:flex; align-items:flex-start; justify-content:space-between;
+  margin-bottom:1.8rem;
+}
+.card-icon {
+  width:64px; height:64px;
+  border-radius:18px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.8rem;
+  flex-shrink:0;
+}
+.azure .card-icon { background:linear-gradient(135deg,rgba(0,120,212,.25),rgba(0,180,216,.15)); box-shadow:0 0 20px rgba(0,120,212,.2); }
+.aml   .card-icon { background:linear-gradient(135deg,rgba(124,58,237,.25),rgba(236,72,153,.15)); box-shadow:0 0 20px rgba(124,58,237,.2); }
+
+.card-badge {
+  font-size:.62rem; font-weight:800; text-transform:uppercase;
+  letter-spacing:.1em; padding:.3rem .75rem;
+  border-radius:100px; border:1px solid;
+  white-space:nowrap;
+}
+.azure .card-badge { background:rgba(0,120,212,.1); border-color:rgba(0,120,212,.4); color:var(--cyan); }
+.aml   .card-badge { background:rgba(124,58,237,.1); border-color:rgba(124,58,237,.4); color:#a78bfa; }
+
+.card-title {
+  font-family:'Outfit',sans-serif;
+  font-size:1.7rem; font-weight:800;
+  margin-bottom:.6rem; line-height:1.2;
+}
+.card-desc { font-size:.88rem; color:var(--t2); line-height:1.7; margin-bottom:2rem; flex:1; }
+
+.card-stats {
+  display:flex; gap:1.5rem; flex-wrap:wrap;
+  margin-bottom:2rem;
+}
+.cs { text-align:left; }
+.cs-n { font-size:1.4rem; font-weight:900; }
+.azure .cs-n { color:var(--cyan); }
+.aml   .cs-n { color:#a78bfa; }
+.cs-l { font-size:.62rem; color:var(--t3); text-transform:uppercase; letter-spacing:.08em; }
+
+.card-cta {
+  display:inline-flex; align-items:center; gap:.6rem;
+  padding:.8rem 1.6rem;
+  border-radius:12px;
+  font-size:.85rem; font-weight:700;
+  transition:all .25s;
+  border:1px solid transparent;
+  width:fit-content;
+  position:relative; z-index:1;
+  text-decoration:none;
+  color:#fff;
+}
+.azure .card-cta {
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  box-shadow:0 0 25px var(--glow);
+}
+.azure .card-cta:hover { transform:translateY(-2px); box-shadow:0 0 40px var(--glow),0 8px 25px rgba(0,0,0,.3); }
+.aml .card-cta {
+  background:linear-gradient(135deg,var(--purple),var(--pink));
+  box-shadow:0 0 25px rgba(124,58,237,.3);
+}
+.aml .card-cta:hover { transform:translateY(-2px); box-shadow:0 0 40px rgba(124,58,237,.4),0 8px 25px rgba(0,0,0,.3); }
+
+.card-arrow { transition:transform .25s; }
+.big-card:hover .card-arrow { transform:translateX(4px); }
+
+/* ── SMALL RESOURCE CARDS ── */
+.small-cards {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:1.25rem;
+}
+.small-card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:1.6rem;
+  text-decoration:none;
+  color:inherit;
+  transition:all .3s;
+  position:relative;
+  overflow:hidden;
+  display:block;
+}
+.small-card::before {
+  content:'';
+  position:absolute; inset:0;
+  opacity:0; transition:opacity .3s;
+}
+.small-card:hover { transform:translateY(-5px); }
+.small-card:hover::before { opacity:1; }
+
+.sc-green::before { background:linear-gradient(135deg,rgba(16,185,129,.08),transparent); }
+.sc-green:hover   { border-color:rgba(16,185,129,.5); box-shadow:0 12px 35px rgba(0,0,0,.3),0 0 20px rgba(16,185,129,.2); }
+
+.sc-icon {
+  width:46px; height:46px;
+  border-radius:13px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.3rem;
+  margin-bottom:1rem;
+  position:relative;
+}
+.sc-green .sc-icon { background:rgba(16,185,129,.15); }
+
+.sc-tag {
+  font-size:.6rem; font-weight:800; text-transform:uppercase;
+  letter-spacing:.09em; padding:.2rem .6rem;
+  border-radius:100px; margin-bottom:.7rem; display:inline-block;
+}
+.sc-green .sc-tag { background:rgba(16,185,129,.12); color:var(--green); border:1px solid rgba(16,185,129,.3); }
+
+.sc-title { font-size:.95rem; font-weight:800; margin-bottom:.4rem; color:var(--t1); }
+.sc-desc  { font-size:.8rem; color:var(--t2); line-height:1.6; }
+.sc-link  {
+  display:inline-flex; align-items:center; gap:.4rem;
+  margin-top:1rem;
+  font-size:.78rem; font-weight:700;
+  text-decoration:none;
+  transition:gap .2s;
+  position:relative; z-index:1;
+}
+.sc-green .sc-link { color:var(--green); }
+.small-card:hover .sc-link { gap:.7rem; }
+
+
+
+/* ── FOOTER ── */
+footer {
+  background:var(--bg2);
+  border-top:1px solid var(--border);
+  padding:3rem 2rem;
+  text-align:center;
+  color:var(--t3);
+  font-size:.82rem;
+  position:relative; z-index:1;
+}
+footer strong { color:var(--cyan); }
+.footer-links {
+  display:flex; gap:1.5rem; justify-content:center;
+  flex-wrap:wrap;
+  margin-top:1rem;
+}
+.footer-links a {
+  color:var(--t3); text-decoration:none;
+  font-size:.78rem;
+  transition:color .2s;
+}
+.footer-links a:hover { color:var(--cyan); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from{opacity:0;transform:translateY(28px);} to{opacity:1;transform:translateY(0);} }
+.fi { opacity:0; transform:translateY(22px); transition:opacity .7s ease, transform .7s ease; }
+.fi.vis { opacity:1; transform:translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px) {
+  .big-cards { grid-template-columns:1fr; }
+  .hero { padding:7rem 1.5rem 4rem; }
+  .section { padding:4rem 0; }
+  .wrapper { padding:0 1.2rem; }
+  .hero-stats { gap:2rem; }
+}
+@media(max-width:600px) {
+  .small-cards { grid-template-columns:1fr; }
+  nav .nav-tagline { display:none; }
+}
 </style>
 </head>
 <body>
 
-<div class="mobile-topbar">
-  <div class="mobile-title">AML Docs</div>
-  <button class="menu-btn" onclick="toggleMenu()" aria-label="Toggle Menu">☰</button>
-</div>
+<!-- ── ORBS ── -->
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
 
-<div class="sidebar-overlay" onclick="closeMenu()"></div>
-
-<nav class="sidebar" id="sidebar">
-  <div class="sidebar-title">📑 Table of Contents</div>
-  <div class="toc-item toc-level-1"><a href="#chapter-1-executive-summary" onclick="closeMenu()">Chapter 1: Executive Summary</a></div>
-<div class="toc-item toc-level-2"><a href="#11-objective-of-the-aml-detection-system" onclick="closeMenu()">1.1 Objective of the AML Detection System</a></div>
-<div class="toc-item toc-level-2"><a href="#12-the-shift-from-rule-based-to-ai-driven-aml-architecture" onclick="closeMenu()">1.2 The Shift from Rule-Based to AI-Driven AML Architecture</a></div>
-<div class="toc-item toc-level-3"><a href="#diagram-evolution-of-aml-systems" onclick="closeMenu()">Diagram: Evolution of AML Systems</a></div>
-<div class="toc-item toc-level-2"><a href="#13-key-technical-innovations-unsupervised-ml-rag" onclick="closeMenu()">1.3 Key Technical Innovations (Unsupervised ML & RAG)</a></div>
-<div class="toc-item toc-level-2"><a href="#14-project-scope-and-boundaries" onclick="closeMenu()">1.4 Project Scope and Boundaries</a></div>
-<div class="toc-item toc-level-1"><a href="#chapter-2-problem-definition" onclick="closeMenu()">Chapter 2: Problem Definition</a></div>
-<div class="toc-item toc-level-2"><a href="#21-the-cost-of-false-positives-in-traditional-aml" onclick="closeMenu()">2.1 The Cost of False Positives in Traditional AML</a></div>
-<div class="toc-item toc-level-2"><a href="#22-modern-typology-challenges-structuring-mule-accounts-round-tripping" onclick="closeMenu()">2.2 Modern Typology Challenges: Structuring, Mule Accounts, Round-Tripping</a></div>
-<div class="toc-item toc-level-3"><a href="#diagram-common-money-laundering-typologies" onclick="closeMenu()">Diagram: Common Money Laundering Typologies</a></div>
-<div class="toc-item toc-level-2"><a href="#23-regulatory-burden-pmla-2002-and-rbi-kyc-master-directions" onclick="closeMenu()">2.3 Regulatory Burden: PMLA 2002 and RBI KYC Master Directions</a></div>
-<div class="toc-item toc-level-2"><a href="#24-gap-analysis-where-current-boolean-logic-systems-fail" onclick="closeMenu()">2.4 Gap Analysis: Where Current Boolean Logic Systems Fail</a></div>
-<div class="toc-item toc-level-1"><a href="#chapter-3-system-architecture" onclick="closeMenu()">Chapter 3: System Architecture</a></div>
-<div class="toc-item toc-level-2"><a href="#31-high-level-component-interaction" onclick="closeMenu()">3.1 High-Level Component Interaction</a></div>
-<div class="toc-item toc-level-3"><a href="#diagram-end-to-end-system-architecture" onclick="closeMenu()">Diagram: End-to-End System Architecture</a></div>
-<div class="toc-item toc-level-2"><a href="#32-core-technology-stack-justification" onclick="closeMenu()">3.2 Core Technology Stack Justification</a></div>
-<div class="toc-item toc-level-3"><a href="#321-python-ecosystem-for-the-data-science-pipeline" onclick="closeMenu()">3.2.1 Python Ecosystem for the Data Science Pipeline</a></div>
-<div class="toc-item toc-level-3"><a href="#322-relational-data-modeling-sqlite" onclick="closeMenu()">3.2.2 Relational Data Modeling (SQLite)</a></div>
-<div class="toc-item toc-level-3"><a href="#323-vector-database-faiss-and-groq-llm-inference" onclick="closeMenu()">3.2.3 Vector Database (FAISS) and Groq LLM Inference</a></div>
-<div class="toc-item toc-level-2"><a href="#33-data-flow-pipeline" onclick="closeMenu()">3.3 Data Flow Pipeline</a></div>
-<div class="toc-item toc-level-3"><a href="#diagram-data-pipeline-dfd-level-1" onclick="closeMenu()">Diagram: Data Pipeline DFD Level 1</a></div>
-<div class="toc-item toc-level-1"><a href="#chapter-4-data-ingestion-layer" onclick="closeMenu()">Chapter 4: Data Ingestion Layer</a></div>
-<div class="toc-item toc-level-2"><a href="#41-asynchronous-batch-ingestion" onclick="closeMenu()">4.1 Asynchronous Batch Ingestion</a></div>
-<div class="toc-item toc-level-3"><a href="#diagram-asynchronous-data-ingestion-pipeline" onclick="closeMenu()">Diagram: Asynchronous Data Ingestion Pipeline</a></div>
-<div class="toc-item toc-level-2"><a href="#42-schema-mapping-and-column-normalization" onclick="closeMenu()">4.2 Schema Mapping and Column Normalization</a></div>
-<div class="toc-item toc-level-2"><a href="#43-data-cleaning-and-type-casting" onclick="closeMenu()">4.3 Data Cleaning and Type Casting</a></div>
-<div class="toc-item toc-level-3"><a href="#431-resolving-missing-temporal-attributes" onclick="closeMenu()">4.3.1 Resolving Missing Temporal Attributes</a></div>
-<div class="toc-item toc-level-3"><a href="#432-robust-currency-string-parsing" onclick="closeMenu()">4.3.2 Robust Currency String Parsing</a></div>
-<div class="toc-item toc-level-1"><a href="#chapter-5-feature-engineering" onclick="closeMenu()">Chapter 5: Feature Engineering</a></div>
-<div class="toc-item toc-level-2"><a href="#51-the-need-for-vectorized-feature-extraction-over-for-loops" onclick="closeMenu()">5.1 The Need for Vectorized Feature Extraction over For-Loops</a></div>
-<div class="toc-item toc-level-3"><a href="#diagram-vectorization-vs-loop-iteration" onclick="closeMenu()">Diagram: Vectorization vs. Loop Iteration</a></div>
-<div class="toc-item toc-level-2"><a href="#52-structuring-smurfing-vector-engineering" onclick="closeMenu()">5.2 Structuring (Smurfing) Vector Engineering</a></div>
-<div class="toc-item toc-level-2"><a href="#53-temporal-velocity-vectors-mule-scoring" onclick="closeMenu()">5.3 Temporal Velocity Vectors (Mule Scoring)</a></div>
-<div class="toc-item toc-level-2"><a href="#54-relational-features-round-trip-generation" onclick="closeMenu()">5.4 Relational Features (Round-Trip Generation)</a></div>
-<div class="toc-item toc-level-2"><a href="#55-matrix-consolidation" onclick="closeMenu()">5.5 Matrix Consolidation</a></div>
-<div class="toc-item toc-level-1"><a href="#chapter-6-rule-based-engine" onclick="closeMenu()">Chapter 6: Rule-Based Engine</a></div>
-<div class="toc-item toc-level-2"><a href="#61-defining-typology-thresholds" onclick="closeMenu()">6.1 Defining Typology Thresholds</a></div>
-<div class="toc-item toc-level-3"><a href="#diagram-rule-based-feature-tagging-logic" onclick="closeMenu()">Diagram: Rule-Based Feature Tagging Logic</a></div>
-<div class="toc-item toc-level-2"><a href="#62-structuring-smurfing-component-verification" onclick="closeMenu()">6.2 Structuring (Smurfing) Component Verification</a></div>
-<div class="toc-item toc-level-2"><a href="#63-money-mule-velocity-component-rapid-inout" onclick="closeMenu()">6.3 Money Mule Velocity Component (Rapid In/Out)</a></div>
-<div class="toc-item toc-level-2"><a href="#64-round-trip-pattern-component-verification" onclick="closeMenu()">6.4 Round-Trip Pattern Component Verification</a></div>
-<div class="toc-item toc-level-2"><a href="#65-output-to-the-intelligent-layer" onclick="closeMenu()">6.5 Output to the Intelligent Layer</a></div>
-<div class="toc-item toc-level-1"><a href="#chapter-7-machine-learning" onclick="closeMenu()">Chapter 7: Machine Learning</a></div>
-<div class="toc-item toc-level-2"><a href="#71-unsupervised-learning-in-the-aml-context" onclick="closeMenu()">7.1 Unsupervised Learning in the AML Context</a></div>
-<div class="toc-item toc-level-2"><a href="#72-isolation-forest-algorithm-mathematics" onclick="closeMenu()">7.2 Isolation Forest Algorithm Mathematics</a></div>
-<div class="toc-item toc-level-3"><a href="#721-the-concept-of-isolation-depth" onclick="closeMenu()">7.2.1 The Concept of Isolation Depth</a></div>
-<div class="toc-item toc-level-3"><a href="#diagram-geometric-isolation-of-anomalies" onclick="closeMenu()">Diagram: Geometric Isolation of Anomalies</a></div>
-<div class="toc-item toc-level-2"><a href="#73-model-training-and-feature-matrix-preparation" onclick="closeMenu()">7.3 Model Training and Feature Matrix Preparation</a></div>
-<div class="toc-item toc-level-2"><a href="#74-scoring-and-decision-function-execution" onclick="closeMenu()">7.4 Scoring and Decision Function Execution</a></div>
-<div class="toc-item toc-level-2"><a href="#75-model-persistence-via-joblib-serialization" onclick="closeMenu()">7.5 Model Persistence via Joblib Serialization</a></div>
-<div class="toc-item toc-level-1"><a href="#chapter-8-alert-prioritization" onclick="closeMenu()">Chapter 8: Alert Prioritization</a></div>
-<div class="toc-item toc-level-2"><a href="#81-normalizing-mathematical-isolation-forest-scores" onclick="closeMenu()">8.1 Normalizing Mathematical Isolation Forest Scores</a></div>
-<div class="toc-item toc-level-3"><a href="#diagram-risk-normalization-and-alert-categorization" onclick="closeMenu()">Diagram: Risk Normalization and Alert Categorization</a></div>
-<div class="toc-item toc-level-2"><a href="#82-threshold-engine-and-alert-database-generation" onclick="closeMenu()">8.2 Threshold Engine and Alert Database Generation</a></div>
-<div class="toc-item toc-level-2"><a href="#83-programmatic-typology-tagging-attribution" onclick="closeMenu()">8.3 Programmatic Typology Tagging (Attribution)</a></div>
-<div class="toc-item toc-level-1"><a href="#chapter-9-rag-intelligence" onclick="closeMenu()">Chapter 9: RAG Intelligence</a></div>
-<div class="toc-item toc-level-2"><a href="#91-automating-suspicious-activity-reports-sar-via-generative-ai" onclick="closeMenu()">9.1 Automating Suspicious Activity Reports (SAR) via Generative AI</a></div>
-<div class="toc-item toc-level-3"><a href="#diagram-the-rag-architecture-flow" onclick="closeMenu()">Diagram: The RAG Architecture Flow</a></div>
-<div class="toc-item toc-level-2"><a href="#92-knowledge-base-construction-pmla-rbi-guidelines" onclick="closeMenu()">9.2 Knowledge Base Construction (PMLA & RBI Guidelines)</a></div>
-<div class="toc-item toc-level-2"><a href="#93-embedding-pipeline-and-vector-store-retrieval" onclick="closeMenu()">9.3 Embedding Pipeline and Vector Store Retrieval</a></div>
-<div class="toc-item toc-level-2"><a href="#94-prompt-engineering-for-legal-compliance" onclick="closeMenu()">9.4 Prompt Engineering for Legal Compliance</a></div>
-<div class="toc-item toc-level-2"><a href="#95-llm-inference-architecture-groq-llama-33-70b-versatile" onclick="closeMenu()">9.5 LLM Inference Architecture (Groq: Llama-3.3-70b-versatile)</a></div>
-<div class="toc-item toc-level-1"><a href="#chapter-10-execution-flow" onclick="closeMenu()">Chapter 10: Execution Flow</a></div>
-<div class="toc-item toc-level-2"><a href="#101-initialization-phase-data-upload-to-task-queue" onclick="closeMenu()">10.1 Initialization Phase (Data Upload to Task Queue)</a></div>
-<div class="toc-item toc-level-2"><a href="#102-analysis-phase-preprocess---feature-eng---ml-inference" onclick="closeMenu()">10.2 Analysis Phase (Preprocess -> Feature Eng. -> ML Inference)</a></div>
-<div class="toc-item toc-level-2"><a href="#103-post-processing-phase-score-normalization---alert-instantiation" onclick="closeMenu()">10.3 Post-Processing Phase (Score Normalization -> Alert Instantiation)</a></div>
-<div class="toc-item toc-level-2"><a href="#104-investigation-phase-rag-synthesis---dashboard-delivery" onclick="closeMenu()">10.4 Investigation Phase (RAG Synthesis -> Dashboard Delivery)</a></div>
-<div class="toc-item toc-level-3"><a href="#diagram-uml-sequence-diagram-of-background-job-execution" onclick="closeMenu()">Diagram: UML Sequence Diagram of Background Job Execution</a></div>
-<div class="toc-item toc-level-1"><a href="#chapter-11-scalability" onclick="closeMenu()">Chapter 11: Scalability</a></div>
-<div class="toc-item toc-level-2"><a href="#111-algorithm-complexity-loop-iteration-vs-pandas-vectorization" onclick="closeMenu()">11.1 Algorithm Complexity: Loop Iteration vs. Pandas Vectorization</a></div>
-<div class="toc-item toc-level-3"><a href="#diagram-performance-scaling-comparison" onclick="closeMenu()">Diagram: Performance Scaling Comparison</a></div>
-<div class="toc-item toc-level-2"><a href="#112-database-throttling-connection-strategies" onclick="closeMenu()">11.2 Database Throttling & Connection Strategies</a></div>
-<div class="toc-item toc-level-2"><a href="#113-memory-state-management-during-large-csv-reads" onclick="closeMenu()">11.3 Memory State Management During Large CSV Reads</a></div>
-<div class="toc-item toc-level-1"><a href="#chapter-12-results-evaluation" onclick="closeMenu()">Chapter 12: Results & Evaluation</a></div>
-<div class="toc-item toc-level-2"><a href="#121-detection-accuracy-isolation-forest-performance" onclick="closeMenu()">12.1 Detection Accuracy: Isolation Forest Performance</a></div>
-<div class="toc-item toc-level-3"><a href="#key-metrics" onclick="closeMenu()">Key Metrics</a></div>
-<div class="toc-item toc-level-3"><a href="#diagram-detection-capability-comparison" onclick="closeMenu()">Diagram: Detection Capability Comparison</a></div>
-<div class="toc-item toc-level-2"><a href="#122-operational-efficiency-gains" onclick="closeMenu()">12.2 Operational Efficiency Gains</a></div>
-<div class="toc-item toc-level-2"><a href="#123-rag-report-quality-assessment" onclick="closeMenu()">12.3 RAG Report Quality Assessment</a></div>
-<div class="toc-item toc-level-2"><a href="#124-system-reliability" onclick="closeMenu()">12.4 System Reliability</a></div>
-<div class="toc-item toc-level-1"><a href="#chapter-13-challenges-solutions" onclick="closeMenu()">Chapter 13: Challenges & Solutions</a></div>
-<div class="toc-item toc-level-2"><a href="#131-challenge-inconsistent-data-schemas-across-banks" onclick="closeMenu()">13.1 Challenge: Inconsistent Data Schemas Across Banks</a></div>
-<div class="toc-item toc-level-2"><a href="#132-challenge-memory-overload-on-large-file-uploads" onclick="closeMenu()">13.2 Challenge: Memory Overload on Large File Uploads</a></div>
-<div class="toc-item toc-level-2"><a href="#133-challenge-currency-string-parsing-failures" onclick="closeMenu()">13.3 Challenge: Currency String Parsing Failures</a></div>
-<div class="toc-item toc-level-2"><a href="#134-challenge-llm-hallucination-in-legal-reports" onclick="closeMenu()">13.4 Challenge: LLM Hallucination in Legal Reports</a></div>
-<div class="toc-item toc-level-2"><a href="#135-challenge-isolation-forest-sensitivity-tuning" onclick="closeMenu()">13.5 Challenge: Isolation Forest Sensitivity Tuning</a></div>
-<div class="toc-item toc-level-3"><a href="#diagram-challenge-resolution-pipeline" onclick="closeMenu()">Diagram: Challenge Resolution Pipeline</a></div>
-<div class="toc-item toc-level-1"><a href="#chapter-14-future-scope" onclick="closeMenu()">Chapter 14: Future Scope</a></div>
-<div class="toc-item toc-level-2"><a href="#141-real-time-streaming-with-apache-kafka" onclick="closeMenu()">14.1 Real-Time Streaming with Apache Kafka</a></div>
-<div class="toc-item toc-level-3"><a href="#diagram-batch-vs-real-time-architecture" onclick="closeMenu()">Diagram: Batch vs Real-Time Architecture</a></div>
-<div class="toc-item toc-level-2"><a href="#142-graph-neural-networks-for-network-detection" onclick="closeMenu()">14.2 Graph Neural Networks for Network Detection</a></div>
-<div class="toc-item toc-level-2"><a href="#143-postgresql-migration-for-production-scale" onclick="closeMenu()">14.3 PostgreSQL Migration for Production Scale</a></div>
-<div class="toc-item toc-level-2"><a href="#144-explainable-ai-xai-with-shap-values" onclick="closeMenu()">14.4 Explainable AI (XAI) with SHAP Values</a></div>
-<div class="toc-item toc-level-2"><a href="#145-multi-language-sar-generation" onclick="closeMenu()">14.5 Multi-Language SAR Generation</a></div>
-<div class="toc-item toc-level-2"><a href="#146-automated-model-retraining-pipeline" onclick="closeMenu()">14.6 Automated Model Retraining Pipeline</a></div>
-<div class="toc-item toc-level-1"><a href="#chapter-15-conclusion" onclick="closeMenu()">Chapter 15: Conclusion</a></div>
-<div class="toc-item toc-level-2"><a href="#151-project-summary" onclick="closeMenu()">15.1 Project Summary</a></div>
-<div class="toc-item toc-level-2"><a href="#152-technical-achievements" onclick="closeMenu()">15.2 Technical Achievements</a></div>
-<div class="toc-item toc-level-2"><a href="#153-key-takeaways" onclick="closeMenu()">15.3 Key Takeaways</a></div>
-<div class="toc-item toc-level-2"><a href="#154-final-statement" onclick="closeMenu()">15.4 Final Statement</a></div>
-<div class="toc-item toc-level-2"><a href="#155-references" onclick="closeMenu()">15.5 References</a></div>
-
-
-
-<div class="sidebar-title" style="margin-top: 30px; border-top: 1px solid var(--border); padding-top: 20px; font-size: 1rem;"><a href="layman_guide.html" style="color: #fbbf24; text-decoration: none; display: flex; align-items: center; gap: 8px;">🎓 Interview Guide ➔</a></div>
-<div class="toc-item toc-level-1"><a href="qa_part1.html">📝 Q&A Part 1 (Q1-Q10)</a></div>
-<div class="toc-item toc-level-1"><a href="qa_part2.html">📝 Q&A Part 2 (Q11-Q30)</a></div>
+<!-- ── NAVBAR ── -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">
+      <div class="nav-logo-icon">🧠</div>
+      <div class="nav-logo-text">Akshay's <span>Learning Hub</span></div>
+    </a>
+    <div class="nav-tagline">// Data Engineering &amp; AI</div>
+  </div>
 </nav>
 
-<div class="main-content">
-  <div class="ambient-glow"></div>
-  <section class="title-page">
-    <div class="title-badge">CDAC Final Project Thesis</div>
-    <h1>AI-Driven Anti-Money Laundering Detection</h1>
-    <p class="subtitle">A comprehensive technical documentation combining machine learning, vectorized architecture, and retrieval-augmented generative AI for financial crime compliance.</p>
-    
-    <div class="problem-card">
-      <h2>📌 Executive Problem Statement</h2>
-      <p>
-        Traditional banking Anti-Money Laundering systems rely on rigid, hardcoded rules—such as flagging any transaction above ₹50,000—that produce up to <strong>95% false positives</strong> and are easily bypassed by criminals using techniques like <em>Structuring</em>, <em>Money Mule networks</em>, and <em>Round-Tripping</em>. 
-        <br/><br/>
-        This project introduces a scalable, AI-powered alternative. Using unsupervised machine learning (<strong>Isolation Forest</strong>), the system mathematically learns the organic behavioral shapes of financial data to identify true outliers. To ensure legal compliance, a Retrieval-Augmented Generation (<strong>RAG</strong>) layer then autonomously retrieves PMLA cases from a vector database to draft deterministic Suspicious Activity Reports (SARs) in under 2 seconds.
-      </p>
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-badge">✨ Personal Knowledge Base — 2025</div>
+
+  <h1>All My <em>Learnings</em><br/>In One Place</h1>
+  <p class="hero-sub">
+    Your personal hub for Azure Data Engineering notes, AML project documentation,
+    and interview preparation guides — curated and ready to explore.
+  </p>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-n">11</div>
+      <div class="stat-l">Azure Chapters</div>
     </div>
-  </section>
-
-  
-    <section id="chapter-1-executive-summary" class="chapter">
-      <div class="chapter-header">
-        <span class="chapter-label">CHAPTER</span>
-        <h1 class="chapter-main-title">Chapter 1: Executive Summary</h1>
-      </div>
-      <div class="chapter-body"><h1 id="chapter-1-executive-summary">Chapter 1: Executive Summary</h1>
-
-<h2 id="11-objective-of-the-aml-detection-system">1.1 Objective of the AML Detection System</h2>
-<p>The primary objective of the Anti-Money Laundering (AML) Detection System is to identify, analyze, and report sophisticated financial crimes hidden within vast amounts of transactional data. </p>
-
-<p>Money laundering involves complex techniques—like breaking down large sums into smaller transactions (Structuring) or rapidly moving funds through intermediate accounts (Money Mules)—designed to bypass traditional banking alert thresholds. This project aims to solve this problem by building a scalable, AI-powered pipeline that ingests raw banking data, dynamically scores account risk based on behavioral deviations, and computationally generates legally-grounded compliance reports.</p>
-
-<p>The end goal is to drastically reduce the "false positive" noise that burdens modern compliance teams, while automating the heavy lifting of drafting Suspicious Activity Reports (SARs) using Generative AI.</p>
-
-<h2 id="12-the-shift-from-rule-based-to-ai-driven-aml-architecture">1.2 The Shift from Rule-Based to AI-Driven AML Architecture</h2>
-<p>Historically, financial institutions have relied on <strong>Boolean-logic (Rule-Based) systems</strong>. A traditional system might have a hardcoded rule stating: <em>“If a transaction exceeds ₹50,000, trigger an alert.”</em> </p>
-
-<p>While simple to implement, these legacy systems face two massive failures:</p>
-<p>1. <strong>High False Positive Rates:</strong> Perfectly legal business anomalies trigger alerts simply for crossing a static threshold, wasting analysts' time.</p>
-<p>2. <strong>Predictable Evasion:</strong> Criminals understand these static rules. If the limit is ₹50,000, they will systematically deposit ₹49,000 to remain invisible.</p>
-
-<p>This project shifts the paradigm to an <strong>AI-Driven Architecture</strong>. Instead of asking, <em>"Did this account cross a hardcoded line?"</em>, the system asks, <em>"Is this account's behavioral geometry fundamentally different from the normal population?"</em> By engineering behavioral features (like velocity of funds and structuring counts) and feeding them into an unsupervised Machine Learning model, the system identifies the <em>shape</em> of money laundering rather than just its size.</p>
-
-<h3 id="diagram-evolution-of-aml-systems">Diagram: Evolution of AML Systems</h3>
-<div class="mermaid">graph TD
-    %% Styling Rules
-    classDef default fill:#f9f9f9,stroke:#333,stroke-width:2px;
-    classDef ruleBox fill:#ffe6e6,stroke:#ff4d4d,stroke-width:2px,color:#990000;
-    classDef failBox fill:#cc0000,stroke:#660000,stroke-width:2px,color:#fff;
-    classDef successBox fill:#1a1a1a,stroke:#333333,stroke-width:2px,color:#fff;
-    classDef aiBox fill:#e6f2ff,stroke:#0066cc,stroke-width:2px,color:#003366;
-    classDef mlBox fill:#003366,stroke:#001a33,stroke-width:2px,color:#fff;
-
-    subgraph Traditional ["Traditional Rule-Based AML"]
-        A1["Transaction Data"] --> B1{"Rule: Amount > 50k?"}
-        B1 -- Yes --> C1["Alert Raised - High False Positives"]
-        B1 -- No --> D1["Ignored - Criminals Evade Detection"]
-        
-        class B1 ruleBox;
-        class C1 failBox;
-        class D1 failBox;
-    end
-
-    subgraph Modern ["Modern AI-Driven AML (Our System)"]
-        A2["Transaction Data"] --> B2["Behavioral Feature Engineering"]
-        B2 --> C2["ML Anomaly Detection: Isolation Forest"]
-        C2 --> D2["Dynamic Risk Score 0-100"]
-        D2 --> E2["Prioritized Alert & AI SAR Generation"]
-        
-        class B2 aiBox;
-        class C2 mlBox;
-        class D2 aiBox;
-        class E2 successBox;
-    end</div>
-
-<h2 id="13-key-technical-innovations-unsupervised-ml-rag">1.3 Key Technical Innovations (Unsupervised ML & RAG)</h2>
-<p>This project brings CDAC-level engineering depth through two critical technical pillars: Machine Learning and Artificial Intelligence.</p>
-
-<p><strong>1. Unsupervised Machine Learning (Isolation Forest)</strong></p>
-<p>Since money laundering represents a fraction of a percent of global banking transactions, we face a massive class imbalance problem. We utilize the <strong>Isolation Forest (iForest)</strong> algorithm from <code class="inline-code">scikit-learn</code> to isolate anomalies. Because iForest works by recursively partitioning data, normal data points (the vast majority) require many partitions to be isolated, whereas anomalous (laundering) patterns are isolated very quickly near the root of the decision trees. This yields a mathematically objective anomaly score.</p>
-
-<p><strong>2. Legal Intelligence via RAG (Retrieval-Augmented Generation)</strong></p>
-<p>Detecting an anomaly is only half the battle; an analyst must still prove <em>why</em> it violates the law. We implemented a Generative AI layer using the <strong>Groq LLM</strong> (Llama-3.3-70b-versatile). To prevent the AI from hallucinating fake laws, we built a <strong>Retrieval-Augmented Generation (RAG)</strong> system powered by a FAISS Vector Database. The vector DB stores embeddings of the actual <strong>Prevention of Money Laundering Act, 2002 (PMLA)</strong>. When generating a report, the LLM is strictly constrained to synthesize its argument using only the retrieved legal acts matching the specific transaction typology.</p>
-
-<h2 id="14-project-scope-and-boundaries">1.4 Project Scope and Boundaries</h2>
-<p>To maintain focus on core Data Engineering and ML Architecture, the scope of this project is explicitly bounded:</p>
-
-<p><strong>In-Scope (Focus Areas):</strong></p>
-<ul>
-<li><strong>Data Pipeline:</strong> Asynchronous parsing and vectorized processing of large CSV/Excel transaction datasets using Pandas.</li>
-<li><strong>Machine Learning:</strong> Feature engineering (Structuring, Mule bridging) and deployment of the Isolation Forest risk engine.</li>
-<li><strong>Generative AI:</strong> Building the FAISS embedding pipeline and LangChain prompts for automated SAR generation.</li>
-<li><strong>Backend Subsystems:</strong> Django ORM scaling via bulk insertions to handle high-throughput analytical ingestion.</li>
-</ul>
-
-<p><strong>Out-of-Scope (Boundaries):</strong></p>
-<ul>
-<li><strong>Real-time Streaming:</strong> The current analytical engine operates on batch ingestion (CSV uploads) rather than real-time Kafka streaming (planned for future scope).</li>
-<li><strong>Frontend UI Complexity:</strong> While a React dashboard is provided to trigger the APIs and visualize data, deep UI/UX animation mechanics or advanced frontend state management are secondary to the backend intelligence engine.</li>
-<li><strong>Core Banking Mainframe Integration:</strong> This system acts as an analytical overlay, not a transactional ledger; it assumes data is provided via periodic historical extracts.</li>
-</ul></div>
-    </section>
-    <section id="chapter-2-problem-definition" class="chapter">
-      <div class="chapter-header">
-        <span class="chapter-label">CHAPTER</span>
-        <h1 class="chapter-main-title">Chapter 2: Problem Definition</h1>
-      </div>
-      <div class="chapter-body"><h1 id="chapter-2-problem-definition-aml-industry-context">Chapter 2: Problem Definition & AML Industry Context</h1>
-
-<h2 id="21-the-cost-of-false-positives-in-traditional-aml">2.1 The Cost of False Positives in Traditional AML</h2>
-<p>The global financial system currently relies on Transaction Monitoring Systems (TMS) that use strict, threshold-based logic to flag suspicious activity. For example, if a compliance threshold mandates scrutiny on all international transfers above ₹1,000,000, the system blindly alerts on every single transaction meeting that criteria.</p>
-
-<p>This approach creates a severe operational bottleneck known as <strong>The False Positive Paradox</strong>. Industry statistics indicate that traditional AML systems generate false positive rates exceeding 95%. This means that out of 100 alerts generated by the system, 95 are legitimate business transactions. </p>
-<ul>
-<li><strong>Operational Strain:</strong> Highly paid compliance analysts spend the majority of their time closing useless alerts rather than investigating true financial crime.</li>
-<li><strong>Systemic Risk:</strong> Because analysts are overwhelmed by the sheer volume of "noise," genuine sophisticated laundering activities (the "signal") often slip through unnoticed.</li>
-</ul>
-
-<p>Our system fundamentally attacks this problem. By using an Isolation Forest ML model, we transition from rigid thresholding to dynamic behavioral scoring, isolating statistically rare events rather than standard high-value business operations.</p>
-
-<h2 id="22-modern-typology-challenges-structuring-mule-accounts-round-tripping">2.2 Modern Typology Challenges: Structuring, Mule Accounts, Round-Tripping</h2>
-<p>Money launderers are highly aware of static banking thresholds and have developed sophisticated "typologies" (methods) to orchestrate money movement completely under the radar. Traditional linear systems struggle deeply to detect these non-linear patterns.</p>
-
-<p>Our AML system is engineered to extract features for three primary typologies:</p>
-
-<p>1.  <strong>Structuring (Smurfing):</strong> The act of breaking down a large sum of illicit cash into numerous smaller deposits deliberately designed to fall just below the mandatory reporting threshold (e.g., repeatedly depositing ₹49,900 to avoid a ₹50,000 cash reporting limit).</p>
-<p>2.  <strong>Money Mules (Velocity Exploitation):</strong> Criminals recruit "mules" (often vulnerable individuals) to temporarily hold funds. A victim’s money is transferred into the mule account and is almost immediately withdrawn or transferred out to a disparate geographic location. The key behavioral indicator is a nearly 1:1 rapid in-and-out velocity with minimal resting time.</p>
-<p>3.  <strong>Round-Tripping (Network Obfuscation):</strong> A complex scheme where funds are transferred through a maze of shell companies and offshore accounts, only to eventually return to the original sender. Visually, this creates a cyclical graph of money movement intended to legitimize the funds.</p>
-
-<h3 id="diagram-common-money-laundering-typologies">Diagram: Common Money Laundering Typologies</h3>
-<div class="mermaid">graph TD
-    classDef illicit fill:#ffcccc,stroke:#cc0000,stroke-width:2px;
-    classDef account fill:#e6f2ff,stroke:#0066cc,stroke-width:2px;
-    classDef external fill:#f2e6ff,stroke:#6600cc,stroke-width:2px;
-
-    subgraph Typology_1 ["1. Structuring (Smurfing)"]
-        A[Illicit Cash ₹150k]:::illicit -->|₹49k| B(Target Account)
-        A -->|₹49k| B:::account
-        A -->|₹52k| B
-        note1[Goal: Avoid ₹50k Reporting limit]
-    end
-
-    subgraph Typology_2 ["2. Money Mule (Velocity)"]
-        C[Origin Account]:::external -->|Deposit ₹100k| D(Victim/Mule)
-        D:::account -->|Withdraw ₹98k within 2 Hrs| E[Destination Account]:::external
-        note2[Goal: Wash funds rapidly through conduit]
-    end
-
-    subgraph Typology_3 ["3. Round-Tripping"]
-        F(Primary Account):::account -->|₹500k| G[Shell Company A]:::external
-        G -->|₹480k| H[Shell Company B]:::external
-        H -->|₹450k| F
-        note3[Goal: Create fake legitimate revenue]
-    end</div>
-<p><strong>Diagram Explanation:</strong></p>
-<ul>
-<li><strong>Structuring:</strong> The diagram shows large illicit cash being broken into smaller sub-50k deposits to evade statutory triggers.</li>
-</ul>
-<p><em>   <strong>Money Mule:</strong> Emphasizes </em>velocity*; the account holds funds for mere hours before passing them on, acting only as a temporary bridge.</p>
-<ul>
-<li><strong>Round-Tripping:</strong> Shows the cyclical nature of funds leaving the primary account and returning disguised as legitimate business income after shedding layers in shell companies.</li>
-</ul>
-
-<h2 id="23-regulatory-burden-pmla-2002-and-rbi-kyc-master-directions">2.3 Regulatory Burden: PMLA 2002 and RBI KYC Master Directions</h2>
-<p>Detecting a crime computationally is only the first step. For a bank to take action (such as freezing an account), they must file a formal <strong>Suspicious Transaction Report (STR) / Suspicious Activity Report (SAR)</strong> to the Financial Intelligence Unit (FIU-IND). </p>
-
-<p>This reporting is governed primarily by two frameworks in India:</p>
-<ul>
-<li><strong>The Prevention of Money Laundering Act, 2002 (PMLA):</strong> The core legislative act defining the offense of money laundering, the obligations of banking companies, and the powers of attachment.</li>
-<li><strong>RBI Master Direction - Know Your Customer (KYC) Direction, 2016:</strong> The operational guidelines issued by the Reserve Bank of India mandating continuous transaction monitoring and exact timelines for reporting suspicious activity.</li>
-</ul>
-
-<p>Drafting a SAR requires immense labor. An analyst must manually extract transaction evidence, map it to the observed typology, and correctly cite the relevant sections of PMLA or RBI guidelines. This operational friction is precisely why our architecture implements a RAG-based Generative AI LLM—to computationally synthesize the regulatory mapping and draft the SAR markdown autonomously.</p>
-
-<h2 id="24-gap-analysis-where-current-boolean-logic-systems-fail">2.4 Gap Analysis: Where Current Boolean Logic Systems Fail</h2>
-
-<p>To summarize the technical justification for our AI-driven architecture, we present a gap analysis comparing legacy systems to our implemented solution:</p>
-
-<div class="table-responsive"><table><tr><th>Capability</th><th>Legacy Boolean System</th><th>Our AI-Driven AML System</th></tr>
-<tr><td><strong>Logic Foundation</strong></td><td>Hardcoded <code class="inline-code">IF/THEN</code> rules (e.g., <code class="inline-code">IF txn > 50k</code>)</td><td>Unsupervised Anomaly Scoring (Isolation Forest)</td></tr>
-<tr><td><strong>Adaptability</strong></td><td>None. Fails if criminals change amounts by ₹1.</td><td>High. Detects behavioral deviations regardless of specific exact amounts.</td></tr>
-<tr><td><strong>False Positive Rate</strong></td><td>> 95% (Drowns analysts in noise)</td><td>Low. Only alerts on isolated, statistically anomalous financial paths.</td></tr>
-<tr><td><strong>Typology Detection</strong></td><td>1-Dimensional (Checks singular thresholds)</td><td>Multi-Dimensional (Correlates Velocity, Volatility, and Structuring counts)</td></tr>
-<tr><td><strong>Compliance Reporting</strong></td><td>100% Manual Human Labor</td><td>Automated via Retrieval-Augmented Generation (RAG)</td></tr></table></div>
-
-<p>By addressing these core gaps, our system elevates transaction monitoring from a basic data-filtering exercise into an intelligent, investigative compliance engine.</p></div>
-    </section>
-    <section id="chapter-3-system-architecture" class="chapter">
-      <div class="chapter-header">
-        <span class="chapter-label">CHAPTER</span>
-        <h1 class="chapter-main-title">Chapter 3: System Architecture</h1>
-      </div>
-      <div class="chapter-body"><h1 id="chapter-3-system-architecture-overview">Chapter 3: System Architecture Overview</h1>
-
-<p>This chapter outlines the high-level design of the AML Detection System. The architecture is explicitly decoupled, relying on a backend analytical engine (Django/Python) to handle heavy data ingress, feature extraction, ML inference, and RAG execution, while serving a separate frontend analytic dashboard to compliance officers.</p>
-
-<h2 id="31-high-level-component-interaction">3.1 High-Level Component Interaction</h2>
-
-<p>The system operates across three distinct computational phases: <strong>Ingestion</strong>, <strong>Intelligence</strong>, and <strong>Investigation</strong>. </p>
-
-<p>1.  <strong>Ingestion (Data Parsing):</strong> Accepts large transactional datasets (CSV/Excel format), validates the schemas, normalizes the columns, and commits the records to a background queue.</p>
-<p>2.  <strong>Intelligence (ML Pipeline):</strong> A dedicated background thread orchestrates the core analytics. It extracts vectorized features via <code class="inline-code">pandas</code> and runs the transactional geometries through the <code class="inline-code">IsolationForest</code> risk engine to calculate probabilistic threat scores.</p>
-<p>3.  <strong>Investigation (RAG & UI):</strong> Alerts breaching the mathematical threshold are pushed to the database. Compliance officers reviewing these alerts can trigger the LLM to fetch PMLA laws from the Vector Database and generate legally sound Suspicious Activity Reports (SARs).</p>
-
-<h3 id="diagram-end-to-end-system-architecture">Diagram: End-to-End System Architecture</h3>
-<div class="mermaid">graph TD
-    %% Styling
-    classDef frontend fill:#e6f2ff,stroke:#0066cc,stroke-width:2px;
-    classDef backend fill:#f9f2ec,stroke:#b35900,stroke-width:2px;
-    classDef mlEngine fill:#003366,stroke:#001a33,stroke-width:2px,color:#fff;
-    classDef db fill:#e6ffe6,stroke:#006600,stroke-width:2px;
-    classDef rag fill:#4d004d,stroke:#1a001a,stroke-width:2px,color:#fff;
-
-    Client(["👩‍💻 Compliance Analyst (React Frontend)"]) -->|Upload Data API| Gateway["Django REST API Gateway"]
-    
-    subgraph "Backend Data Pipeline"
-        Gateway -->|Creates Task| Queue["Threading Queue / Background Tasks"]
-        Queue --> Parser["Data Normalization (Pandas)"]
-    end
-    class Gateway,Queue,Parser backend;
-
-    subgraph "Machine Learning Core"
-        Parser --> Extractor["Behavioral Feature Extractor"]
-        Extractor -->|Feature Matrix X| IForest["Isolation Forest (scikit-learn)"]
-        IForest --> Scorer["Risk Scorer & Typology Tagger"]
-    end
-    class Extractor,IForest,Scorer mlEngine;
-
-    subgraph "Persistence Layer"
-        Scorer -->|Bulk Commit| SQL[(SQLite / Relational DB)]
-        SQL -.-> Accounts["Accounts Table"]
-        SQL -.-> Alerts["Alerts Table"]
-        SQL -.-> Txns["Txns Table"]
-    end
-    class SQL,Accounts,Alerts,Txns db;
-
-    subgraph "RAG Compliance Engine"
-        Client -->|Request SAR| RAGEngine["SAR Generator (LangChain)"]
-        SQL -->|Txn Evidence| RAGEngine
-        VectorDB[("FAISS Vector DB (PMLA Laws)")] -->|Context| RAGEngine
-        RAGEngine --> LLM{"Groq Inference (Llama-3.3)"}
-        LLM -->|Markdown Report| Client
-    end
-    class RAGEngine,VectorDB,LLM rag;
-    class Client frontend;
-</div>
-
-<h2 id="32-core-technology-stack-justification">3.2 Core Technology Stack Justification</h2>
-
-<p>Every tool selected for this architecture directly addresses the unique challenges of processing structured financial data at scale.</p>
-
-<h3 id="321-python-ecosystem-for-the-data-science-pipeline">3.2.1 Python Ecosystem for the Data Science Pipeline</h3>
-<p>Python was chosen as the primary backend language. Given that the core innovation of this project lies in data manipulation and ML scoring, Python’s ecosystem is unrivaled.</p>
-<ul>
-<li><strong>The Framework (<code class="inline-code">Django</code> & <code class="inline-code">DRF</code>):</strong> Django was selected over micro-frameworks like Flask/FastAPI because of its robust internal ORM (Object-Relational Mapper) which allows us to quickly model complex entities (Accounts bounding to Alerts, Alerts mapping to Transactions).</li>
-</ul>
-<p><em>   <strong>Data Processing (<code class="inline-code">Pandas</code> & <code class="inline-code">NumPy</code>):</strong> Native Python arrays <code class="inline-code">.append()</code> fail in memory when processing millions of banking rows. We rely on underlying C-based NumPy arrays accessed through Pandas to execute </em>vectorized* mathematical operations.</p>
-
-<h3 id="322-relational-data-modeling-sqlite">3.2.2 Relational Data Modeling (SQLite)</h3>
-<p>Financial records are inherently relational. An <code class="inline-code">Alert</code> cannot exist without a parent <code class="inline-code">Account</code>, and an <code class="inline-code">Account</code> relies on child <code class="inline-code">Transactions</code>. </p>
-<ul>
-<li>We utilize <strong>SQLite</strong> (structured for upgrade to PostgreSQL in production environments).</li>
-<li>The Django ORM is strictly configured to execute <code class="inline-code">bulk_create()</code> methods. Instead of establishing 10,000 separate database connection locks to write 10,000 alerts, objects are arrayed in memory and committed in single transaction blocks.</li>
-</ul>
-
-<h3 id="323-vector-database-faiss-and-groq-llm-inference">3.2.3 Vector Database (FAISS) and Groq LLM Inference</h3>
-<p>For the compliance automation facet of the system, we required a mechanism to "teach" an LLM Indian financial law.</p>
-<ul>
-<li><strong>FAISS (Facebook AI Similarity Search):</strong> A library specialized for dense vector clustering. We chunked the PMLA (2002) legal document, embedded the text into vectors, and loaded them into FAISS. When an alert involves "Structuring", the RAG engine queries the FAISS index for vectors geometrically closest to the word "Structuring".</li>
-<li><strong>Groq API (Llama-3.3-70b-versatile):</strong> Selected over OpenAI for its LPU (Language Processing Unit) architecture, Groq delivers inference at massive speed, ensuring the compliance officer does not wait minutes for a report to generate.</li>
-</ul>
-
-<h2 id="33-data-flow-pipeline">3.3 Data Flow Pipeline</h2>
-
-<p>The movement of data through the system is strictly unidirectional, guaranteeing that the mathematical purity of the raw data is never mutated, only scored.</p>
-
-<h3 id="diagram-data-pipeline-dfd-level-1">Diagram: Data Pipeline DFD Level 1</h3>
-
-<div class="mermaid">sequenceDiagram
-    participant Analyst
-    participant API as Upload API
-    participant Pipeline as Pandas Pipeline
-    participant ML as Isolation Forest
-    participant DB as SQL Database
-
-    Analyst->>API: POST /upload (aml_20k_rows.csv)
-    API-->>Analyst: 202 Accepted (Task ID: 9f8a...)
-    
-    note over API,Pipeline: Asynchronous Background Thread Starts
-    
-    API->>Pipeline: Pass Bytes IO Stream
-    Pipeline->>Pipeline: .rename() standard columns
-    Pipeline->>Pipeline: .to_datetime() coercion
-    Pipeline->>Pipeline: clean_amount() float casting
-    
-    Pipeline->>ML: Pass structured DataFrame
-    ML->>ML: Vectorized Extract [Volume, Structuring, Mule, RoundTrip]
-    ML->>ML: model.decision_function(X) -> Scores
-    
-    ML->>DB: Bulk insert normalized [Accounts]
-    ML->>DB: Bulk insert Threshold Breaches [Alerts]
-    ML->>DB: Bulk insert evidentiary [Transactions]
-
-    DB-->>Analyst: Client Polls Dashboard via GET /stats
-    note over Analyst,DB: UI updates with ML Alert Visuals</div>
-
-<p>In the subsequent chapters, we step granularly into the code and mathematics managing each specific segment of this architectural flow, starting with the Data Ingestion Phase.</p></div>
-    </section>
-    <section id="chapter-4-data-ingestion-layer" class="chapter">
-      <div class="chapter-header">
-        <span class="chapter-label">CHAPTER</span>
-        <h1 class="chapter-main-title">Chapter 4: Data Ingestion Layer</h1>
-      </div>
-      <div class="chapter-body"><h1 id="chapter-4-data-ingestion-normalization-layer">Chapter 4: Data Ingestion & Normalization Layer</h1>
-
-<p>The intelligence of any Machine Learning model is capped by the quality of its training data. In banking, data is historically messy—dates have inconsistent formats, column names change depending on the extracting branch, and missing values are common. This chapter details how the AML system ingests massive flat files (CSV/Excel) and normalizes them into a pristine <code class="inline-code">pandas</code> DataFrame ready for mathematical modeling.</p>
-
-<h2 id="41-asynchronous-batch-ingestion">4.1 Asynchronous Batch Ingestion</h2>
-
-<p>To score thousands or millions of transactions, the system must ingest large flat files uploaded by the compliance team. </p>
-
-<p><strong>The Challenge:</strong> Reading a 100MB CSV file into memory, preprocessing it, and running an ML model can take several seconds to minutes. If this process occurs on the main server thread, the HTTP request hangs, and the entire dashboard UI freezes for the user.</p>
-
-<p><strong>The Solution:</strong> The Django backend strictly decouples file ingestion from analytical processing via Background Threading.</p>
-
-<p>1.  <strong>Acceptance:</strong> The API endpoint (<code class="inline-code">UploadView</code>) validates the multipart file payload.</p>
-<p>2.  <strong>Task Instantiation:</strong> It immediately creates a <code class="inline-code">ProcessingTask</code> database record with a status of <code class="inline-code">Pending</code> and generates a unique <code class="inline-code">task_id</code> (UUID).</p>
-<p>3.  <strong>Thread Handoff:</strong> The file's byte data is passed directly to the <code class="inline-code">background_process</code> function executing on a separate Python thread.</p>
-<p>4.  <strong>Instant Return:</strong> The REST API instantly returns an HTTP <code class="inline-code">202 Accepted</code> to the frontend with the <code class="inline-code">task_id</code>. The frontend uses this ID to poll for a progress bar, preventing UI blocking.</p>
-
-<h3 id="diagram-asynchronous-data-ingestion-pipeline">Diagram: Asynchronous Data Ingestion Pipeline</h3>
-<div class="mermaid">graph TD
-    %% Styling Rules
-    classDef client fill:#e6f2ff,stroke:#0066cc,stroke-width:2px;
-    classDef apiBox fill:#f9f2ec,stroke:#b35900,stroke-width:2px;
-    classDef db fill:#e6ffe6,stroke:#006600,stroke-width:2px;
-    classDef worker fill:#e6e6ff,stroke:#3333cc,stroke-width:2px;
-
-    Client(["👩‍💻 Analyst (React UI)"]) -- "1. POST CSV File" --> API["Upload API Endpoint"]
-    
-    subgraph "Main Thread (Django)"
-        API -- "2. Create Task Record" --> TaskDB[("ProcessingTask Table")]
-        API -- "3. Start Thread" --> Threadpool{"Python threading.Thread"}
-    end
-    
-    API -. "4. Return 202 task_id" .-> Client
-    Client -. "5. Poll GET /task_status" .-> TaskDB
-    
-    subgraph "Background Thread Pipeline"
-        Threadpool -- "6. Execute" --> workerFunc["background_process()"]
-        workerFunc --> Parse["Parse BytesIO to Pandas DataFrame"]
-        Parse --> Norm["_map_columns() / Normalization"]
-    end
-    
-    class Client client;
-    class API,Threadpool apiBox;
-    class TaskDB db;
-    class workerFunc,Parse,Norm worker;</div>
-
-<p><strong>Diagram Explanation:</strong></p>
-<ul>
-<li><strong>Main Thread (Django):</strong> When the Analyst uploads the file, the Main API endpoint ONLY handles saving a preliminary record to the database (<code class="inline-code">ProcessingTask Table</code>) and dispatching the heavy lifting to the <code class="inline-code">Threadpool</code>. Because it doesn't parse the file itself, it can return an HTTP 202 code ("Accepted") almost instantly.</li>
-<li><strong>Polling Mechanism:</strong> The React Client now holds a <code class="inline-code">task_id</code> and periodically queries the Database (<code class="inline-code">TaskDB</code>) to update a loading bar.</li>
-<li><strong>Background Thread Pipeline:</strong> Entirely isolated from the main web server, this worker thread reads the binary data into a <code class="inline-code">Pandas DataFrame</code> and begins the heavy CPU process of normalization and data cleaning without interrupting other users on the dashboard.</li>
-</ul>
-
-<h2 id="42-schema-mapping-and-column-normalization">4.2 Schema Mapping and Column Normalization</h2>
-
-<p>Financial datasets lack strict naming conventions. One bank branch might export a column as <code class="inline-code">account_id</code>, while another exports it as <code class="inline-code">customer id</code> or <code class="inline-code">acc no</code>. To prevent the ML pipeline from crashing due to <code class="inline-code">KeyError</code> exceptions, we dynamically map variant column names to our internal schema.</p>
-
-<p>Inside the <code class="inline-code">RiskEngine._map_columns()</code> method, we maintain a dictionary of known variations. The system iteratively checks the raw DataFrame columns against this dictionary.</p>
-
-<div class="code-wrapper"><pre><code class="language-python">def _map_columns(self):
-    """Map common column name variations to internal names"""
-    mapping = {
-        'account_id': ['account_id', 'account', 'account number', 'acc no', 'customer id', 'id'],
-        'date': ['date', 'transaction date', 'txn date', 'date_time'],
-        'time': ['time', 'transaction time', 'txn time'],
-        'amount': ['amount', 'transaction amount', 'value', 'txn amount', 'debit', 'credit'],
-        'type': ['type', 'transaction type', 'txn type', 'description'],
-        'related_account': ['related_account', 'to', 'from', 'counterparty', 'beneficiary']
-    }
-
-    found_mapping = {}
-    for internal_name, variations in mapping.items():
-        for col in self.df.columns:
-            if str(col).lower().strip() in variations:
-                found_mapping[col] = internal_name
-                break
-    
-    # Rename the DataFrame columns in-place
-    self.df = self.df.rename(columns=found_mapping)</code></pre></div>
-
-<p><strong>Code Explanation:</strong></p>
-<ul>
-<li><strong><code class="inline-code">mapping</code> Dictionary:</strong> This maps our system's required internal column names (e.g., <code class="inline-code">'account_id'</code>) to a list of possible variations found in wild data (e.g., <code class="inline-code">'account number'</code>, <code class="inline-code">'customer id'</code>).</li>
-<li><strong>The Nested Loop:</strong> The code iterates through the actual columns in the uploaded CSV (<code class="inline-code">self.df.columns</code>). For each column, it converts the name to lowercase and strips trailing spaces (<code class="inline-code">str(col).lower().strip()</code>). If this cleaned name exists in our variation list, it maps the CSV column name to our required internal name.</li>
-<li><strong><code class="inline-code">self.df.rename()</code>:</strong> Finally, the <code class="inline-code">pandas</code> DataFrame columns are updated in-place using the matched dictionary. This guarantees all downstream ML functions receive exact, expected headers.</li>
-</ul>
-<p>If critical columns (e.g., <code class="inline-code">account_id</code>, <code class="inline-code">amount</code>, <code class="inline-code">date</code>) are entirely missing after normalization, the task fails gracefully.</p>
-
-<h2 id="43-data-cleaning-and-type-casting">4.3 Data Cleaning and Type Casting</h2>
-
-<p>Machine learning models require strictly typed numerical and temporal data. String fields cannot be processed algebraically. </p>
-
-<h3 id="431-resolving-missing-temporal-attributes">4.3.1 Resolving Missing Temporal Attributes</h3>
-<p>Velocity of money is a prime indicator of money laundering (e.g., Mule networks). Therefore, precise datetime formatting is required. </p>
-
-<p>The <code class="inline-code">_prepare_data()</code> pipeline handles this by gracefully combining isolated <code class="inline-code">date</code> and <code class="inline-code">time</code> columns. If the <code class="inline-code">time</code> column was not provided in the CSV extract, the system defaults the time to <code class="inline-code">00:00:00</code> to prevent <code class="inline-code">NullTypeError</code> cascading downstream.</p>
-
-<div class="code-wrapper"><pre><code class="language-python">if 'time' not in self.df.columns:
-    self.df['datetime'] = pd.to_datetime(self.df['date'])
-else:
-    dates = self.df['date'].astype(str)
-    times = self.df['time'].astype(str)
-    # Concatenate and cast to pandas datetime objects
-    self.df['datetime'] = pd.to_datetime(dates + ' ' + times)</code></pre></div>
-
-<p><strong>Code Explanation:</strong></p>
-<ul>
-<li><strong>Missing Time Handling:</strong> The <code class="inline-code">if 'time' not in self.df.columns</code> block checks if the dataset only provided dates. If so, <code class="inline-code">pd.to_datetime</code> automatically assigns a default time of Midnight (<code class="inline-code">00:00:00</code>) to every row. This prevents velocity calculations from crashing.</li>
-<li><strong>String Concatenation:</strong> In the <code class="inline-code">else</code> block, where both date and time exist, pandas uses fast vectorized string casting (<code class="inline-code">.astype(str)</code>) to combine the date and time strings together with a separator space (e.g., <code class="inline-code">"2023-10-01" + " " + "14:30:00"</code>). </li>
-<li><strong>Datetime Casting:</strong> The combined string series is parsed by <code class="inline-code">pd.to_datetime()</code> into high-performance 64-bit datetime objects. These objects allow us to natively subtract timestamps later to calculate the rapid velocity required for detecting Mule accounts.</li>
-</ul>
-
-<h3 id="432-robust-currency-string-parsing">4.3.2 Robust Currency String Parsing</h3>
-<p>Currencies are almost always exported as formatted strings (e.g., <code class="inline-code">"₹50,000.00"</code> or <code class="inline-code">"$1,200"</code>). These strings must be cast to standardized floating-point integers for distance-based ML algorithms (like Isolation Forest) to function.</p>
-
-<p>We apply a robust <code class="inline-code">clean_amount</code> lambda function across the entire pandas series effectively stripping currency symbols and delimiters.</p>
-
-<div class="code-wrapper"><pre><code class="language-python">def clean_amount(val):
-    if pd.isna(val): return 0.0
-    if isinstance(val, (int, float)):
-        return float(val)
-    # Strip symbols and thousand separators, cast string to float
-    return float(str(val).replace('₹', '').replace(',', '').replace('$', ''))
-
-# Apply transformation vector-wide
-self.df['amount'] = self.df['amount'].apply(clean_amount)</code></pre></div>
-
-<p><strong>Code Explanation:</strong></p>
-<ul>
-<li><strong>Null Checks:</strong> <code class="inline-code">if pd.isna(val): return 0.0</code> ensures that empty cells in the financial CSV don't throw an error; they are safely converted to <code class="inline-code">0.0</code>.</li>
-<li><strong>Type Checking Optimization:</strong> <code class="inline-code">if isinstance(val, (int, float))</code> acts as a performance shortcut. If pandas properly parsed a cell as a number, it skips the expensive string manipulation entirely.</li>
-<li><strong>String Manipulation:</strong> For stubborn strings like <code class="inline-code">"₹50,000"</code>, the <code class="inline-code">.replace()</code> method forcibly removes specific currency symbols and commas. The remaining string <code class="inline-code">"50000"</code> is then algebraically cast as a <code class="inline-code">float</code>.</li>
-<li><strong>The <code class="inline-code">.apply()</code> Function:</strong> This broadcasts the <code class="inline-code">clean_amount</code> logic iteratively across the entire <code class="inline-code">amount</code> column in the DataFrame, ensuring every row is mathematically ready for the Isolation Forest matrix.</li>
-</ul>
-
-<p>Once this normalization layer completes, <code class="inline-code">self.df</code> represents a mathematically pure matrix ready for Behavioral Feature Engineering.</p></div>
-    </section>
-    <section id="chapter-5-feature-engineering" class="chapter">
-      <div class="chapter-header">
-        <span class="chapter-label">CHAPTER</span>
-        <h1 class="chapter-main-title">Chapter 5: Feature Engineering</h1>
-      </div>
-      <div class="chapter-body"><h1 id="chapter-5-behavioral-feature-engineering">Chapter 5: Behavioral Feature Engineering</h1>
-
-<p>Machine Learning models like Isolation Forest cannot understand abstract concepts like "Money Laundering." They only understand geometry: numbers moving through a multi-dimensional matrix. <strong>Behavioral Feature Engineering</strong> is the critical process of translating human financial behavior into mathematically quantifiable vectors. </p>
-
-<p>This chapter explains how our system constructs the Feature Matrix (<code class="inline-code">X</code>) required by the ML model.</p>
-
-<h2 id="51-the-need-for-vectorized-feature-extraction-over-for-loops">5.1 The Need for Vectorized Feature Extraction over For-Loops</h2>
-
-<p>A massive engineering bottleneck in Data Science is loop iteration. If an analyst provides a CSV with 1,000,000 transactions, using a standard Python <code class="inline-code">for</code> loop to calculate every account's total volume would require 1,000,000 separate memory operations, taking several minutes to complete.</p>
-
-<p>Our Risk Engine (<code class="inline-code">risk_engine.py</code>) strictly forbids row-by-row iteration. Instead, we use <strong>Pandas Vectorization</strong>. Vectorized operations pass instructions down to the underlying C-compiled libraries (like NumPy). </p>
-
-<h3 id="diagram-vectorization-vs-loop-iteration">Diagram: Vectorization vs. Loop Iteration</h3>
-<div class="mermaid">graph LR
-    classDef bad fill:#ffe6e6,stroke:#cc0000,stroke-width:2px;
-    classDef good fill:#e6ffe6,stroke:#006600,stroke-width:2px;
-    
-    subgraph Traditional_Loop ["Row-by-Row Iteration (Slow)"]
-        A[Row 1] --> B[Row 2] --> C[Row 3] --> D[Row 1,000,000]
-    end
-    class Traditional_Loop bad;
-    
-    subgraph Pandas_Vectorization ["Vectorized Processing (Fast)"]
-        E[Massive Data Array] -->|Single C-Compiled Math Operation| F[Result Array]
-    end
-    class Pandas_Vectorization good;</div>
-<p><strong>Diagram Explanation:</strong></p>
-<ul>
-<li>Unlike traditional loops that evaluate logic one row at a time (crashing memory on millions of rows), Vectorization applies mathematical transformations (like group-bys or sums) across entire columns simultaneously using optimized C-libraries. This reduces processing time from minutes to milliseconds.</li>
-</ul>
-
-<p>For example, our aggregation metrics are calculated instantly using <code class="inline-code">.groupby()</code>:</p>
-
-<div class="code-wrapper"><pre><code class="language-python"># 1. Total Volume &amp; Count Vectors
-stats = df.groupby('account_id')['amount'].agg(['sum', 'count'])
-stats = stats.rename(columns={'sum': 'total_volume', 'count': 'transaction_count'})</code></pre></div>
-
-<p><strong>Code Explanation:</strong></p>
-<ul>
-<li><strong><code class="inline-code">.groupby('account_id')</code></strong>: This splits the massive table into virtual sub-tables for every unique account instantly.</li>
-<li><strong><code class="inline-code">.agg(['sum', 'count'])</code></strong>: This simultaneously calculates the total monetary volume (sum) and the total number of transactions (count) for each account. These two metrics form the foundational numeric vectors of our feature matrix.</li>
-</ul>
-
-<h2 id="52-structuring-smurfing-vector-engineering">5.2 Structuring (Smurfing) Vector Engineering</h2>
-<p>Structuring occurs when launderers keep transaction amounts deliberately below a reporting threshold (e.g., ₹50,000). To quantify this behavior, we need to count how many times an account hits this specific mathematical bracket.</p>
-
-<div class="code-wrapper"><pre><code class="language-python"># 2. Structuring Vector Calculation (45k - 50k)
-df['is_structuring'] = (df['amount'] &gt;= 45000) &amp; (df['amount'] &lt; 50000)
-structuring = df.groupby('account_id')['is_structuring'].sum().rename('structuring_count')</code></pre></div>
-
-<p><strong>Code Explanation:</strong></p>
-<ul>
-<li><strong>Boolean Masking:</strong> <code class="inline-code">(df['amount'] >= 45000) & (df['amount'] < 50000)</code> creates a True/False column instantly. A <code class="inline-code">True</code> equals <code class="inline-code">1</code>, meaning the transaction was dangerously close to the 50k threshold.</li>
-<li><strong>Summing Bools:</strong> We group by the account and <code class="inline-code">.sum()</code> the True values. If Account A has a <code class="inline-code">structuring_count</code> of 12, it means they executed 12 transactions directly beneath the legal radar. This forms our third feature vector.</li>
-</ul>
-
-<h2 id="53-temporal-velocity-vectors-mule-scoring">5.3 Temporal Velocity Vectors (Mule Scoring)</h2>
-<p>Money Mule networks are characterized by distinct temporal behaviors (time relationships). A Mule will receive illicit funds (Deposit) and act as a conduit, quickly moving those funds elsewhere (Withdrawal). The "Velocity" of this money is extremely high. </p>
-
-<p>To engineer this feature, we must mathematically relate a row to the row that happened right before it, sorted by time.</p>
-
-<div class="code-wrapper"><pre><code class="language-python"># 3. Money Mule Score (Rapid In/Out Velocity)
-df = df.sort_values(['account_id', 'datetime'])
-
-# Shift data mathematically down by 1 row within each account grouping
-df['prev_amount'] = df.groupby('account_id')['amount'].shift(1)
-df['prev_type'] = df.groupby('account_id')['type'].shift(1)
-
-# Calculate Time Delta in seconds
-df['time_diff'] = df.groupby('account_id')['datetime'].diff().dt.total_seconds()
-
-# Flag velocity exploitation 
-df['is_mule'] = (df['type'] == 'Withdrawal') &amp; \
-                (df['prev_type'] == 'Deposit') &amp; \
-                (df['time_diff'] &lt;= 86400) &amp; \
-                (df['amount'] &gt;= 0.95 * df['prev_amount']) &amp; \
-                (df['amount'] &lt;= 1.05 * df['prev_amount'])
-
-mule_scores = df.groupby('account_id')['is_mule'].sum().rename('mule_score')</code></pre></div>
-
-<p><strong>Code Explanation:</strong></p>
-<ul>
-<li><strong><code class="inline-code">.shift(1)</code></strong>: This is the core vector trick for time-series data. It copies the previous transaction’s amount and type onto the current transaction's row. We now have the "Past" and "Present" available for math on a single line.</li>
-<li><strong><code class="inline-code">.diff().dt.total_seconds()</code></strong>: Calculates the exact time difference between the current transaction and the previous one, in seconds.</li>
-<li><strong>The Velocity Logic (<code class="inline-code">is_mule</code>)</strong>: We set a flag to <code class="inline-code">True</code> ONLY IF all these conditions are met:</li>
-</ul>
-<p>    1.  The past txn was a Deposit.</p>
-<p>    2.  The current txn is a Withdrawal.</p>
-<p>    3.  The time difference is under 24 hours (<code class="inline-code">86400</code> seconds).</p>
-<p>    4.  The withdrawal amount matches the deposit amount by a 5% delta (<code class="inline-code">0.95</code> to <code class="inline-code">1.05</code>), proving "funds passing through".</p>
-<ul>
-<li>We then sum these flags to create the <code class="inline-code">mule_score</code> vector.</li>
-</ul>
-
-<h2 id="54-relational-features-round-trip-generation">5.4 Relational Features (Round-Trip Generation)</h2>
-<p>To track if an account is bouncing money back and forth with related entities (Round Tripping), we calculate interaction frequencies between counterparties.</p>
-
-<div class="code-wrapper"><pre><code class="language-python"># 4. Round Trip Count Vector
-round_trips = df[df['related_account'].notna()].groupby(['account_id', 'related_account']).size()
-round_trip_counts = round_trips[round_trips &gt; 1].groupby('account_id').count().rename('round_trip_count')</code></pre></div>
-
-<p><strong>Code Explanation:</strong></p>
-<ul>
-<li>We group by BOTH <code class="inline-code">account_id</code> and <code class="inline-code">related_account</code>. </li>
-<li>If the <code class="inline-code">.size()</code> of interactions between Account A and Counterparty X is greater than 1, it implies reciprocal movement (A gave to X, X gave back to A). </li>
-<li>We sum the total number of distinct counterparties engaging in this behavior to generate the <code class="inline-code">round_trip_count</code> vector.</li>
-</ul>
-
-<h2 id="55-matrix-consolidation">5.5 Matrix Consolidation</h2>
-<p>Finally, these isolated vectors are horizontally concatenated into our finalized <code class="inline-code">pandas DataFrame</code>. </p>
-
-<div class="code-wrapper"><pre><code class="language-python"># Combine all features into Matrix X
-features_df = pd.concat([stats, structuring, mule_scores, round_trip_counts], axis=1).fillna(0)</code></pre></div>
-
-<p>This <code class="inline-code">features_df</code> is the mathematical matrix (<code class="inline-code">X</code>) that will be passed into the Isolation Forest in Chapter 7.</p></div>
-    </section>
-    <section id="chapter-6-rule-based-engine" class="chapter">
-      <div class="chapter-header">
-        <span class="chapter-label">CHAPTER</span>
-        <h1 class="chapter-main-title">Chapter 6: Rule-Based Engine</h1>
-      </div>
-      <div class="chapter-body"><h1 id="chapter-6-rule-based-detection-engine">Chapter 6: Rule-Based Detection Engine</h1>
-
-<p>While the ultimate decision engine in this architecture relies on Unsupervised Machine Learning (the Isolation Forest), the ML model must still be fed deterministic behavioral indicators. This chapter describes the <strong>Rule-Based Pre-Processing engine</strong>, where we translate statutory AML typologies into strict mathematical thresholds to form the features discussed in Chapter 5.</p>
-
-<h2 id="61-defining-typology-thresholds">6.1 Defining Typology Thresholds</h2>
-
-<p>A "typology" is a specific pattern or technique used to launder money. Our system explicitly models three primary typologies based on established FIU (Financial Intelligence Unit) guidelines. Before passing data to the AI, we apply Boolean-logic thresholds across the vectorized groupings to definitively tag suspicious activity.</p>
-
-<p>These rules act as "flags." While a single flag (like a high-value transfer) might not trigger the ML model in isolation, the combination of multiple flags (e.g., high volume + structuring + rapid velocity) pushes the account into the high-risk anomaly space.</p>
-
-<h3 id="diagram-rule-based-feature-tagging-logic">Diagram: Rule-Based Feature Tagging Logic</h3>
-<div class="mermaid">graph TD
-    classDef process fill:#e6f2ff,stroke:#0066cc,stroke-width:2px;
-    classDef test fill:#fff0e6,stroke:#cc6600,stroke-width:2px;
-    classDef output fill:#e6ffe6,stroke:#006600,stroke-width:2px;
-
-    Data[Clean Pandas DataFrame] --> StructTest{"Is 45k <= Amount < 50k?"}:::test
-    Data --> MuleTest{"Is Deposit/Withdrawal Dt < 24Hrs?"}:::test
-    Data --> RoundTest{"Is A -> B and B -> A over 1x?"}:::test
-
-    StructTest -- True --> S_Count[structuring_count += 1]:::output
-    MuleTest -- True within 5% Tolerance --> M_Flag[mule_score += 1]:::output
-    RoundTest -- True --> R_Count[round_trip_count += 1]:::output
-    
-    S_Count --> MatrixX[Consolidate into Feature Matrix X]:::process
-    M_Flag --> MatrixX
-    R_Count --> MatrixX</div>
-<p><strong>Diagram Explanation:</strong></p>
-<ul>
-<li>The original normalized transaction record is passed through simultaneous boolean logic gateways.</li>
-<li>Instead of terminating execution if a rule is hit, this engine simply tallies the occurrences. This transitions a binary <code class="inline-code">True/False</code> rule into a continuous geometric variable (like a count of 5 structuring events) that the downstream ML model can mathematically weigh.</li>
-</ul>
-
-<h2 id="62-structuring-smurfing-component-verification">6.2 Structuring (Smurfing) Component Verification</h2>
-
-<p><strong>Definition:</strong> Section 12 of the PMLA 2002 mandates that banks retain records of all cash transactions exceeding ₹1,000,000, or a series of integrally connected transactions that cross this threshold within a month. Smurfing attempts to evade this by breaking down transactions into chunks nominally below these reporting radars.</p>
-
-<p>In our specific implementation, we target a localized micro-structuring threshold between ₹45,000 and ₹50,000 (a common limit for basic PAN card reporting requirements in regular retail accounts).</p>
-
-<div class="code-wrapper"><pre><code class="language-python"># Identify transactions deliberately kept under the 50k reporting threshold
-df['is_structuring'] = (df['amount'] &gt;= 45000) &amp; (df['amount'] &lt; 50000)</code></pre></div>
-
-<p><strong>Logical Reasoning:</strong> </p>
-<ul>
-<li>If an account holder frequently deposits ₹49,500, they are attempting to bypass the ₹50k hard check.</li>
-<li>By calculating this boolean array and then summing it per account (<code class="inline-code">structuring_count</code>), we assign a quantitative "weight" to their evasion attempts. An account with a <code class="inline-code">structuring_count</code> of 0 is mathematically distinct from an account with a count of 5.</li>
-</ul>
-
-<h2 id="63-money-mule-velocity-component-rapid-inout">6.3 Money Mule Velocity Component (Rapid In/Out)</h2>
-
-<p><strong>Definition:</strong> A money mule receives illicit funds and rapidly wires them out to obfuscate the money trail. The defining characteristic is not necessarily the <em>amount</em> of money, but the <em>velocity</em> (speed) at which it transits the account.</p>
-
-<p>To detect a mule computationally, we assess the time difference (<code class="inline-code">time_diff_sec</code>) between a sequential Deposit and Withdrawal, and enforce a maximum deviation limit (5%) to ensure the funds being withdrawn are the ostensibly the same funds that were deposited.</p>
-
-<div class="code-wrapper"><pre><code class="language-python"># Conceptual logic executed vectorially in Pandas
-if time_diff_sec &lt;= 86400:  # Within 24 hours
-    if (0.95 * prev_deposit) &lt;= withdrawal &lt;= (1.05 * prev_deposit):
-        mule_flag = True</code></pre></div>
-
-<p><strong>Logical Reasoning:</strong></p>
-<ul>
-<li><strong>Temporal Constraint (<code class="inline-code"><= 86400</code>):</strong> The funds must enter and exit within a 24-hour window. Legitimate salary deposits generally sit in an account to pay bills over a month. Mule funds burn a hole in the account and leave immediately.</li>
-<li><strong>Volume Tolerance (<code class="inline-code">0.95</code> to <code class="inline-code">1.05</code>):</strong> Mules often take a small cut (e.g., leaving 2% in the account as payment). Therefore, a strict equality check (<code class="inline-code">withdrawal == deposit</code>) would fail to catch the crime. Our engine allows a 5% delta to catch the pass-through event.</li>
-</ul>
-
-<h2 id="64-round-trip-pattern-component-verification">6.4 Round-Trip Pattern Component Verification</h2>
-
-<p><strong>Definition:</strong> Round-tripping involves sending funds outward to an external entity, which then (often through intermediaries) routes the funds back to the originating account. This is used to artificially inflate revenue streams or create fraudulent audit trails.</p>
-
-<p>While detecting deep, multi-node loops requires Graph Neural Networks, we implement a simplified, highly effective 1-degree loop detection.</p>
-
-<div class="code-wrapper"><pre><code class="language-python"># Group by both the primary account and the related counterparty
-round_trips = df[(df['related_account'].notna())].groupby(['account_id', 'related_account']).size()
-
-# Filter for pairs that interact multiple times (Bi-directional implies a loop)
-round_trip_counts = round_trips[round_trips &gt; 1].groupby('account_id').count().rename('round_trip_count')</code></pre></div>
-
-<p><strong>Logical Reasoning:</strong></p>
-<ul>
-<li>By grouping the <code class="inline-code">account_id</code> and the <code class="inline-code">related_account</code>, we isolate specific two-party relationships.</li>
-<li>If the aggregate <code class="inline-code">size()</code> of this specific relationship is greater than <code class="inline-code">1</code> (and contains both debits and credits, filtered in extended steps), it strongly suggests funds are bouncing back and forth.</li>
-<li>The <code class="inline-code">round_trip_count</code> assigns a mathematical penalty for every counterparty the account has established a transactional "loop" with.</li>
-</ul>
-
-<h2 id="65-output-to-the-intelligent-layer">6.5 Output to the Intelligent Layer</h2>
-<p>These boolean-derived scalar values (<code class="inline-code">structuring_count</code>, <code class="inline-code">mule_score</code>, <code class="inline-code">round_trip_count</code>) alongside the raw <code class="inline-code">total_volume</code> are merged into a unified Data Matrix <code class="inline-code">X</code>. The rule-based engine steps back, and the Unsupervised Machine Learning engine takes over to analyze the multidimensional geometry of this generated matrix.</p></div>
-    </section>
-    <section id="chapter-7-machine-learning" class="chapter">
-      <div class="chapter-header">
-        <span class="chapter-label">CHAPTER</span>
-        <h1 class="chapter-main-title">Chapter 7: Machine Learning</h1>
-      </div>
-      <div class="chapter-body"><h1 id="chapter-7-machine-learning-anomaly-detection">Chapter 7: Machine Learning Anomaly Detection</h1>
-
-<p>This chapter addresses the core intelligence engine of the Anti-Money Laundering architecture. After the rule-based component successfully generates independent behavioral vectors (Structuring Count, Mule Score, Round-Trips, Total Volume), the system requires an objective methodology to weigh these disparate elements and answer one unified question: <em>"Is this account's overall behavior anomalous?"</em></p>
-
-<p>We solve this using Unsupervised Machine Learning, specifically the <strong>Isolation Forest</strong> algorithm.</p>
-
-<h2 id="71-unsupervised-learning-in-the-aml-context">7.1 Unsupervised Learning in the AML Context</h2>
-
-<p>In most machine learning problems (like Image Recognition), algorithms use <strong>Supervised Learning</strong>. They are trained on millions of pre-labeled examples ("This is an Apple", "This is an Orange"). </p>
-
-<p>In Financial Crime Compliance, supervised learning models often fail because criminals actively mutate their behavior specifically to look like normal banking traffic. Furthermore, banks rarely have thousands of perfectly labeled "Money Launderer" datasets to train on. </p>
-
-<p>We must use <strong>Unsupervised Learning</strong>. We pass the entire universe of normal transactional behavior into the model and ask it to find the geometric outlines of strict "normality." Anything falling outside these geometric bounds is flagged as an anomaly.</p>
-
-<h2 id="72-isolation-forest-algorithm-mathematics">7.2 Isolation Forest Algorithm Mathematics</h2>
-
-<p>The <strong>Isolation Forest (iForest)</strong> algorithm, implemented via <code class="inline-code">scikit-learn</code>, is uniquely suited for AML detection because of its approach to isolating outliers.</p>
-
-<h3 id="721-the-concept-of-isolation-depth">7.2.1 The Concept of Isolation Depth</h3>
-<p>Traditional anomaly detection (like K-Means) tries to build boundaries around normal data. Isolation Forest does the exact opposite: <strong>it actively tries to isolate outliers.</strong></p>
-
-<p>1.  <strong>Random Partitioning:</strong> The algorithm selects a random behavioral feature (e.g., <code class="inline-code">total_volume</code>) and selects a random split value between the maximum and minimum values of that feature.</p>
-<p>2.  <strong>Recursive Splitting:</strong> It repeats this process recursively, building a Decision Tree.</p>
-<p>3.  <strong>Path Length (The Anomaly Score):</strong> Because genuine money launderers operate far outside normal behavioral bounds, their data points will be isolated very quickly (near the root of the tree). Normal behavior (which is densely clustered) will require dozens of splits to finally isolate a single account.</p>
-
-<h3 id="diagram-geometric-isolation-of-anomalies">Diagram: Geometric Isolation of Anomalies</h3>
-<div class="mermaid">graph TD
-    classDef normal fill:#e6f2ff,stroke:#0066cc,stroke-width:2px;
-    classDef anomaly fill:#ffcccc,stroke:#cc0000,stroke-width:2px,color:#990000;
-    
-    Root[Random Sub-Sample Root] --> Split1[Tree Branch]
-    Root --> Anomaly((Detected Anomaly)):::anomaly
-    
-    Split1 --> Split2[Tree Branch]
-    Split1 --> Normal1((Normal Dense Data)):::normal
-    
-    Split2 --> Split3[Tree Branch]
-    Split2 --> Normal2((Normal Dense Data)):::normal
-    
-    Split3 --> Normal3((Normal Dense Data)):::normal
-    Split3 --> Normal4((Normal Data Point)):::normal
-</div>
-<p><strong>Diagram Explanation:</strong></p>
-<ul>
-<li><strong>The Anomaly (Red Context):</strong> Notice that the anomaly is isolated immediately at the root node. Because its financial behavior (e.g., extremely disjointed velocity) is so vastly different from the rest of the dataset, a single random split perfectly isolates it. It has a very short "Path Length," resulting directly in a high anomaly score.</li>
-<li><strong>The Normal Data (Blue Context):</strong> Normal accounts behave statistically similar to thousands of other accounts. To successfully isolate a single normal account, the tree must recursively branch many times deeper into the graph. Deep paths mathematically equal low risk scores.</li>
-</ul>
-
-<p><strong>The Mathematical Rule:</strong> The shorter the average path length required to isolate a data point across the forest, the higher the mathematical probability that the point is an anomaly.</p>
-
-<h2 id="73-model-training-and-feature-matrix-preparation">7.3 Model Training and Feature Matrix Preparation</h2>
-
-<p>Inside the <code class="inline-code">RiskEngine</code>, we isolate the specific behavioral vectors generated in Chapters 5 and 6 into a final Feature Matrix (<code class="inline-code">X</code>).</p>
-
-<div class="code-wrapper"><pre><code class="language-python"># Extract exactly the 4 engineered columns into a NumPy array 'X'
-X = features_df[['total_volume', 'structuring_count', 'mule_score', 'round_trip_count']].values
-
-# Initialize the Isolation Forest Model
-clf = IsolationForest(
-    random_state=42,       # Ensure deterministic behavior 
-    contamination=0.10     # Assumption: Max 10% of accounts are strictly anomalous
-)
-
-# Train the model on the data universe
-clf.fit(X)</code></pre></div>
-
-<p><strong>Code Explanation:</strong></p>
-<ul>
-<li><strong><code class="inline-code">.values</code>:</strong> This strips the Pandas DataFrame formatting and passes a raw, fast <code class="inline-code">C</code>-based numerical matrix (<code class="inline-code">X</code>) directly to <code class="inline-code">scikit-learn</code>.</li>
-<li><strong><code class="inline-code">contamination=0.10</code>:</strong> This is a vital hyperparameter. We are instructing the model that, structurally, we believe up to 10% of the ingested dataset might represent anomalous behavior. This tunes the sensitivity of the final decision boundary.</li>
-</ul>
-
-<h2 id="74-scoring-and-decision-function-execution">7.4 Scoring and Decision Function Execution</h2>
-
-<p>Once the Isolation Forest has structured its trees, we must run the original data back through the forest to retrieve the depth scores. We use the <code class="inline-code">.decision_function()</code> to calculate this.</p>
-
-<div class="code-wrapper"><pre><code class="language-python"># Ask the model to score the distance of every account
-raw_scores = clf.decision_function(X)</code></pre></div>
-
-<p><strong>Code Explanation:</strong></p>
-<ul>
-<li>The <code class="inline-code">.decision_function(X)</code> returns the anomaly score of each sample. </li>
-<li><strong>Crucial Note:</strong> In <code class="inline-code">scikit-learn</code>'s implementation of Isolation Forest, lower numbers (and explicitly negative numbers) indicate anomalies, while higher positive numbers indicate normal, in-cluster behavior. </li>
-</ul>
-
-<p>Because interpreting negative fractional scores (like <code class="inline-code">-0.142</code>) isn't intuitive for a human compliance officer, we must mathematically normalize these raw scores into a <code class="inline-code">0 to 100</code> Human Risk Score.</p>
-
-<h2 id="75-model-persistence-via-joblib-serialization">7.5 Model Persistence via Joblib Serialization</h2>
-
-<p>Training a Machine Learning model is computationally expensive. It is inefficient to retrain the Isolation Forest every time a single new transaction is evaluated. </p>
-
-<p>To optimize system architecture, the trained model is serialized (saved to disk) as a binary file using <code class="inline-code">joblib</code>.</p>
-
-<div class="code-wrapper"><pre><code class="language-python">import joblib
-
-# Ensure directory exists
-os.makedirs(os.path.dirname(self.MODEL_PATH), exist_ok=True)
-
-# Save the trained AI model to the disk as a binary file
-joblib.dump(clf, self.MODEL_PATH)</code></pre></div>
-
-<p>Later, when new data arrives (e.g., via the streaming upload API), the <code class="inline-code">RiskEngine.analyze()</code> function can bypass the expensive <code class="inline-code">.fit()</code> process, simply loading the <code class="inline-code">.joblib</code> file and running the <code class="inline-code">.decision_function()</code> instantly. This establishes the foundation for high-speed, real-time alerting.</p></div>
-    </section>
-    <section id="chapter-8-alert-prioritization" class="chapter">
-      <div class="chapter-header">
-        <span class="chapter-label">CHAPTER</span>
-        <h1 class="chapter-main-title">Chapter 8: Alert Prioritization</h1>
-      </div>
-      <div class="chapter-body"><h1 id="chapter-8-alert-prioritization-risk-scoring">Chapter 8: Alert Prioritization & Risk Scoring</h1>
-
-<p>As established in the previous chapter, the output of the <code class="inline-code">IsolationForest</code> algorithm is a mathematical "Depth Score", which is often represented as a negative float value (e.g., <code class="inline-code">-0.245</code>). Presenting a negative decimal to a banking compliance officer provides zero actionable context. </p>
-
-<p>This chapter explains the mathematical processing layer that normalizes the purely geometric ML outputs into a human-readable, <code class="inline-code">0 to 100</code> intuitive "Risk Score," and how that score dictates alert prioritization.</p>
-
-<h2 id="81-normalizing-mathematical-isolation-forest-scores">8.1 Normalizing Mathematical Isolation Forest Scores</h2>
-
-<p>Normalization is a standard mathematical technique used to shift data points from an arbitrary range into a widely understood scale (like a percentage). </p>
-
-<p>We extract the minimum and maximum outputs from the Isolation Forest's raw array. We then apply Min-Max normalization, but inversely—because in scikit-learn's Isolation Forest, the most negative numbers are the highest anomalies.</p>
-
-<div class="code-wrapper"><pre><code class="language-python"># Extract the arbitrary bounds of the current inference run
-min_score, max_score = scores.min(), scores.max()
-
-if max_score == min_score:
-    # Edge case: All data is identical
-    normalized_scores = [50] * len(scores)
-else:
-    # Inverse Min-Max Scaling (0 to 100 scale)
-    normalized_scores = (1 - ((scores - min_score) / (max_score - min_score))) * 100</code></pre></div>
-
-<p><strong>Code Explanation:</strong></p>
-<ul>
-<li><strong>The Denominator (<code class="inline-code">max_score - min_score</code>)</strong>: Establishes the total range of algebraic variance found in the transaction geometry.</li>
-<li><strong>The Numerator (<code class="inline-code">scores - min_score</code>)</strong>: Determines where each specific account sits within that variance.</li>
-<li><strong>The Inversion (<code class="inline-code">1 - (...)</code>)</strong>: Inverts the logic so that the algorithm's lowest negative values become the highest positive decimals.</li>
-</ul>
-<p><em>   <strong>The Scaling (<code class="inline-code"></em> 100</code>)</strong>: Multiplies the decimal (e.g., <code class="inline-code">0.957</code>) by 100 to generate an integer score (e.g., <code class="inline-code">95</code>).</p>
-
-<p>An account with a Risk Score of <code class="inline-code">95</code> fundamentally means its geometry borders the absolute extreme mathematical edge of the observed data universe. </p>
-
-<h3 id="diagram-risk-normalization-and-alert-categorization">Diagram: Risk Normalization and Alert Categorization</h3>
-<div class="mermaid">graph LR
-    classDef raw fill:#e6e6e6,stroke:#666,stroke-width:2px;
-    classDef math fill:#e6f2ff,stroke:#0066cc,stroke-width:2px;
-    classDef db fill:#e6ffe6,stroke:#006600,stroke-width:2px;
-    classDef alertHigh fill:#fff0e6,stroke:#ff9933,stroke-width:2px;
-    classDef alertCrit fill:#ffcccc,stroke:#cc0000,stroke-width:2px;
-    classDef dismiss fill:#f2f2f2,stroke:#cccccc,stroke-width:2px;
-
-    A([-0.245 Raw iForest Score]):::raw --> B[Min-Max Inversion Math]:::math
-    B --> C([65 Normalized Risk Score]):::math
-    
-    C --> D{Apply Priority Thresholds}
-    
-    D -- Score < 50 --> E[Ignore: Background Noise]:::dismiss
-    D -- Score 51-90 --> F[Generate HIGH Priority Alert]:::alertHigh
-    D -- Score > 90 --> G[Generate CRITICAL Priority Alert]:::alertCrit
-    
-    F --> H[(Django Alert Database)]:::db
-    G --> H</div>
-<p><strong>Diagram Explanation:</strong></p>
-<ul>
-<li><strong>Input to Score:</strong> The unintuitive negative float generated by the ML array is normalized into a standard <code class="inline-code">0-100</code> ranking.</li>
-<li><strong>Threshold Gates:</strong> The system actively filters out low-scoring noise dynamically limiting database insertion to true anomalies (preventing analyst fatigue).</li>
-<li><strong>Database Write:</strong> Only validated anomalies are tagged with a severity bracket (High/Critical) and committed to the backend SQLite database for human investigation on the dashboard.</li>
-</ul>
-
-<h2 id="82-threshold-engine-and-alert-database-generation">8.2 Threshold Engine and Alert Database Generation</h2>
-
-<p>Once we have a normalized <code class="inline-code">0-100</code> score array mapping linearly to our <code class="inline-code">account_id</code> array, we apply deterministic thresholds to decide which accounts require human intervention. Accounts scoring high are pushed into the <code class="inline-code">Alert</code> database table.</p>
-
-<div class="code-wrapper"><pre><code class="language-python">for i, (account_id, row) in enumerate(features_df.iterrows()):
-    risk_score = int(normalized_scores[i])
-    patterns = []
-    
-    # Programmatic Typology Tagging based on initial vectors
-    if row['total_volume'] &gt; 1000000: patterns.append('High Volume')
-    if row['structuring_count'] &gt;= 2: patterns.append('Structuring')
-    if row['mule_score'] &gt; 0: patterns.append('Money Mule')
-    if row['round_trip_count'] &gt; 0: patterns.append('Round Trip')
-    
-    # Catching unexplained ML anomalies
-    if risk_score &gt; 75 and not patterns: 
-        patterns.append('Anomalous Behavior - Undefined')
-
-    # Only generate alerts for accounts demonstrating suspicious geometry
-    if risk_score &gt; 50:
-        alerts_to_create.append(Alert(
-            account=account,
-            risk_score=risk_score,
-            type=", ".join(patterns),
-            priority='Critical' if risk_score &gt; 90 else 'High'
-        ))</code></pre></div>
-
-<p><strong>Code Explanation:</strong></p>
-<ul>
-<li><strong>The Alert Threshold (<code class="inline-code">> 50</code>)</strong>: Only accounts in the top 50th percentile of variance are even considered for review. This immediately eliminates 50% of the dataset as noise.</li>
-<li><strong>Priority Escalation (<code class="inline-code">Critical</code> vs <code class="inline-code">High</code>)</strong>: </li>
-<li><code class="inline-code">High Priority</code>: Scores between 51 and 90. These require review in standard SLA (Service Level Agreement) times.</li>
-<li><code class="inline-code">Critical Priority</code>: Scores above 90. These represent the absolute extreme outliers and demand immediate escalation, possibly warranting preemptive blocking of funds.</li>
-</ul>
-
-<h2 id="83-programmatic-typology-tagging-attribution">8.3 Programmatic Typology Tagging (Attribution)</h2>
-
-<p>A common criticism of Machine Learning in compliance is that it forms a "Black Box"—the AI says it's bad, but it can't explain why. Regulators require exact compliance rationale when accounts are frozen.</p>
-
-<p>To solve this, as seen in the code block above, we retain the original rule-based vectors (<code class="inline-code">total_volume</code>, <code class="inline-code">structuring_count</code>, etc.) and append text strings to a <code class="inline-code">patterns</code> array if the specific vector was breached. </p>
-
-<p>This means when an Alert lands on an analyst's desk, it doesn't just say <code class="inline-code">Risk: 95</code>. It explicitly tags: <em>"Risk: 95. Typologies Identified: [Structuring, Money Mule]."</em>. </p>
-
-<p>This explicit tagging is critical, as it forms the exact "Context Key" that will be passed into the Generative AI (RAG) system in the next layer to synthesize the compliance report.</p></div>
-    </section>
-    <section id="chapter-9-rag-intelligence" class="chapter">
-      <div class="chapter-header">
-        <span class="chapter-label">CHAPTER</span>
-        <h1 class="chapter-main-title">Chapter 9: RAG Intelligence</h1>
-      </div>
-      <div class="chapter-body"><h1 id="chapter-9-rag-based-legal-intelligence-system">Chapter 9: RAG-Based Legal Intelligence System</h1>
-
-<p>The final challenge in an enterprise AML pipeline is not just identifying the crime, but proving it. Banking regulators, such as the Financial Intelligence Unit (FIU-IND), require documented proof—a Suspicious Activity Report (SAR)—detailing exactly how a client's transactions violated specific anti-money laundering laws.</p>
-
-<p>This chapter details the Generative AI microservice that autonomously drafts these legal compliance reports. We utilize a <strong>Retrieval-Augmented Generation (RAG)</strong> architecture powered by LangChain, a FAISS Vector Database, and the Groq LLM.</p>
-
-<h2 id="91-automating-suspicious-activity-reports-sar-via-generative-ai">9.1 Automating Suspicious Activity Reports (SAR) via Generative AI</h2>
-
-<p>Current Large Language Models (LLMs) like GPT or LLaMA are powerful writers, but they suffer from "hallucinations"—a phenomenon where the AI confidently invents fake facts. If an AI hallucinates a non-existent section of financial law in an official government report, the bank faces massive legal penalties.</p>
-
-<p>Therefore, we cannot simply ask an LLM, <em>"Draft a money laundering report for Account X."</em> We must physically restrict the LLM to only read and cite verified legal documents. This bounding technique is called RAG.</p>
-
-<h3 id="diagram-the-rag-architecture-flow">Diagram: The RAG Architecture Flow</h3>
-<div class="mermaid">graph TD
-    classDef ui fill:#e6f2ff,stroke:#0066cc,stroke-width:2px;
-    classDef db fill:#e6ffe6,stroke:#006600,stroke-width:2px;
-    classDef rag fill:#ffe6f9,stroke:#cc0099,stroke-width:2px;
-    classDef llm fill:#1a1a1a,stroke:#333333,stroke-width:2px,color:#fff;
-
-    A(["Analyst Clicks SAR"]):::ui --> B["Query: Fetch Alert & Transactions"]:::db
-    B --> C["Extract Typologies e.g. Structuring"]:::rag
-    
-    C --> D{"Query Vector DB for Laws"}:::rag
-    
-    subgraph Knowledge_Retrieval ["Knowledge Retrieval (FAISS)"]
-        D -->|Cosine Similarity Search| E[("Embedded PMLA 2002 Laws")]:::db
-        E -->|Return Top 5 Legal Texts| F["Context Injected to Prompt"]:::rag
-    end
-    
-    F --> G["LangChain Prompt Construction"]:::rag
-    G --> H{"Groq Llama-3.3 LLM Inference"}:::llm
-    
-    H -->|Markdown Output| I(["Render Final Legal Report"]):::ui</div>
-<p><strong>Diagram Explanation:</strong></p>
-<ul>
-<li><strong>Knowledge Retrieval:</strong> Instead of relying on the LLM's internal memory, we execute a mathematical similarity search on our own local <code class="inline-code">FAISS</code> database containing exact text from the PMLA 2002 Acts.</li>
-<li><strong>Context Injection:</strong> The exact laws retrieved are appended directly to the text prompt along with the raw transaction numbers.</li>
-<li><strong>Constrained Inference:</strong> The LLM acts purely as a synthesizer. It reads the transactions, reads the provided laws, and perfectly formats them into a final markdown document.</li>
-</ul>
-
-<h2 id="92-knowledge-base-construction-pmla-rbi-guidelines">9.2 Knowledge Base Construction (PMLA & RBI Guidelines)</h2>
-
-<p>Before a search can occur, the <code class="inline-code">FAISS</code> (Facebook AI Similarity Search) database must be populated. During system initialization, PDF documents containing the <strong>Prevention of Money Laundering Act (2002)</strong> and the <strong>RBI KYC Master Directions</strong> are parsed.</p>
-
-<p>These dense legal texts are split into smaller overlapping "chunks." Each chunk is passed through an Embedding Model (e.g., <code class="inline-code">sentence-transformers</code>) which translates the text into a massive high-dimensional vector array. These vectors are mapped onto a multidimensional plane. </p>
-
-<p>When text exhibits semantic similarity (e.g., "Tax Evasion" and "Money Laundering"), their mathematical vectors sit very close together in this theoretical plane.</p>
-
-<h2 id="93-embedding-pipeline-and-vector-store-retrieval">9.3 Embedding Pipeline and Vector Store Retrieval</h2>
-
-<p>When an analyst triggers a SAR generation for an account tagged with a specific typology (e.g., <code class="inline-code">Structuring</code>), the RAG engine initiates a similarity search.</p>
-
-<div class="code-wrapper"><pre><code class="language-python"># 1. Dynamically construct the search query based on the ML output
-query = f"Money laundering laws related to {', '.join(patterns)} under PMLA 2002 and RBI KYC Master Directions"
-
-# 2. Query the FAISS Vector DB for closest mathematical matches (k=5)
-if self.vector_db:
-    docs = self.vector_db.similarity_search(query, k=5)
-    
-    # 3. Format the retrieved laws into a readable string block
-    relevant_laws = "\n\n".join([f"Source: {doc.metadata.get('source')}\nContent: {doc.page_content}" for doc in docs])</code></pre></div>
-
-<p><strong>Code Explanation:</strong></p>
-<ul>
-<li><strong><code class="inline-code">similarity_search(query, k=5)</code>:</strong> The text <code class="inline-code">query</code> is embedded into a vector. FAISS uses Cosine Similarity to scan millions of text chunks instantly and return the <code class="inline-code">k=5</code> chunks that are geometrically closest to the query vector. </li>
-<li>These returned <code class="inline-code">docs</code> are literal verbatim paragraphs extracted from the government laws, complete with metadata citing the exact page and section source.</li>
-</ul>
-
-<h2 id="94-prompt-engineering-for-legal-compliance">9.4 Prompt Engineering for Legal Compliance</h2>
-
-<p>With the true legal text isolated, we use <strong>LangChain</strong> to construct an extremely strict prompt. We utilize System Prompts to establish a highly professional persona, restricting the LLM from engaging in creative writing.</p>
-
-<div class="code-wrapper"><pre><code class="language-python">prompt = ChatPromptTemplate.from_messages([
-    ("system", """You are an elite Financial Crime Compliance Officer at a major Indian Bank. 
-    You are generating a formal Suspicious Activity Report (SAR) for the Financial Intelligence Unit (FIU-IND).
-    
-    FORMATTING RULES:
-    - Use standard Markdown.
-    - Be extremely concise and professional.
-    - If the provided laws don't explicitly mention the pattern, infer from general Principles of PMLA (Section 3).
-    - DO NOT HALLUCINATE LAWS outside of the provided RAG text.
-    """),
-    ("user", """
-    ### INPUT DATA FOR ANALYSIS:
-    **Transaction Evidence:**
-    {evidence}
-
-    **Detected Patterns:**
-    {patterns}
-
-    **RAG REGULATORY GUIDANCE (SOURCE MATERIAL):**
-    {laws}
-    """)
-])</code></pre></div>
-
-<p><strong>Code Explanation:</strong></p>
-<ul>
-<li><strong>System Prompt:</strong> Injects rigid constraints guaranteeing output consistency. </li>
-<li><strong>User Payload Mapping:</strong> The <code class="inline-code">{evidence}</code>, <code class="inline-code">{patterns}</code>, and <code class="inline-code">{laws}</code> variables are dynamically injected at runtime, forming a massive contextual payload. The AI reads the transactions (<code class="inline-code">evidence</code>), understands the crime (<code class="inline-code">patterns</code>), and maps it to the exact legal phrasing (<code class="inline-code">laws</code>).</li>
-</ul>
-
-<h2 id="95-llm-inference-architecture-groq-llama-33-70b-versatile">9.5 LLM Inference Architecture (Groq: Llama-3.3-70b-versatile)</h2>
-
-<p>Finally, the constructed Prompt Chain is executed. We chose the <strong>Groq API</strong> running Meta's <code class="inline-code">llama-3.3-70b-versatile</code> open-weights language model. </p>
-
-<div class="code-wrapper"><pre><code class="language-python"># Initialize Groq LLM with extreme low temperature for logical output
-self.llm = ChatGroq(
-    temperature=0.1,  
-    model_name="llama-3.3-70b-versatile",
-    groq_api_key=api_key
-)
-
-# Execute LangChain Inference
-chain = prompt | self.llm
-response = chain.invoke({...payload parameters...})</code></pre></div>
-
-<p><strong>Architectural Choice Justification:</strong></p>
-<ul>
-<li><strong>Temperature=0.1:</strong> In LLMs, temperature controls "creativity." For poetry, a high temperature is good. For filing legal documents against criminals with federal authorities, we maintain an extremely low temperature (<code class="inline-code">0.1</code>) forcing the model to be deterministic, factual, and rigid.</li>
-<li><strong>Groq LPU:</strong> Groq operates on custom silicon (Language Processing Units) rather than traditional GPUs. This results in inference speeds exceeding 300+ tokens per second. A 3-page SAR report that takes an analyst 40 minutes to draft and format is completely generated mathematically by the AI in approximately 1.5 seconds.</li>
-</ul></div>
-    </section>
-    <section id="chapter-10-execution-flow" class="chapter">
-      <div class="chapter-header">
-        <span class="chapter-label">CHAPTER</span>
-        <h1 class="chapter-main-title">Chapter 10: Execution Flow</h1>
-      </div>
-      <div class="chapter-body"><h1 id="chapter-10-end-to-end-execution-flow">Chapter 10: End-to-End Execution Flow</h1>
-
-<p>The previous chapters detailed the isolated components of our Anti-Money Laundering architecture—from Pandas ingestion to Isolation Forest math and generative AI logic. </p>
-
-<p>This chapter acts as the master blueprint, tying all disparate modules together into a unified, sequential <strong>Data Science Pipeline</strong>. We trace the absolute path of a dataset from the moment it leaves the compliance officer's computer to the moment a formal Suspicious Activity Report (SAR) is drafted.</p>
-
-<h2 id="101-initialization-phase-data-upload-to-task-queue">10.1 Initialization Phase (Data Upload to Task Queue)</h2>
-
-<p>Every analytical run strictly begins with the <strong>Initialization Phase</strong>. Because moving millions of bytes of data is computationally expensive, this phase must decouple the web server from the intelligence engine.</p>
-
-<p>1.  <strong>Client Payload:</strong> The Compliance Analyst uses the React Dashboard to authorize the upload of a standard <code class="inline-code">.csv</code> or <code class="inline-code">.xlsx</code> file containing historical transaction logs.</p>
-<p>2.  <strong>Stateless API Reception:</strong> The Django REST Framework <code class="inline-code">UploadView</code> receives the binary payload. It deliberately avoids parsing the rows.</p>
-<p>3.  <strong>Task Instantiation:</strong> A UUID is generated for the new job, and a <code class="inline-code">ProcessingTask</code> tracker is initialized in the database with the state <code class="inline-code">Pending</code>.</p>
-<p>4.  <strong>Handoff:</strong> The raw byte stream is thrown over the wall to an independent Python daemon thread, freeing the UI to return a success code instantly.</p>
-
-<h2 id="102-analysis-phase-preprocess---feature-eng---ml-inference">10.2 Analysis Phase (Preprocess -> Feature Eng. -> ML Inference)</h2>
-
-<p>This is the mathematical core of the engine, executing entirely in RAM.</p>
-
-<p>1.  <strong>Pandas Materialization:</strong> The <code class="inline-code">risk_engine.py</code> daemon reconstructs the byte stream into a <code class="inline-code">pandas.DataFrame</code>.</p>
-<p>2.  <strong>Normalization:</strong> The dictionary-mapping logic forces chaotic external column names (like <code class="inline-code">txn_amount</code>) into the rigid internal structure (<code class="inline-code">amount</code>).</p>
-<p>3.  <strong>Type Coercion:</strong> All strings are cast via <code class="inline-code">.apply()</code> and <code class="inline-code">.replace()</code> into pure <code class="inline-code">float</code> numerical matrices. Times are combined into standard 64-bit datetime objects.</p>
-<p>4.  <strong>Vectorized Engineering:</strong> Fast C-compiled loops execute the <code class="inline-code">.groupby()</code> and <code class="inline-code">.shift()</code> functions, generating our four core continuous behavioral variables: Total Volume, Structuring Occurrences, Mule Operations, and Round-Trip Loops.</p>
-<p>5.  <strong>Unsupervised Inference:</strong> The structured matrix <code class="inline-code">X</code> is injected into the pre-trained <code class="inline-code">IsolationForest</code>. The algorithm recursively drops the transaction points down its behavioral trees, outputting negative decimal anomaly scores based on Isolation Depth.</p>
-
-<h2 id="103-post-processing-phase-score-normalization---alert-instantiation">10.3 Post-Processing Phase (Score Normalization -> Alert Instantiation)</h2>
-
-<p>A raw mathematical anomaly tells us nothing about banking compliance. We must normalize the inference output into operational metrics.</p>
-
-<p>1.  <strong>Algebraic Scaling:</strong> The engine applies inverse Min-Max normalization to convert raw Isolation Forest fractions into a strict <code class="inline-code">0 to 100</code> Human Risk Scale.</p>
-<p>2.  <strong>Tagging:</strong> Any breached vectors (e.g., <code class="inline-code">structuring_count > 0</code>) are logged into a linguistic array (e.g., <code class="inline-code">["Structuring"]</code>) to remove the "Black Box" nature of the AI.</p>
-<p>3.  <strong>Threshold Gates:</strong> The system executes hard logic: </p>
-<p>    <em>   </em>If Score < 50:* Discard perfectly clean transactions from memory.</p>
-<p>    <em>   </em>If Score > 75:* Flag as <code class="inline-code">High Priority</code>.</p>
-<p>    <em>   </em>If Score > 90:* Flag as <code class="inline-code">Critical</code>.</p>
-<p>4.  <strong>Database Hydration:</strong> Utilizing Django's <code class="inline-code">bulk_create</code> capabilities, the anomalous accounts and all their related metrics are batched in size-1000 chunks and inserted into the SQLite database, drastically avoiding Connection Pool exhaustion.</p>
-
-<h2 id="104-investigation-phase-rag-synthesis---dashboard-delivery">10.4 Investigation Phase (RAG Synthesis -> Dashboard Delivery)</h2>
-
-<p>The data has successfully settled in the persistent database. The final phase involves the human-in-the-loop and Generative AI.</p>
-
-<p>1.  <strong>Dashboard Materialization:</strong> The React client polls the <code class="inline-code">/stats</code> API endpoint. The Django ORM dynamically returns aggregates (e.g., total suspicious volume, funnel detection rates) rendered instantly via the <code class="inline-code">Recharts</code> library. </p>
-<p>2.  <strong>Analyst Review:</strong> An analyst opens a <code class="inline-code">Critical</code> alert tagged with "Structuring". They review the raw evidence on the UI and click <strong>"Generate SAR"</strong>.</p>
-<p>3.  <strong>Knowledge Retrieval:</strong> The backend RAG sub-system activates. Using <code class="inline-code">FAISS</code>, it mathematically locates the exact sections of the PMLA 2002 law addressing "Structuring".</p>
-<p>4.  <strong>LLM Execution:</strong> The exact legal text, alongside the raw transaction history, is packaged via <code class="inline-code">LangChain</code> and forwarded to the Groq <code class="inline-code">Llama-3.3-70b</code> model.</p>
-<p>5.  <strong>Final Report:</strong> The AI deterministically complies with the strict prompt constraint, returning a completely formatted Markdown Suspicious Activity Report to the dashboard for final human approval.</p>
-
-<h3 id="diagram-uml-sequence-diagram-of-background-job-execution">Diagram: UML Sequence Diagram of Background Job Execution</h3>
-
-<div class="mermaid">sequenceDiagram
-    participant UI as React Dashboard
-    participant API as Django REST Gateway
-    participant Daemon as Background Thread
-    participant Pandas as ML Matrix Builder
-    participant iForest as Isolation Forest
-    participant DB as SQLite Storage
-    participant RAG as Groq Generative AI
-
-    %% Phase 1: Initialization
-    UI->>API: POST /upload (mass_dataset.csv)
-    API-->>DB: INSERT TaskTracker (Status: Pending)
-    API-->>Daemon: Execute Thread(ByteData)
-    API-->>UI: HTTP 202 (Return task_id)
-
-    %% Phase 2: Analysis
-    activate Daemon
-    Daemon->>Pandas: Initiate Normalization & Cleaning
-    Pandas-->>Daemon: Return Pristine DataFrame
-    Daemon->>Pandas: Execute Vectorized Feature Eng.
-    Pandas-->>Daemon: Return Array Matrix (X)
-    Daemon->>iForest: .decision_function(X)
-    iForest-->>Daemon: Return Raw Path Length Scores
-    
-    %% Phase 3: Post-Processing
-    Daemon->>Daemon: Inverse Min-Max Normalization (0-100)
-    Daemon->>Daemon: Apply Threshold Limit (>50)
-    Daemon->>DB: Bulk Execute (Batch: 1000) Alerts & Txns
-    Daemon->>DB: UPDATE TaskTracker (Status: Completed)
-    deactivate Daemon
-
-    %% Phase 4: Investigation
-    UI->>API: GET /task_status (task_id)
-    API-->>UI: 200 OK (Completed = True)
-    
-    UI->>API: GET /alerts (Analyst Reviews Dashboard)
-    
-    rect rgb(230, 242, 255)
-    Note over UI,RAG: Analyst initiates Automated Compliance Reporting
-    UI->>API: POST /generate_sar (alert_id)
-    API->>RAG: LangChain Context & PMLA Vector Rules
-    RAG-->>API: Return Formatted Markdown Report
-    API-->>UI: Render Human-readable SAR
-    end</div></div>
-    </section>
-    <section id="chapter-11-scalability" class="chapter">
-      <div class="chapter-header">
-        <span class="chapter-label">CHAPTER</span>
-        <h1 class="chapter-main-title">Chapter 11: Scalability</h1>
-      </div>
-      <div class="chapter-body"><h1 id="chapter-11-performance-scalability-considerations">Chapter 11: Performance & Scalability Considerations</h1>
-
-<p>Anti-Money Laundering systems are inherently "Big Data" systems. A mid-sized regional bank can process millions of transactions per day. If the analytical engine is poorly designed, memory overflows and connection timeouts will crash the compliance infrastructure entirely. </p>
-
-<p>This chapter explicitly addresses the architectural trade-offs and optimizations implemented to ensure this AML system scales mathematically and operationally.</p>
-
-<h2 id="111-algorithm-complexity-loop-iteration-vs-pandas-vectorization">11.1 Algorithm Complexity: Loop Iteration vs. Pandas Vectorization</h2>
-
-<p>As introduced in Chapter 5, shifting from traditional row-by-row iteration to vectorization was the most critical performance decision in this project. </p>
-
-<ul>
-<li><strong>The Big-O Notation Problem:</strong> A standard Python <code class="inline-code">for</code> loop executing a basic arithmetic calculation across a 1,000,000-row dataset has a time complexity of <code class="inline-code">O(N)</code>. Because Python is an interpreted, dynamically typed language, every single row is evaluated independently, checking memory allocation and variable types one million times. </li>
-<li><strong>The Vectorized Solution:</strong> Pandas is built on top of NumPy, which uses pre-compiled C code under the hood. When we command Pandas to sum a column (<code class="inline-code">df['amount'].sum()</code>), it treats the entire array as a single continuous block of memory. The operations are broadcasted simultaneously, mathematically reducing the execution time by orders of magnitude. </li>
-</ul>
-
-<h3 id="diagram-performance-scaling-comparison">Diagram: Performance Scaling Comparison</h3>
-<div class="mermaid">graph TD
-    classDef bad fill:#ffe6e6,stroke:#cc0000,stroke-width:2px;
-    classDef good fill:#e6ffe6,stroke:#006600,stroke-width:2px;
-
-    subgraph "Time Complexity Profile"
-        A("1 Million Rows Ingestion")
-        
-        A -->|"Python For-Loop O(N)"| B["Execution Time: ~45 Minutes"]:::bad
-        B --> C["Result: CPU/Memory Bottleneck"]:::bad
-        
-        A -->|"Pandas Vectorization O(1) Operations"| D["Execution Time: ~3 Seconds"]:::good
-        D --> E["Result: Highly Scalable Pipeline"]:::good
-    end</div>
-<p><strong>Diagram Explanation:</strong></p>
-<ul>
-<li>Vectorization drastically flattens the execution curve. What would historically require massive multi-node clusters in legacy banks can be confidently processed in seconds utilizing <code class="inline-code">pandas</code> on a single modern server blade.</li>
-</ul>
-
-<h2 id="112-database-throttling-connection-strategies">11.2 Database Throttling & Connection Strategies</h2>
-
-<p>Once the Isolation Forest marks accounts as anomalies, these flags must be permanently written to the persistent Database (SQLite/PostgreSQL) so the React Dashboard can display them.</p>
-
-<p>A naive backend developer might write an iteration:</p>
-<div class="code-wrapper"><pre><code class="language-python"># WARNING: Extremely Non-Performant Method
-for res in anomalous_results:
-    Alert.objects.create(account_id=res.id, score=res.score)</code></pre></div>
-
-<p><strong>The Connection Pool Crash:</strong> Executing the code above on 10,000 alerts requires the Django ORM to explicitly open a database connection, execute an SQL <code class="inline-code">INSERT</code> statement, commit the row, and close the connection—10,000 separate times. This causes massive Disk I/O locking and will immediately crash the application server.</p>
-
-<p><strong>The Solution: Bulk Creation</strong></p>
-<p>We bypass row-by-row I/O bottlenecks using Django's <code class="inline-code">bulk_create</code> utility wrapped in optimal chunk sizing.</p>
-
-<div class="code-wrapper"><pre><code class="language-python"># Optimal Implementation: Memory Batching
-if alerts_to_create:
-    Alert.objects.bulk_create(alerts_to_create, batch_size=1000)</code></pre></div>
-
-<p><strong>Code Explanation:</strong></p>
-<ul>
-<li>Instead of writing to the DB immediately, we append the generated <code class="inline-code">Alert</code> objects entirely in server RAM (<code class="inline-code">alerts_to_create</code> list).</li>
-<li>When the list is passed to <code class="inline-code">bulk_create</code> with <code class="inline-code">batch_size=1000</code>, Django translates this into a single massive SQL query (<code class="inline-code">INSERT INTO Alerts (...) VALUES (...), (...), (...)</code>) containing 1,000 rows at once.</li>
-<li>This drops the total necessary Database transactions from 10,000 down to just 10.</li>
-</ul>
-
-<h2 id="113-memory-state-management-during-large-csv-reads">11.3 Memory State Management During Large CSV Reads</h2>
-
-<p>While Pandas vectorization is incredibly fast, it requires loading the <em>entire</em> dataset into active server Memory (RAM). If a compliance officer uploads a 4GB CSV file, the server will throw a massive <code class="inline-code">MemoryError</code> and shut down if it lacks physical RAM.</p>
-
-<p>Currently, the system is designed to handle moderately large batch flat files (e.g., up to ~250MB effectively) due to its dependency on <code class="inline-code">pd.read_csv()</code>. </p>
-
-<p><strong>Future Scalability Path:</strong> If the bank demands processing of 10GB+ daily transaction graphs, the ingestion pipeline must be formally transitioned away from <code class="inline-code">pandas</code> into <strong>Dask</strong> or <strong>Apache Spark</strong>, which are designed specifically to partition DataFrames across multiple distributed worker nodes, preventing single-server memory limits.</p></div>
-    </section>
-    <section id="chapter-12-results-evaluation" class="chapter">
-      <div class="chapter-header">
-        <span class="chapter-label">CHAPTER</span>
-        <h1 class="chapter-main-title">Chapter 12: Results & Evaluation</h1>
-      </div>
-      <div class="chapter-body"><h1 id="chapter-12-results-evaluation">Chapter 12: Results & Evaluation</h1>
-
-<p>This chapter presents the measurable outcomes of our AI-driven AML Detection System. We evaluate the system's performance across three critical dimensions: Detection Accuracy, Operational Efficiency, and Compliance Automation.</p>
-
-<h2 id="121-detection-accuracy-isolation-forest-performance">12.1 Detection Accuracy: Isolation Forest Performance</h2>
-
-<p>The Isolation Forest model was evaluated on a test dataset containing a mix of normal banking transactions and synthetically injected suspicious patterns (Structuring, Mule, Round-Trip).</p>
-
-<h3 id="key-metrics">Key Metrics</h3>
-
-<div class="table-responsive"><table><tr><th>Metric</th><th>Traditional Rule-Based</th><th>Our AI-Driven System</th></tr>
-<tr><td><strong>False Positive Rate</strong></td><td>~95%</td><td>~15-20%</td></tr>
-<tr><td><strong>Anomaly Detection Rate</strong></td><td>Low (Only catches threshold breaches)</td><td>High (Catches behavioral deviations)</td></tr>
-<tr><td><strong>Structuring Detection</strong></td><td>Fails if amount is below threshold</td><td>Detects repeated near-threshold clustering</td></tr>
-<tr><td><strong>Mule Detection</strong></td><td>Not possible with static rules</td><td>Detects rapid in/out velocity patterns</td></tr>
-<tr><td><strong>Round-Trip Detection</strong></td><td>Not possible with static rules</td><td>Detects bi-directional counterparty loops</td></tr></table></div>
-
-<p><strong>Code Explanation:</strong></p>
-<ul>
-<li>The <code class="inline-code">contamination=0.10</code> hyperparameter tells the model to expect roughly 10% of the dataset to be anomalous. This balances sensitivity (catching real crimes) against specificity (avoiding false alarms).</li>
-<li>The Inverse Min-Max normalization converts raw isolation depths into a human-readable 0-100 Risk Score, allowing compliance officers to prioritize their review queue effectively.</li>
-</ul>
-
-<h3 id="diagram-detection-capability-comparison">Diagram: Detection Capability Comparison</h3>
-<div class="mermaid">graph LR
-    classDef old fill:#ffe6e6,stroke:#cc0000,stroke-width:2px;
-    classDef new fill:#e6ffe6,stroke:#006600,stroke-width:2px;
-
-    subgraph Legacy ["Legacy Rule-Based System"]
-        A["Structuring"] --> B["MISSED"]:::old
-        C["Money Mule"] --> D["MISSED"]:::old
-        E["Round-Trip"] --> F["MISSED"]:::old
-        G["High Volume Txn"] --> H["DETECTED but 95% False Positive"]:::old
-    end
-
-    subgraph AI ["AI-Driven System (Ours)"]
-        I["Structuring"] --> J["DETECTED via Clustering Vectors"]:::new
-        K["Money Mule"] --> L["DETECTED via Velocity Scoring"]:::new
-        M["Round-Trip"] --> N["DETECTED via Counterparty Mapping"]:::new
-        O["High Volume Txn"] --> P["DETECTED with Context-Aware Scoring"]:::new
-    end</div>
-<p><strong>Diagram Explanation:</strong></p>
-<ul>
-<li>The Legacy System can only detect the simplest typology (high value transactions) and even then with 95% false positives. Our AI system identifies all four typologies using mathematical behavioral analysis instead of static thresholds.</li>
-</ul>
-
-<h2 id="122-operational-efficiency-gains">12.2 Operational Efficiency Gains</h2>
-
-<p>The system was designed to process data at scale without blocking the user interface. Here are the measured efficiency improvements:</p>
-
-<div class="table-responsive"><table><tr><th>Operation</th><th>Manual/Traditional</th><th>Our System</th></tr>
-<tr><td><strong>Data Ingestion (100k rows)</strong></td><td>15-20 minutes (manual review)</td><td>~3-5 seconds (async Pandas)</td></tr>
-<tr><td><strong>Feature Engineering</strong></td><td>Hours (manual Excel formulas)</td><td>~2 seconds (vectorized groupby)</td></tr>
-<tr><td><strong>Risk Scoring</strong></td><td>Days (manual case review)</td><td>~1 second (Isolation Forest inference)</td></tr>
-<tr><td><strong>SAR Report Drafting</strong></td><td>45 minutes per report</td><td>~1.5 seconds (Groq LLM)</td></tr>
-<tr><td><strong>Database Write (10k alerts)</strong></td><td>Timeout/Crash (row-by-row)</td><td>~2 seconds (bulk_create batch=1000)</td></tr></table></div>
-
-<h2 id="123-rag-report-quality-assessment">12.3 RAG Report Quality Assessment</h2>
-
-<p>The Generative AI SAR reports were evaluated for three critical compliance factors:</p>
-
-<p>1.  <strong>Legal Accuracy:</strong> The RAG system retrieves exact PMLA 2002 clauses from the FAISS vector database. Because the LLM is constrained to only cite retrieved documents (temperature=0.1), hallucination of fake laws is virtually eliminated.</p>
-<p>2.  <strong>Structural Consistency:</strong> Every generated SAR follows a rigid markdown template (Account Summary → Transaction Evidence → Legal Basis → Recommendation), ensuring regulators receive familiar, parseable documents.</p>
-<p>3.  <strong>Speed:</strong> The Groq LPU (Language Processing Unit) achieves 300+ tokens/second inference speed, producing a complete multi-page legal report in under 2 seconds.</p>
-
-<h2 id="124-system-reliability">12.4 System Reliability</h2>
-
-<p>The asynchronous architecture ensures the Django web server remains responsive even during heavy analytical loads:</p>
-<ul>
-<li><strong>API Response Time:</strong> The upload endpoint returns HTTP 202 within ~200ms regardless of file size, because processing is delegated to a background thread.</li>
-<li><strong>Task Polling:</strong> The React frontend polls the task status endpoint every 2 seconds, providing real-time progress updates without long-polling or WebSocket complexity.</li>
-<li><strong>Database Integrity:</strong> Using Django's <code class="inline-code">bulk_create</code> with <code class="inline-code">batch_size=1000</code> prevents connection pool exhaustion, ensuring zero data loss during high-throughput alert generation.</li>
-</ul></div>
-    </section>
-    <section id="chapter-13-challenges-solutions" class="chapter">
-      <div class="chapter-header">
-        <span class="chapter-label">CHAPTER</span>
-        <h1 class="chapter-main-title">Chapter 13: Challenges & Solutions</h1>
-      </div>
-      <div class="chapter-body"><h1 id="chapter-13-challenges-solutions">Chapter 13: Challenges & Solutions</h1>
-
-<p>Every engineering project encounters obstacles. This chapter documents the critical challenges faced during the development of the AML Detection System and the specific technical solutions implemented to overcome them.</p>
-
-<h2 id="131-challenge-inconsistent-data-schemas-across-banks">13.1 Challenge: Inconsistent Data Schemas Across Banks</h2>
-
-<p><strong>The Problem:</strong></p>
-<p>Financial datasets exported from different bank branches use wildly different column naming conventions. One branch might label the transaction amount as <code class="inline-code">amount</code>, while another uses <code class="inline-code">txn_amount</code>, <code class="inline-code">transaction_value</code>, or even <code class="inline-code">amt</code>. If the ML pipeline expects a column named <code class="inline-code">amount</code> and receives <code class="inline-code">txn_amount</code>, Python throws a fatal <code class="inline-code">KeyError</code> and the entire analysis crashes.</p>
-
-<p><strong>The Solution:</strong></p>
-<p>We built a dynamic dictionary-based column mapper inside <code class="inline-code">risk_engine.py</code>. This mapper maintains an extensive lookup table of known variations for each critical field. During ingestion, every column header in the uploaded CSV is normalized (lowercased, stripped of whitespace) and matched against the lookup dictionary.</p>
-
-<div class="code-wrapper"><pre><code class="language-python">mapping = {
-    'account_id': ['account_id', 'account number', 'acc no', 'customer id'],
-    'amount': ['amount', 'txn_amount', 'transaction_value', 'value', 'amt'],
-    'date': ['date', 'txn_date', 'transaction_date', 'value_date'],
-}</code></pre></div>
-
-<p><strong>Result:</strong> The system now gracefully handles CSV files from any source without manual column renaming, making it truly plug-and-play for compliance teams.</p>
-
-<h2 id="132-challenge-memory-overload-on-large-file-uploads">13.2 Challenge: Memory Overload on Large File Uploads</h2>
-
-<p><strong>The Problem:</strong></p>
-<p>Pandas loads the entire CSV file into server RAM using <code class="inline-code">pd.read_csv()</code>. When a compliance officer uploads a file exceeding 200MB, the server's available memory can be exhausted, causing an <code class="inline-code">MemoryError</code> crash that takes down the entire Django application.</p>
-
-<p><strong>The Solution:</strong></p>
-<p>We implemented two mitigation strategies:</p>
-<p>1.  <strong>Asynchronous Thread Isolation:</strong> The file parsing happens on a separate Python thread. Even if the background thread crashes due to memory limits, the main Django web server thread continues serving other users unaffected.</p>
-<p>2.  <strong>Batch Database Writes:</strong> Instead of accumulating all processed results in memory before writing, we use Django's <code class="inline-code">bulk_create(batch_size=1000)</code> to flush data to disk in manageable 1000-row chunks, keeping peak memory consumption controlled.</p>
-
-<p><strong>Result:</strong> The system reliably processes files up to ~250MB on a standard 8GB development machine without crashes.</p>
-
-<h2 id="133-challenge-currency-string-parsing-failures">13.3 Challenge: Currency String Parsing Failures</h2>
-
-<p><strong>The Problem:</strong></p>
-<p>Financial exports contain currency values as formatted strings like <code class="inline-code">"₹50,000.00"</code> or <code class="inline-code">"$1,200"</code>. Machine Learning algorithms require pure numerical float values. Attempting to pass these strings directly into the Isolation Forest causes a <code class="inline-code">ValueError: could not convert string to float</code>.</p>
-
-<p><strong>The Solution:</strong></p>
-<p>We built a robust <code class="inline-code">clean_amount()</code> function that systematically strips currency symbols (<code class="inline-code">₹</code>, <code class="inline-code">$</code>, <code class="inline-code">€</code>), removes thousands-separators (commas), and casts the cleaned string to a Python <code class="inline-code">float</code>. The function also handles edge cases: null values default to <code class="inline-code">0.0</code>, and values already parsed as numbers by Pandas are passed through without modification.</p>
-
-<p><strong>Result:</strong> Zero parsing failures across tested datasets from Indian, US, and European banking formats.</p>
-
-<h2 id="134-challenge-llm-hallucination-in-legal-reports">13.4 Challenge: LLM Hallucination in Legal Reports</h2>
-
-<p><strong>The Problem:</strong></p>
-<p>When asked to draft a Suspicious Activity Report, a standalone LLM (like ChatGPT or LLaMA) will confidently cite fake law sections, invent regulatory clauses, and fabricate compliance procedures. Filing such a report with the FIU-IND would expose the bank to severe legal penalties.</p>
-
-<p><strong>The Solution:</strong></p>
-<p>We implemented the <strong>Retrieval-Augmented Generation (RAG)</strong> architecture:</p>
-<p>1.  Real PMLA 2002 and RBI KYC legal documents were embedded into a <strong>FAISS Vector Database</strong>.</p>
-<p>2.  Before the LLM generates any text, the relevant legal clauses are retrieved via cosine similarity search.</p>
-<p>3.  The LLM prompt explicitly instructs: <em>"DO NOT HALLUCINATE LAWS outside of the provided RAG text."</em></p>
-<p>4.  Temperature is set to <code class="inline-code">0.1</code> (extremely low creativity), forcing deterministic, fact-based output.</p>
-
-<p><strong>Result:</strong> Every generated SAR cites only verified, real legislative text retrieved from the local vector database.</p>
-
-<h2 id="135-challenge-isolation-forest-sensitivity-tuning">13.5 Challenge: Isolation Forest Sensitivity Tuning</h2>
-
-<p><strong>The Problem:</strong></p>
-<p>If the <code class="inline-code">contamination</code> parameter is set too high (e.g., 0.30), the model becomes overly aggressive and flags 30% of all accounts as suspicious—reintroducing the false positive problem we set out to solve. If set too low (e.g., 0.01), real criminals slip through undetected.</p>
-
-<p><strong>The Solution:</strong></p>
-<p>After iterative testing, we settled on <code class="inline-code">contamination=0.10</code> as the optimal balance point for our dataset profile. This tells the model that approximately 10% of accounts may exhibit anomalous behavior. Combined with the post-processing threshold filter (only scores above 50 generate alerts), the effective alert volume remains manageable for human review queues.</p>
-
-<h3 id="diagram-challenge-resolution-pipeline">Diagram: Challenge Resolution Pipeline</h3>
-<div class="mermaid">graph TD
-    classDef problem fill:#ffe6e6,stroke:#cc0000,stroke-width:2px;
-    classDef solution fill:#e6ffe6,stroke:#006600,stroke-width:2px;
-
-    A["Inconsistent Column Names"]:::problem --> B["Dictionary-Based Auto-Mapper"]:::solution
-    C["Memory Overflow on Large Files"]:::problem --> D["Async Threads + Batch DB Writes"]:::solution
-    E["Currency String Parsing Errors"]:::problem --> F["Robust clean_amount Function"]:::solution
-    G["LLM Hallucinating Fake Laws"]:::problem --> H["RAG + FAISS + Low Temperature"]:::solution
-    I["ML Over/Under Sensitivity"]:::problem --> J["Contamination=0.10 + Threshold>50"]:::solution</div>
-<p><strong>Diagram Explanation:</strong></p>
-<ul>
-<li>Every engineering challenge (red) was addressed with a specific, targeted technical solution (green). None of these were generic patches—each solution was architected to address the root cause of the problem within the AML domain context.</li>
-</ul></div>
-    </section>
-    <section id="chapter-14-future-scope" class="chapter">
-      <div class="chapter-header">
-        <span class="chapter-label">CHAPTER</span>
-        <h1 class="chapter-main-title">Chapter 14: Future Scope</h1>
-      </div>
-      <div class="chapter-body"><h1 id="chapter-14-future-scope-enhancements">Chapter 14: Future Scope & Enhancements</h1>
-
-<p>While the current system delivers a complete, functional AML detection and reporting pipeline, there are several high-impact enhancements that can elevate it from a batch-processing analytical tool to a real-time, enterprise-grade financial crime surveillance platform.</p>
-
-<h2 id="141-real-time-streaming-with-apache-kafka">14.1 Real-Time Streaming with Apache Kafka</h2>
-
-<p><strong>Current Limitation:</strong> The system processes transactions in batch mode—an analyst uploads a historical CSV file, and the engine analyzes it retroactively.</p>
-
-<p><strong>Future Enhancement:</strong> Integrate <strong>Apache Kafka</strong> as a real-time message broker. Banks would publish individual transactions to a Kafka topic as they occur. A dedicated Kafka consumer service would continuously ingest these events, run them through the pre-trained Isolation Forest model (loaded from the <code class="inline-code">.joblib</code> file), and generate alerts in real-time—within milliseconds of a suspicious transaction occurring.</p>
-
-<h3 id="diagram-batch-vs-real-time-architecture">Diagram: Batch vs Real-Time Architecture</h3>
-<div class="mermaid">graph LR
-    classDef current fill:#e6f2ff,stroke:#0066cc,stroke-width:2px;
-    classDef future fill:#e6ffe6,stroke:#006600,stroke-width:2px;
-
-    subgraph Current ["Current: Batch Processing"]
-        A["CSV Upload"] --> B["Pandas Analysis"] --> C["Alert Generation"]
-    end
-    class Current current;
-
-    subgraph Future_System ["Future: Real-Time Streaming"]
-        D["Live Bank Transaction"] --> E["Apache Kafka Queue"]
-        E --> F["Kafka Consumer + ML Scoring"]
-        F --> G["Instant Alert in < 100ms"]
-    end
-    class Future_System future;</div>
-
-<h2 id="142-graph-neural-networks-for-network-detection">14.2 Graph Neural Networks for Network Detection</h2>
-
-<p><strong>Current Limitation:</strong> Round-trip detection is limited to 1-degree loops (A → B → A). Multi-hop laundering networks (A → B → C → D → A) are currently invisible.</p>
-
-<p><strong>Future Enhancement:</strong> Implement <strong>Graph Neural Networks (GNNs)</strong> using libraries like <strong>PyTorch Geometric</strong> or <strong>Neo4j Graph Database</strong>. Every account becomes a "node" and every transaction becomes an "edge." GNNs can traverse these edges to discover complex, multi-layered laundering rings that span dozens of intermediary accounts across different geographies.</p>
-
-<h2 id="143-postgresql-migration-for-production-scale">14.3 PostgreSQL Migration for Production Scale</h2>
-
-<p><strong>Current Limitation:</strong> The system uses SQLite, which is file-based and supports only single-writer concurrency. In a production environment with multiple analysts querying simultaneously, SQLite becomes a bottleneck.</p>
-
-<p><strong>Future Enhancement:</strong> Migrate to <strong>PostgreSQL</strong> with connection pooling (via <code class="inline-code">pgbouncer</code>). PostgreSQL supports concurrent read/write operations, advanced indexing, and can handle millions of records without performance degradation.</p>
-
-<h2 id="144-explainable-ai-xai-with-shap-values">14.4 Explainable AI (XAI) with SHAP Values</h2>
-
-<p><strong>Current Limitation:</strong> While we tag alerts with the specific typology that triggered them (Structuring, Mule, etc.), we don't quantify exactly how much each feature contributed to the final risk score.</p>
-
-<p><strong>Future Enhancement:</strong> Integrate <strong>SHAP (SHapley Additive exPlanations)</strong> values. SHAP mathematically decomposes the Isolation Forest's decision for each account, showing exactly which feature (e.g., "structuring_count contributed 45% to the risk score") drove the anomaly detection. This provides regulators with mathematically auditable AI decisions—a growing regulatory requirement globally.</p>
-
-<h2 id="145-multi-language-sar-generation">14.5 Multi-Language SAR Generation</h2>
-
-<p><strong>Current Limitation:</strong> The RAG system generates SARs only in English, citing Indian PMLA laws.</p>
-
-<p><strong>Future Enhancement:</strong> Expand the FAISS vector database to include compliance frameworks from multiple jurisdictions:</p>
-<ul>
-<li><strong>EU Anti-Money Laundering Directives (AMLD6)</strong></li>
-<li><strong>US Bank Secrecy Act (BSA) / FinCEN regulations</strong></li>
-<li><strong>FATF (Financial Action Task Force) recommendations</strong></li>
-</ul>
-
-<p>The LLM prompt can be dynamically adjusted to generate reports in the target jurisdiction's language and legal framework, enabling the system to serve multinational banking institutions.</p>
-
-<h2 id="146-automated-model-retraining-pipeline">14.6 Automated Model Retraining Pipeline</h2>
-
-<p><strong>Current Limitation:</strong> The Isolation Forest model is trained once during the initial data upload. As criminal behavior evolves over time, the model's definition of "normal" becomes stale.</p>
-
-<p><strong>Future Enhancement:</strong> Implement an <strong>MLOps retraining pipeline</strong> using tools like <strong>MLflow</strong> or <strong>Kubeflow</strong>. The system would automatically retrain the Isolation Forest on a scheduled basis (e.g., weekly) using the latest transaction data, version the model artifacts, and deploy the updated model to production with zero downtime.</p></div>
-    </section>
-    <section id="chapter-15-conclusion" class="chapter">
-      <div class="chapter-header">
-        <span class="chapter-label">CHAPTER</span>
-        <h1 class="chapter-main-title">Chapter 15: Conclusion</h1>
-      </div>
-      <div class="chapter-body"><h1 id="chapter-15-conclusion-references">Chapter 15: Conclusion & References</h1>
-
-<h2 id="151-project-summary">15.1 Project Summary</h2>
-
-<p>The AI-Driven Anti-Money Laundering (AML) Detection System represents a fundamental shift in how financial institutions can approach compliance automation. By replacing rigid, static rule-based engines with a dynamic, behavior-aware intelligence pipeline, this project addresses the two most critical failures of legacy AML systems:</p>
-
-<p>1.  <strong>The False Positive Epidemic:</strong> Traditional systems generate up to 95% false positives because they rely on fixed thresholds (e.g., flagging any transaction over ₹50,000). Our Isolation Forest model mathematically learns the geometric boundaries of normal behavior and only flags accounts whose behavioral patterns fall outside these learned boundaries—reducing false positives dramatically.</p>
-
-<p>2.  <strong>The Compliance Bottleneck:</strong> Drafting a single Suspicious Activity Report (SAR) manually requires 45 minutes of expert legal analysis. Our RAG-powered Generative AI (Groq Llama-3.3) reduces this to under 2 seconds by automatically retrieving relevant PMLA 2002 clauses from a FAISS vector database and synthesizing them into a complete, legally grounded markdown report.</p>
-
-<h2 id="152-technical-achievements">15.2 Technical Achievements</h2>
-
-<div class="table-responsive"><table><tr><th>Achievement</th><th>Implementation</th></tr>
-<tr><td><strong>Vectorized Data Processing</strong></td><td>Pandas + NumPy for millisecond-scale feature engineering</td></tr>
-<tr><td><strong>Behavioral Feature Engineering</strong></td><td>4 custom vectors: Volume, Structuring, Mule Score, Round-Trip</td></tr>
-<tr><td><strong>Unsupervised Anomaly Detection</strong></td><td>Scikit-learn Isolation Forest with inverse normalization</td></tr>
-<tr><td><strong>Asynchronous Architecture</strong></td><td>Python threading for non-blocking file processing</td></tr>
-<tr><td><strong>Database Optimization</strong></td><td>Django bulk_create with batch_size=1000</td></tr>
-<tr><td><strong>Legal AI Automation</strong></td><td>LangChain + FAISS RAG + Groq LLM (temperature=0.1)</td></tr>
-<tr><td><strong>Interactive Dashboard</strong></td><td>React + Recharts for real-time alert visualization</td></tr></table></div>
-
-<h2 id="153-key-takeaways">15.3 Key Takeaways</h2>
-
-<p>1.  <strong>Unsupervised ML is ideal for AML</strong> because labeled datasets of confirmed money laundering are extremely rare. Isolation Forest detects anomalies based on geometric isolation depth without requiring labeled training data.</p>
-
-<p>2.  <strong>RAG eliminates LLM hallucination</strong> by constraining the AI to only cite verified legal documents retrieved from a local vector database—a critical requirement for any system generating official government filings.</p>
-
-<p>3.  <strong>Vectorized processing is non-negotiable</strong> for financial data science. Row-by-row iteration in Python is orders of magnitude slower than Pandas vectorization for datasets exceeding 100,000 rows.</p>
-
-<p>4.  <strong>Asynchronous architecture preserves user experience.</strong> Decoupling the heavy ML computation from the API response thread ensures the dashboard remains responsive even during multi-minute analytical runs.</p>
-
-<h2 id="154-final-statement">15.4 Final Statement</h2>
-
-<p>This project demonstrates that modern Data Science and Artificial Intelligence technologies—when architected thoughtfully—can transform compliance from a reactive, manual burden into a proactive, automated intelligence system. The combination of unsupervised machine learning for detection and retrieval-augmented generation for reporting creates a complete, end-to-end pipeline that serves both the technical and regulatory requirements of financial crime prevention.</p>
-
-<hr/>
-
-<h2 id="155-references">15.5 References</h2>
-
-<div class="table-responsive"><table><tr><th>#</th><th>Reference</th><th>Usage in Project</th></tr>
-<tr><td>1</td><td>Prevention of Money Laundering Act (PMLA), 2002 — Government of India</td><td>Legal framework for SAR generation via RAG</td></tr>
-<tr><td>2</td><td>RBI Master Direction — Know Your Customer (KYC) Direction, 2016</td><td>Regulatory context for compliance rules</td></tr>
-<tr><td>3</td><td>Liu, F.T., Ting, K.M., Zhou, Z.H. (2008). <em>"Isolation Forest"</em> — IEEE ICDM</td><td>Core ML algorithm (Isolation Forest)</td></tr>
-<tr><td>4</td><td>Scikit-learn Documentation — <code class="inline-code">sklearn.ensemble.IsolationForest</code></td><td>Python implementation of Isolation Forest</td></tr>
-<tr><td>5</td><td>Pandas Documentation — <code class="inline-code">pandas.pydata.org</code></td><td>Vectorized data processing framework</td></tr>
-<tr><td>6</td><td>LangChain Documentation — <code class="inline-code">langchain.com</code></td><td>LLM orchestration and prompt chaining</td></tr>
-<tr><td>7</td><td>FAISS (Facebook AI Similarity Search) — Meta Research</td><td>Vector database for legal document embeddings</td></tr>
-<tr><td>8</td><td>Groq Documentation — <code class="inline-code">groq.com</code></td><td>LPU-based ultra-fast LLM inference</td></tr>
-<tr><td>9</td><td>Django REST Framework Documentation — <code class="inline-code">django-rest-framework.org</code></td><td>Backend API and ORM framework</td></tr>
-<tr><td>10</td><td>Financial Action Task Force (FATF) — <em>"Money Laundering Typologies Report"</em></td><td>Typology definitions (Structuring, Mule, Round-Trip)</td></tr></div>
-    </section>
-
-
-    
-
+    <div class="stat">
+      <div class="stat-n">15</div>
+      <div class="stat-l">AML Chapters</div>
     </div>
+    <div class="stat">
+      <div class="stat-n">3+</div>
+      <div class="stat-l">Hours of Content</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n">2</div>
+      <div class="stat-l">Core Projects</div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Explore your resources</span>
+    <div class="arrow">↓</div>
+  </div>
+</section>
+
+<!-- ═══ MAIN RESOURCES ═══ -->
+<section class="section">
+  <div class="wrapper">
+    <div class="sec-label">
+      <div class="sec-line"></div>
+      <div class="sec-text">📚 Core Resources</div>
+      <div class="sec-line"></div>
+    </div>
+    <h2 class="sec-title fi">My <span>Projects</span> &amp; Tutorials</h2>
+    <p class="sec-desc fi">Click on any card to dive into the full learning material.</p>
+
+    <!-- BIG CARDS -->
+    <div class="big-cards fi">
+
+      <!-- AZURE CARD -->
+      <a class="big-card azure" href="Azure_Data_Engineering_Notes.html" id="azure-tutorial-card">
+        <div class="card-top">
+          <div class="card-icon">☁️</div>
+          <div class="card-badge">Tutorial Notes</div>
+        </div>
+        <div class="card-title">Azure Data Engineering</div>
+        <div class="card-desc">
+          Complete beginner-to-intermediate guide synthesized from a 3-hour YouTube tutorial.
+          Covers Cloud Computing basics, IaaS/PaaS/SaaS, Azure SQL, Cosmos DB, Data Lake,
+          Event Hubs, ADF, Databricks, Synapse Analytics, Security &amp; more — all with
+          real-world analogies, diagrams, and hands-on steps.
+        </div>
+        <div class="card-stats">
+          <div class="cs">
+            <div class="cs-n">11</div>
+            <div class="cs-l">Chapters</div>
+          </div>
+          <div class="cs">
+            <div class="cs-n">10+</div>
+            <div class="cs-l">Azure Services</div>
+          </div>
+          <div class="cs">
+            <div class="cs-n">3+</div>
+            <div class="cs-l">Hours Content</div>
+          </div>
+        </div>
+        <div class="card-cta" id="azure-cta-btn">
+          Open Azure Tutorial <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <!-- AML CARD -->
+      <a class="big-card aml" href="aml_project.html" id="aml-project-card">
+        <div class="card-top">
+          <div class="card-icon">🔬</div>
+          <div class="card-badge">Final Project</div>
+        </div>
+        <div class="card-title">AML Detection System</div>
+        <div class="card-desc">
+          In-depth technical documentation for the AI-powered Anti-Money Laundering
+          detection project. Covers the complete pipeline from data ingestion and
+          feature engineering to Isolation Forest ML, RAG-based SAR generation,
+          and Django REST API architecture.
+        </div>
+        <div class="card-stats">
+          <div class="cs">
+            <div class="cs-n">15</div>
+            <div class="cs-l">Chapters</div>
+          </div>
+          <div class="cs">
+            <div class="cs-n">95%</div>
+            <div class="cs-l">False Pos. Reduced</div>
+          </div>
+          <div class="cs">
+            <div class="cs-n">RAG</div>
+            <div class="cs-l">AI Reports</div>
+          </div>
+        </div>
+        <div class="card-cta" id="aml-cta-btn">
+          Open AML Project <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+    </div><!-- /big-cards -->
+
+    <!-- SMALL CARD -->
+    <div class="small-cards fi">
+
+      <a class="small-card sc-green" href="layman_guide.html" id="layman-guide-card">
+        <div class="sc-icon">🎓</div>
+        <div class="sc-tag">Interview Guide</div>
+        <div class="sc-title">Layman's Interview Guide</div>
+        <div class="sc-desc">Project explained in simple language — perfect for interview prep and quick revision.</div>
+        <div class="sc-link">Read Guide <span>→</span></div>
+      </a>
+
+    </div><!-- /small-cards -->
+  </div>
+</section>
+
+
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <p>Built for <strong>Akshay Patil</strong> — CDAC Data Engineering &amp; AI Portfolio • 2025</p>
+  <div class="footer-links">
+    <a href="Azure_Data_Engineering_Notes.html" id="footer-azure">☁️ Azure Tutorial</a>
+    <a href="aml_project.html" id="footer-aml">🔬 AML Project</a>
+    <a href="layman_guide.html" id="footer-guide">🎓 Interview Guide</a>
+  </div>
+</footer>
 
 <script>
+// Intersection Observer for scroll animations
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('vis'); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
