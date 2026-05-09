@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Chapter 5: LLM APIs for AI Engineers</title>
+  <meta name="description"
+    content="A premium tutorial on building APIs for Large Language Models, covering streaming, structured outputs, and function calling." />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #090f17;
+      --bg-card: #111a27;
+      --bg-card-hover: #162232;
+      --bg-code: #0b111a;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --primary: #05b59a;
+      --primary-glow: rgba(5, 181, 154, 0.25);
+      --secondary: #3b82f6;
+      --accent: #8b5cf6;
+      --border: #1e293b;
+      --nav-bg: rgba(9, 15, 23, 0.85);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .article-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 65px;
+      background: var(--nav-bg);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .nav-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .logo {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo span {
+      color: var(--primary);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 8rem 0 5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--primary-glow) 0%, transparent 60%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      background: rgba(5, 181, 154, 0.1);
+      border: 1px solid rgba(5, 181, 154, 0.3);
+      color: var(--primary);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(to right, #fff, var(--text-muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ── CONTENT TYPOGRAPHY ── */
+    h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 4rem 0 1.5rem;
+      color: #fff;
+    }
+
+    h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin: 2rem 0 1rem;
+      color: #fff;
+    }
+
+    p {
+      margin-bottom: 1.5rem;
+    }
+
+    strong {
+      color: #fff;
+    }
+
+    ul {
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+      color: var(--text-muted);
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    li strong {
+      color: var(--text);
+    }
+
+    /* ── CALLOUTS ── */
+    .callout {
+      padding: 1.2rem 1.5rem;
+      border-radius: 12px;
+      margin: 2rem 0;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      border: 1px solid var(--border);
+    }
+
+    .callout.info {
+      background: rgba(59, 130, 246, 0.05);
+      border-color: rgba(59, 130, 246, 0.2);
+    }
+
+    .callout.info .icon {
+      color: var(--secondary);
+    }
+
+    .callout.warning {
+      background: rgba(245, 158, 11, 0.05);
+      border-color: rgba(245, 158, 11, 0.2);
+    }
+
+    .callout.warning .icon {
+      color: var(--warning);
+    }
+
+    .callout.success {
+      background: rgba(16, 185, 129, 0.05);
+      border-color: rgba(16, 185, 129, 0.2);
+    }
+
+    .callout.success .icon {
+      color: var(--success);
+    }
+
+    .callout-content h4 {
+      margin-bottom: 0.3rem;
+      color: #fff;
+      font-size: 1.05rem;
+    }
+
+    .callout-content p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    /* ── CODE BLOCKS ── */
+    pre[class*="language-"] {
+      background: var(--bg-code) !important;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem !important;
+      margin: 2rem 0 !important;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    code[class*="language-"],
+    pre[class*="language-"] {
+      font-family: 'JetBrains Mono', monospace !important;
+    }
+
+    /* ── DIAGRAMS (MERMAID CONTAINER) ── */
+    .diagram-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      margin: 2.5rem 0;
+      text-align: center;
+      overflow-x: auto;
+    }
+
+    .diagram-caption {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 1rem;
+      font-style: italic;
+    }
+
+    /* ── PRODUCTION CARDS ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .prod-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.8rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .prod-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border-color: rgba(5, 181, 154, 0.3);
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(5, 181, 154, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .card-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    /* ── INFOGRAPHIC ── */
+    .infographic {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin: 3rem 0;
+      padding: 2.5rem;
+      background: linear-gradient(145deg, var(--bg-card), var(--bg-code));
+      border-radius: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .info-step {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: relative;
+    }
+
+    .info-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 24px;
+      top: 48px;
+      bottom: -16px;
+      width: 2px;
+      background: var(--border);
+      z-index: 0;
+    }
+
+    .step-num {
+      width: 48px;
+      height: 48px;
+      background: var(--bg);
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 1.2rem;
+      z-index: 1;
+      flex-shrink: 0;
+      box-shadow: 0 0 15px rgba(5, 181, 154, 0.2);
+    }
+
+    .step-content h4 {
+      color: #fff;
+      margin-bottom: 0.2rem;
+      font-size: 1.1rem;
+    }
+
+    .step-content p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+      .info-step {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      .info-step:not(:last-child)::after {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <div class="container nav-content">
+      <div class="logo">🚀 FastAPI <span>AI Docs</span></div>
+      <div class="nav-links">
+        <a href="api_fundamentals.html">Chapter 1</a>
+        <a href="serving_ml_models.html">Chapter 4</a>
+        <a href="#" style="color: var(--primary)">Chapter 5</a>
+        <a href="index.html">← Back to Hub</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">Chapter 5</div>
+      <h1>LLM APIs for <span>AI Engineers</span></h1>
+      <p>Master the modern architecture of Generative AI: streaming responses, structured JSON outputs, and agentic function calling.</p>
+    </div>
+  </section>
+
+  <main class="container article-container">
+
+    <h2>1. The New Paradigm: Calling LLM APIs</h2>
+    <p>Unlike traditional ML models (where you load a <code>.pkl</code> file into memory and run `.predict()`), Large Language Models (LLMs) are usually too massive to run locally. AI Engineers now build API wrappers around external model providers like OpenAI or Anthropic, or internal self-hosted endpoints running vLLM.</p>
+
+    <div class="cards-grid">
+      <div class="prod-card">
+        <div class="card-icon">💬</div>
+        <div class="card-title">Chatbot API</div>
+        <div class="card-desc">Stateless endpoint taking a conversation array <code>[{"role": "user", "content": "hi"}]</code> and returning the assistant's reply.</div>
+      </div>
+      <div class="prod-card">
+        <div class="card-icon">📚</div>
+        <div class="card-title">Document Q&A (RAG)</div>
+        <div class="card-desc">Fetches context from a Vector DB first, injects it into the prompt, and forces the LLM to only answer based on the context.</div>
+      </div>
+      <div class="prod-card">
+        <div class="card-icon">🤖</div>
+        <div class="card-title">Agent Tool Calling</div>
+        <div class="card-desc">The LLM doesn't return text; it returns a JSON object requesting the API to trigger a Python function (e.g., <code>search_web()</code>).</div>
+      </div>
+    </div>
+
+    <h2>2. Streaming Responses (Server-Sent Events)</h2>
+    <p>LLMs generate text one token at a time. If an LLM takes 10 seconds to generate a long essay, making the user stare at a loading spinner is terrible UX. <strong>Streaming</strong> solves this by sending chunks of data over an open connection as soon as they are generated.</p>
+
+    <div class="callout info">
+      <div class="icon">⌨️</div>
+      <div class="callout-content">
+        <h4>Visual Analogy: The Typewriter vs The Printer</h4>
+        <p>A standard HTTP POST is like a Printer: it waits until the entire page is formatted, then gives you the final document all at once. Streaming (via Server-Sent Events) is like a Typewriter: you see every single letter appear on the paper the exact millisecond the model "types" it.</p>
+      </div>
+    </div>
+
+    <pre><code class="language-python">
+from fastapi import FastAPI
+from fastapi.responses import StreamingResponse
+import asyncio
+
+app = FastAPI()
+
+# Mocking an LLM token generator
+async def fake_llm_generator(prompt: str):
+    words = ["Here ", "is ", "your ", "streamed ", "response!"]
+    for word in words:
+        await asyncio.sleep(0.5) # Simulate token generation delay
+        yield word
+
+@app.post("/v1/chat/stream")
+async def stream_chat(prompt: str):
+    # StreamingResponse keeps the HTTP connection open and yields data
+    return StreamingResponse(
+        fake_llm_generator(prompt), 
+        media_type="text/event-stream"
+    )
+    </code></pre>
+
+    <h2>3. Architecture Diagram: Document Q&A (RAG)</h2>
+    <p>Retrieval-Augmented Generation (RAG) APIs require orchestrating multiple systems within a single HTTP request.</p>
+
+    <div class="diagram-container">
+      <div class="mermaid">
+        sequenceDiagram
+          participant Client
+          participant API as FastAPI Router
+          participant VDB as Vector Database
+          participant LLM as External LLM (OpenAI)
+
+          Client->>API: POST /v1/qa {"question": "What is our refund policy?"}
+          activate API
+          API->>VDB: Query embeddings for "refund policy"
+          VDB-->>API: Return Top 3 relevant text chunks
+          API->>API: Inject chunks into System Prompt
+          API->>LLM: Send combined Prompt
+          activate LLM
+          LLM-->>API: Return generated answer
+          deactivate LLM
+          API-->>Client: HTTP 200 OK {"answer": "Refunds take 5 days..."}
+          deactivate API
+      </div>
+      <div class="diagram-caption">Fig 1: The flow of a RAG API Endpoint.</div>
+    </div>
+
+    <h2>4. Structured Outputs (Forcing JSON)</h2>
+    <p>When integrating LLMs into software pipelines, returning raw text is dangerous. If you want the LLM to extract a user's name and age from a paragraph, you need exact JSON keys. <strong>Pydantic</strong> and FastAPI can be used alongside the <code>instructor</code> library or native OpenAI Structured Outputs to guarantee exact schemas.</p>
+
+    <pre><code class="language-python">
+from pydantic import BaseModel
+from openai import OpenAI
+
+client = OpenAI()
+
+# 1. Define the exact format you want the LLM to output
+class UserExtraction(BaseModel):
+    name: str
+    age: int
+    is_student: bool
+
+@app.post("/v1/extract", response_model=UserExtraction)
+def extract_user_info(text: str):
+    # 2. Force the LLM to obey the Pydantic schema
+    completion = client.beta.chat.completions.parse(
+        model="gpt-4o",
+        messages=[
+            {"role": "system", "content": "Extract user info."},
+            {"role": "user", "content": text}
+        ],
+        response_format=UserExtraction,
+    )
+    
+    # 3. The output is guaranteed to be a valid UserExtraction object
+    return completion.choices[0].message.parsed
+    </code></pre>
+
+    <h2>5. Function Calling (Agent Tool Use)</h2>
+    <p>Function calling allows the LLM to pause its generation and say: <em>"I need more data. Please run this specific Python function and give me the result."</em></p>
+    <ul>
+      <li><strong>Step 1:</strong> You define a Python function (e.g., <code>get_weather(city: str)</code>) and pass its schema to the LLM API.</li>
+      <li><strong>Step 2:</strong> The user asks "Is it raining in Tokyo?"</li>
+      <li><strong>Step 3:</strong> The LLM responds with a JSON string: <code>{"name": "get_weather", "arguments": {"city": "Tokyo"}}</code>.</li>
+      <li><strong>Step 4:</strong> Your FastAPI app executes <code>get_weather("Tokyo")</code> and sends the result back to the LLM to formulate the final English answer.</li>
+    </ul>
+
+    <h2>6. Token Optimization & Rate Limits</h2>
+    <p>LLM APIs charge by the token (roughly 3/4 of a word). If you pass entire conversation histories repeatedly, costs explode and latency increases.</p>
+
+    <div class="callout warning">
+      <div class="icon">⚠️</div>
+      <div class="callout-content">
+        <h4>Common Mistake: Infinite Context Growth</h4>
+        <p>Never append infinite messages to an array and send it to the LLM. Your API must actively prune or summarize older messages before the array hits the model's max context window limit (e.g., 128k tokens), or it will throw a fatal 400 Bad Request error.</p>
+      </div>
+    </div>
+
+    <div class="callout success">
+      <div class="icon">✅</div>
+      <div class="callout-content">
+        <h4>Best Practice: Timeout Management</h4>
+        <p>LLMs can occasionally hang. Always configure strict timeout parameters (e.g., <code>httpx.Client(timeout=30.0)</code>) when calling external APIs from within your FastAPI routes to prevent your own server from exhausting its worker threads.</p>
+      </div>
+    </div>
+
+    <h2>7. Interview Insights</h2>
+    <div class="callout info">
+      <div class="icon">🎯</div>
+      <div class="callout-content">
+        <h4>How to answer: "How do you ensure reliability when your API depends on an external LLM provider like OpenAI?"</h4>
+        <p><strong>Perfect Answer:</strong> "Relying on external LLMs introduces latency and rate limit risks. In production, I implement three layers: <strong>1. Fallbacks:</strong> If OpenAI goes down (HTTP 503), the API automatically falls back to an Anthropic model. <strong>2. Retries:</strong> I wrap the LLM call with an Exponential Backoff strategy to handle transient 429 Too Many Request errors. <strong>3. Streaming:</strong> I use Server-Sent Events to stream the first token back to the client immediately, dropping perceived latency from 10 seconds to under 1 second."</p>
+      </div>
+    </div>
+
+    <h2>8. Summary Infographic</h2>
+    <div class="infographic">
+      <div class="info-step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>Prompting</h4>
+          <p>Format user input and system instructions into standard message arrays.</p>
+        </div>
+      </div>
+      <div class="info-step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>Retrieval & Tools</h4>
+          <p>Inject dynamic context (RAG) or define available tools (Function Calling) before calling the LLM.</p>
+        </div>
+      </div>
+      <div class="info-step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>Schema Enforcement</h4>
+          <p>Force the LLM to output precise JSON using Pydantic validation (Structured Outputs).</p>
+        </div>
+      </div>
+      <div class="info-step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h4>Streaming Response</h4>
+          <p>Yield tokens to the client connection immediately to ensure a fast, responsive user experience.</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        primaryColor: '#05b59a',
+        primaryTextColor: '#fff',
+        primaryBorderColor: '#05b59a',
+        lineColor: '#3b82f6',
+        secondaryColor: '#162232',
+        tertiaryColor: '#111a27'
+      }
+    });
+  </script>
+</body>
+
+</html>

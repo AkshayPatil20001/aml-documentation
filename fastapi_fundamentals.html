@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Chapter 3: FastAPI Fundamentals for AI Engineers</title>
+  <meta name="description"
+    content="A premium tutorial on FastAPI fundamentals, Pydantic, and deployment structures for AI Engineers." />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #090f17;
+      --bg-card: #111a27;
+      --bg-card-hover: #162232;
+      --bg-code: #0b111a;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --primary: #05b59a;
+      --primary-glow: rgba(5, 181, 154, 0.25);
+      --secondary: #3b82f6;
+      --accent: #8b5cf6;
+      --border: #1e293b;
+      --nav-bg: rgba(9, 15, 23, 0.85);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .article-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 65px;
+      background: var(--nav-bg);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .nav-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .logo {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo span {
+      color: var(--primary);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 8rem 0 5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--primary-glow) 0%, transparent 60%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      background: rgba(5, 181, 154, 0.1);
+      border: 1px solid rgba(5, 181, 154, 0.3);
+      color: var(--primary);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(to right, #fff, var(--text-muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ── CONTENT TYPOGRAPHY ── */
+    h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 4rem 0 1.5rem;
+      color: #fff;
+    }
+
+    h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin: 2rem 0 1rem;
+      color: #fff;
+    }
+
+    p {
+      margin-bottom: 1.5rem;
+    }
+
+    strong {
+      color: #fff;
+    }
+
+    ul {
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+      color: var(--text-muted);
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    li strong {
+      color: var(--text);
+    }
+
+    /* ── CALLOUTS ── */
+    .callout {
+      padding: 1.2rem 1.5rem;
+      border-radius: 12px;
+      margin: 2rem 0;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      border: 1px solid var(--border);
+    }
+
+    .callout.info {
+      background: rgba(59, 130, 246, 0.05);
+      border-color: rgba(59, 130, 246, 0.2);
+    }
+
+    .callout.info .icon {
+      color: var(--secondary);
+    }
+
+    .callout.warning {
+      background: rgba(245, 158, 11, 0.05);
+      border-color: rgba(245, 158, 11, 0.2);
+    }
+
+    .callout.warning .icon {
+      color: var(--warning);
+    }
+
+    .callout.success {
+      background: rgba(16, 185, 129, 0.05);
+      border-color: rgba(16, 185, 129, 0.2);
+    }
+
+    .callout.success .icon {
+      color: var(--success);
+    }
+
+    .callout-content h4 {
+      margin-bottom: 0.3rem;
+      color: #fff;
+      font-size: 1.05rem;
+    }
+
+    .callout-content p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    /* ── CODE BLOCKS ── */
+    pre[class*="language-"] {
+      background: var(--bg-code) !important;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem !important;
+      margin: 2rem 0 !important;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    code[class*="language-"],
+    pre[class*="language-"] {
+      font-family: 'JetBrains Mono', monospace !important;
+    }
+
+    /* ── DIAGRAMS (MERMAID CONTAINER) ── */
+    .diagram-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      margin: 2.5rem 0;
+      text-align: center;
+      overflow-x: auto;
+    }
+
+    .diagram-caption {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 1rem;
+      font-style: italic;
+    }
+
+    /* ── TERMINAL WINDOW ── */
+    .terminal {
+      background: #000;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      margin: 2rem 0;
+    }
+    .terminal-header {
+      background: #1e1e1e;
+      padding: 0.5rem 1rem;
+      display: flex;
+      gap: 0.5rem;
+    }
+    .terminal-btn {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .btn-r { background: #ff5f56; }
+    .btn-y { background: #ffbd2e; }
+    .btn-g { background: #27c93f; }
+    .terminal-body {
+      padding: 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #00ff00;
+    }
+    .terminal-body span.prompt { color: #5c6370; }
+    .terminal-body span.cmd { color: #fff; }
+
+    /* ── FILE TREE ── */
+    .file-tree {
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--text);
+      line-height: 1.8;
+      margin: 2rem 0;
+    }
+    .ft-dir { color: var(--secondary); font-weight: bold; }
+    .ft-file { color: var(--text); }
+    .ft-comment { color: var(--text-muted); font-style: italic; font-size: 0.8rem; float: right; }
+
+    /* ── INFOGRAPHIC ── */
+    .infographic {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin: 3rem 0;
+      padding: 2.5rem;
+      background: linear-gradient(145deg, var(--bg-card), var(--bg-code));
+      border-radius: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .info-step {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: relative;
+    }
+
+    .info-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 24px;
+      top: 48px;
+      bottom: -16px;
+      width: 2px;
+      background: var(--border);
+      z-index: 0;
+    }
+
+    .step-num {
+      width: 48px;
+      height: 48px;
+      background: var(--bg);
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 1.2rem;
+      z-index: 1;
+      flex-shrink: 0;
+      box-shadow: 0 0 15px rgba(5, 181, 154, 0.2);
+    }
+
+    .step-content h4 {
+      color: #fff;
+      margin-bottom: 0.2rem;
+      font-size: 1.1rem;
+    }
+
+    .step-content p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      .info-step {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      .info-step:not(:last-child)::after {
+        display: none;
+      }
+      .ft-comment { float: none; display: block; padding-left: 20px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <div class="container nav-content">
+      <div class="logo">🚀 FastAPI <span>AI Docs</span></div>
+      <div class="nav-links">
+        <a href="api_fundamentals.html">Chapter 1</a>
+        <a href="http_rest_apis.html">Chapter 2</a>
+        <a href="#" style="color: var(--primary)">Chapter 3</a>
+        <a href="index.html">← Back to Hub</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">Chapter 3</div>
+      <h1>FastAPI Fundamentals for <span>AI Engineers</span></h1>
+      <p>Transform your local Python scripts into robust, production-ready REST APIs in minutes.</p>
+    </div>
+  </section>
+
+  <main class="container article-container">
+
+    <h2>1. Why FastAPI for ML Engineers?</h2>
+    <p>Before FastAPI, Python developers relied heavily on Flask or Django. However, FastAPI has rapidly become the gold standard specifically for Machine Learning and AI engineering for three core reasons:</p>
+    <ul>
+      <li><strong>Speed:</strong> Built on Starlette, it rivals Node.js and Go. ML models are I/O bound (waiting for compute); FastAPI's native async capabilities handle this beautifully.</li>
+      <li><strong>Data Validation:</strong> It natively integrates with <strong>Pydantic</strong>. If a user sends a string instead of a float to your model, FastAPI rejects it instantly before it can crash your ML code.</li>
+      <li><strong>Auto-Documentation:</strong> It automatically generates stunning, interactive Swagger documentation, completely eliminating the need to write API spec documents for frontend teams.</li>
+    </ul>
+
+    <h2>2. Installation & Setup</h2>
+    <p>To get started, you need two packages: FastAPI itself, and Uvicorn, which is an ASGI server that actually runs your Python code as a web server.</p>
+
+    <div class="terminal">
+      <div class="terminal-header">
+        <div class="terminal-btn btn-r"></div>
+        <div class="terminal-btn btn-y"></div>
+        <div class="terminal-btn btn-g"></div>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">$</span> <span class="cmd">pip install fastapi</span><br/>
+        <span class="prompt">$</span> <span class="cmd">pip install "uvicorn[standard]"</span>
+      </div>
+    </div>
+
+    <h2>3. The Professional ML Project Structure</h2>
+    <p>Don't dump everything into a single <code>app.py</code> file. A clean repository architecture separates the API routing logic from the heavy ML inference logic.</p>
+
+    <div class="file-tree">
+      <span class="ft-dir">📂 my_ai_project/</span><br/>
+      &nbsp;&nbsp;├── <span class="ft-file">📄 main.py</span> <span class="ft-comment"># The FastAPI application & routing</span><br/>
+      &nbsp;&nbsp;├── <span class="ft-file">📄 schemas.py</span> <span class="ft-comment"># Pydantic models (Input/Output formats)</span><br/>
+      &nbsp;&nbsp;├── <span class="ft-file">📄 ml_service.py</span> <span class="ft-comment"># The actual PyTorch/Sklearn logic</span><br/>
+      &nbsp;&nbsp;├── <span class="ft-dir">📂 models/</span> <span class="ft-comment"># Saved weights (.pkl, .pt)</span><br/>
+      &nbsp;&nbsp;└── <span class="ft-file">📄 requirements.txt</span>
+    </div>
+
+    <h2>4. Your First Inference API</h2>
+    <p>Let's create the "Hello World" of Machine Learning APIs: A simple prediction endpoint. Notice how clean and readable the syntax is.</p>
+
+    <pre><code class="language-python">
+# main.py
+from fastapi import FastAPI
+
+# 1. Initialize the app
+app = FastAPI(title="Pricing Predictor AI")
+
+# 2. Define a simple endpoint
+@app.post("/predict")
+def predict_price():
+    # In a real app, this calls ml_service.py
+    return {"predicted_price": 450000.0}
+    </code></pre>
+
+    <div class="terminal">
+      <div class="terminal-header">
+        <div class="terminal-btn btn-r"></div>
+        <div class="terminal-btn btn-y"></div>
+        <div class="terminal-btn btn-g"></div>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">$</span> <span class="cmd">uvicorn main:app --reload</span><br/>
+        <span style="color: #5c6370;">INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)</span>
+      </div>
+    </div>
+
+    <h2>5. Input Validation (The "Bouncer")</h2>
+    <p>The most powerful feature of FastAPI is <strong>Pydantic</strong>. Think of Pydantic as a strict bouncer at the door of your nightclub (your model). If the client tries to enter without the right ID (the correct data types), the bouncer rejects them immediately.</p>
+
+    <div class="callout info">
+      <div class="icon">🛡️</div>
+      <div class="callout-content">
+        <h4>Visual Analogy: The Club Bouncer</h4>
+        <p>If your ML model expects <code>age</code> (integer) and <code>salary</code> (float), but the client sends <code>"age": "twenty"</code>, an unprotected model will crash with a cryptic Python traceback. Pydantic catches this at the API boundary and safely returns an HTTP 422 error detailing exactly what went wrong.</p>
+      </div>
+    </div>
+
+    <pre><code class="language-python">
+from pydantic import BaseModel, Field
+
+# Define exactly what JSON the client MUST send
+class HouseFeatures(BaseModel):
+    square_feet: int = Field(gt=0, description="Must be positive")
+    bedrooms: int
+    has_pool: bool = False  # Optional, defaults to False
+
+@app.post("/predict/house")
+def predict_house_price(features: HouseFeatures):
+    # 'features' is now a fully validated Python object with auto-complete!
+    sqft = features.square_feet
+    return {"status": "success", "sqft_received": sqft}
+    </code></pre>
+
+    <h2>6. Response Models</h2>
+    <p>Just as you validate inputs, you should validate <em>outputs</em>. What if your model suddenly returns a Numpy array instead of a Python float? <code>response_model</code> ensures the API always returns the exact JSON structure the frontend expects.</p>
+
+    <pre><code class="language-python">
+class PredictionResponse(BaseModel):
+    predicted_price: float
+    confidence_score: float
+
+# The response_model enforces the output format
+@app.post("/predict/house", response_model=PredictionResponse)
+def predict_house_price(features: HouseFeatures):
+    # ... mock inference ...
+    price = 450000.0
+    score = 0.92
+    
+    # FastAPI automatically converts this to JSON based on PredictionResponse
+    return {"predicted_price": price, "confidence_score": score}
+    </code></pre>
+
+    <h2>7. Interactive Docs (Swagger UI)</h2>
+    <p>Because you used Pydantic models, FastAPI automatically generated a beautiful, interactive documentation page. Frontend engineers can read this, and even test the API directly from their browser without needing Postman.</p>
+    <p>Just navigate to <code>http://127.0.0.1:8000/docs</code>.</p>
+
+    <div class="diagram-container">
+      <div class="mermaid">
+        graph LR
+          A[Python Code + Pydantic] -->|Auto-Generates| B(OpenAPI Schema)
+          B --> C[Swagger UI Webpage]
+          C -->|Frontend Team Uses| D[Interactive API Testing]
+      </div>
+      <div class="diagram-caption">Fig 1: How FastAPI transforms code into beautiful documentation automatically.</div>
+    </div>
+
+    <h2>8. Common Mistakes & Best Practices</h2>
+
+    <div class="callout warning">
+      <div class="icon">⚠️</div>
+      <div class="callout-content">
+        <h4>Common Mistake: Using Python dictionaries instead of Pydantic</h4>
+        <p>Avoid taking raw <code>dict</code> as input in FastAPI. If you do, you lose all type safety, validation, and auto-documentation. Always define a <code>BaseModel</code> for your inputs.</p>
+      </div>
+    </div>
+
+    <div class="callout success">
+      <div class="icon">✅</div>
+      <div class="callout-content">
+        <h4>Best Practice: Separate ML Logic</h4>
+        <p>Keep your <code>main.py</code> extremely thin. It should only handle HTTP routing and validation. The actual PyTorch/Scikit-learn inference code should live in a separate file (e.g., <code>ml_service.py</code>) and be imported as a function.</p>
+      </div>
+    </div>
+
+    <h2>9. Interview Insights</h2>
+    <div class="callout info">
+      <div class="icon">🎯</div>
+      <div class="callout-content">
+        <h4>How to answer: "What happens if a user passes a string instead of a float to your model API?"</h4>
+        <p><strong>Perfect Answer:</strong> "Because I use FastAPI with Pydantic, the request never reaches the ML model. Pydantic intercepts the JSON payload during deserialization, detects the type mismatch, and instantly returns an HTTP 422 Unprocessable Entity response containing a clear error message. This protects the heavy ML process from wasting compute on invalid data and prevents messy server crashes."</p>
+      </div>
+    </div>
+
+    <h2>10. Summary Infographic</h2>
+    <div class="infographic">
+      <div class="info-step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>Define Pydantic Models</h4>
+          <p>Create Python classes inheriting from <code>BaseModel</code> to define exact input and output JSON schemas.</p>
+        </div>
+      </div>
+      <div class="info-step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>Create the Router</h4>
+          <p>Use the <code>@app.post()</code> decorator to map an HTTP endpoint to a Python function.</p>
+        </div>
+      </div>
+      <div class="info-step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>Run Uvicorn Server</h4>
+          <p>Start the ASGI server with Uvicorn to open the API to incoming requests over the network.</p>
+        </div>
+      </div>
+      <div class="info-step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h4>Share the /docs</h4>
+          <p>Send the auto-generated Swagger UI link to your frontend or mobile team for seamless integration.</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-http.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        primaryColor: '#05b59a',
+        primaryTextColor: '#fff',
+        primaryBorderColor: '#05b59a',
+        lineColor: '#3b82f6',
+        secondaryColor: '#162232',
+        tertiaryColor: '#111a27'
+      }
+    });
+  </script>
+</body>
+
+</html>

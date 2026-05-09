@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Chapter 6: RAG and Agent APIs</title>
+  <meta name="description"
+    content="A premium tutorial on building robust RAG pipelines and Autonomous Agent workflows using FastAPI, LangChain, and LangGraph." />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #090f17;
+      --bg-card: #111a27;
+      --bg-card-hover: #162232;
+      --bg-code: #0b111a;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --primary: #05b59a;
+      --primary-glow: rgba(5, 181, 154, 0.25);
+      --secondary: #3b82f6;
+      --accent: #8b5cf6;
+      --border: #1e293b;
+      --nav-bg: rgba(9, 15, 23, 0.85);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .article-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 65px;
+      background: var(--nav-bg);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .nav-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .logo {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo span {
+      color: var(--primary);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 8rem 0 5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--primary-glow) 0%, transparent 60%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      background: rgba(5, 181, 154, 0.1);
+      border: 1px solid rgba(5, 181, 154, 0.3);
+      color: var(--primary);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(to right, #fff, var(--text-muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ── CONTENT TYPOGRAPHY ── */
+    h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 4rem 0 1.5rem;
+      color: #fff;
+    }
+
+    h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin: 2rem 0 1rem;
+      color: #fff;
+    }
+
+    p {
+      margin-bottom: 1.5rem;
+    }
+
+    strong {
+      color: #fff;
+    }
+
+    ul {
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+      color: var(--text-muted);
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    li strong {
+      color: var(--text);
+    }
+
+    /* ── CALLOUTS ── */
+    .callout {
+      padding: 1.2rem 1.5rem;
+      border-radius: 12px;
+      margin: 2rem 0;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      border: 1px solid var(--border);
+    }
+
+    .callout.info {
+      background: rgba(59, 130, 246, 0.05);
+      border-color: rgba(59, 130, 246, 0.2);
+    }
+
+    .callout.info .icon {
+      color: var(--secondary);
+    }
+
+    .callout.warning {
+      background: rgba(245, 158, 11, 0.05);
+      border-color: rgba(245, 158, 11, 0.2);
+    }
+
+    .callout.warning .icon {
+      color: var(--warning);
+    }
+
+    .callout.success {
+      background: rgba(16, 185, 129, 0.05);
+      border-color: rgba(16, 185, 129, 0.2);
+    }
+
+    .callout.success .icon {
+      color: var(--success);
+    }
+
+    .callout-content h4 {
+      margin-bottom: 0.3rem;
+      color: #fff;
+      font-size: 1.05rem;
+    }
+
+    .callout-content p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    /* ── CODE BLOCKS ── */
+    pre[class*="language-"] {
+      background: var(--bg-code) !important;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem !important;
+      margin: 2rem 0 !important;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    code[class*="language-"],
+    pre[class*="language-"] {
+      font-family: 'JetBrains Mono', monospace !important;
+    }
+
+    /* ── DIAGRAMS (MERMAID CONTAINER) ── */
+    .diagram-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      margin: 2.5rem 0;
+      text-align: center;
+      overflow-x: auto;
+    }
+
+    .diagram-caption {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 1rem;
+      font-style: italic;
+    }
+
+    /* ── PRODUCTION CARDS ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .prod-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.8rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .prod-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border-color: rgba(5, 181, 154, 0.3);
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(5, 181, 154, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .card-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    /* ── INFOGRAPHIC ── */
+    .infographic {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin: 3rem 0;
+      padding: 2.5rem;
+      background: linear-gradient(145deg, var(--bg-card), var(--bg-code));
+      border-radius: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .info-step {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: relative;
+    }
+
+    .info-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 24px;
+      top: 48px;
+      bottom: -16px;
+      width: 2px;
+      background: var(--border);
+      z-index: 0;
+    }
+
+    .step-num {
+      width: 48px;
+      height: 48px;
+      background: var(--bg);
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 1.2rem;
+      z-index: 1;
+      flex-shrink: 0;
+      box-shadow: 0 0 15px rgba(5, 181, 154, 0.2);
+    }
+
+    .step-content h4 {
+      color: #fff;
+      margin-bottom: 0.2rem;
+      font-size: 1.1rem;
+    }
+
+    .step-content p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+      .info-step {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      .info-step:not(:last-child)::after {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <div class="container nav-content">
+      <div class="logo">🚀 FastAPI <span>AI Docs</span></div>
+      <div class="nav-links">
+        <a href="serving_ml_models.html">Chapter 4</a>
+        <a href="llm_apis.html">Chapter 5</a>
+        <a href="#" style="color: var(--primary)">Chapter 6</a>
+        <a href="index.html">← Back to Hub</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">Chapter 6</div>
+      <h1>RAG and Agent APIs for <span>AI Engineers</span></h1>
+      <p>Architect complex AI systems combining Embeddings, Vector Databases, Retrieval, and stateful LangGraph Agents into production REST APIs.</p>
+    </div>
+  </section>
+
+  <main class="container article-container">
+
+    <h2>1. The New Architecture: RAG & Agents</h2>
+    <p>A simple LLM call is rarely enough for enterprise applications. AI Engineers build dynamic systems that can search private documents (RAG) and execute actions autonomously (Agents). Exposing these complex orchestrations via a clean FastAPI endpoint is a specialized skill.</p>
+
+    <div class="callout info">
+      <div class="icon">📚</div>
+      <div class="callout-content">
+        <h4>Visual Analogy: The Librarian and the Researcher</h4>
+        <p>In RAG, your API acts as a <strong>Librarian</strong> (Vector DB) finding the exact book pages relevant to a query. In Agentic workflows, your API acts as a <strong>Researcher</strong> (Agent). The Researcher is given a goal, decides to search the library, reads the book, decides to use a calculator (Tool), and finally writes the report. You orchestrate all of this behind a single <code>POST /v1/agent/run</code> endpoint.</p>
+      </div>
+    </div>
+
+    <h2>2. Embedding and Vector Database APIs</h2>
+    <p>A true RAG system usually exposes two distinct APIs: an Ingestion endpoint (to add documents) and a Retrieval/Query endpoint.</p>
+
+    <div class="cards-grid">
+      <div class="prod-card">
+        <div class="card-icon">📥</div>
+        <div class="card-title">Ingestion API</div>
+        <div class="card-desc">Accepts PDF/Text uploads. Chunks the text, calls an Embedding Model, and upserts the vectors into a database like FAISS, Pinecone, or Milvus.</div>
+      </div>
+      <div class="prod-card">
+        <div class="card-icon">🔍</div>
+        <div class="card-title">Retrieval API</div>
+        <div class="card-desc">Accepts a user query, embeds it, performs a Cosine Similarity search against the Vector DB, and returns the top K raw text chunks.</div>
+      </div>
+    </div>
+
+    <h2>3. Architecture Diagram: The RAG Injection Flow</h2>
+    <p>Here is how the data flows when a user queries your RAG API. Notice how the Retrieval and Generation steps are orchestrated by your FastAPI backend.</p>
+
+    <div class="diagram-container">
+      <div class="mermaid">
+        flowchart TD
+          A[Client] -->|POST /v1/ask| B(FastAPI Router)
+          B --> C{Embed Query}
+          C --> D[(Vector Database)]
+          D -->|Top 3 Chunks| E[Context Injection]
+          E --> F[LLM Generation]
+          F -->|Streamed Answer| A
+          
+          style A fill:#111a27,stroke:#1e293b,color:#e2e8f0
+          style B fill:#05b59a,stroke:#047857,color:#fff
+          style D fill:#8b5cf6,stroke:#5b21b6,color:#fff
+          style F fill:#3b82f6,stroke:#1d4ed8,color:#fff
+      </div>
+      <div class="diagram-caption">Fig 1: Standard RAG Retrieval and Generation workflow.</div>
+    </div>
+
+    <h2>4. Exposing LangChain via APIs</h2>
+    <p>If you build complex chains using LangChain, you shouldn't manually write the boilerplate FastAPI routing to handle inputs, outputs, and streaming. Instead, you can expose runnable objects directly.</p>
+
+    <pre><code class="language-python">
+# A simple LangChain + FastAPI example
+from fastapi import FastAPI
+from langchain_openai import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
+from langserve import add_routes
+
+app = FastAPI(title="LangChain Server")
+
+# 1. Define your LangChain logic
+model = ChatOpenAI()
+prompt = ChatPromptTemplate.from_template("Tell me a joke about {topic}")
+chain = prompt | model
+
+# 2. Automatically generate REST endpoints!
+# This creates /joke/invoke, /joke/stream, and /joke/batch automatically.
+add_routes(app, chain, path="/joke")
+    </code></pre>
+
+    <h2>5. LangGraph Agent Workflows</h2>
+    <p>When you move beyond linear chains (like RAG) to cyclical, autonomous loops, you use a state machine framework like <strong>LangGraph</strong>. An Agent might loop multiple times: analyzing a question, calling a web search tool, analyzing the results, calling a database tool, and finally responding.</p>
+
+    <div class="diagram-container">
+      <div class="mermaid">
+        stateDiagram-v2
+          [*] --> Agent
+          Agent --> ToolNode: Needs more info
+          ToolNode --> Agent: Returns Tool Data
+          Agent --> [*]: Has final answer
+      </div>
+      <div class="diagram-caption">Fig 2: A cyclic LangGraph state machine. The Agent can loop infinitely until it solves the problem.</div>
+    </div>
+
+    <h2>6. Tool Calling in Production APIs</h2>
+    <p>When deploying an Agent, your API endpoint must manage the state of the graph and stream the updates so the client knows what the Agent is currently thinking or doing.</p>
+
+    <pre><code class="language-python">
+from fastapi import FastAPI
+from pydantic import BaseModel
+# Assuming 'compiled_graph' is your compiled LangGraph state machine
+
+class AgentRequest(BaseModel):
+    user_message: str
+    thread_id: str
+
+@app.post("/v1/agent/run")
+async def run_agent(req: AgentRequest):
+    # Pass the user's message to the state machine
+    inputs = {"messages": [("user", req.user_message)]}
+    config = {"configurable": {"thread_id": req.thread_id}}
+    
+    # Run the graph and collect the final state
+    final_state = compiled_graph.invoke(inputs, config=config)
+    
+    # Extract the last message generated by the AI
+    final_ai_message = final_state["messages"][-1].content
+    return {"answer": final_ai_message}
+    </code></pre>
+
+    <h2>7. Common Mistakes & Best Practices</h2>
+
+    <div class="callout warning">
+      <div class="icon">⚠️</div>
+      <div class="callout-content">
+        <h4>Common Mistake: Blocking I/O in Tools</h4>
+        <p>If your Agent has a Tool that queries an external SQL database, and you write it as a synchronous Python function, your entire FastAPI server thread will block while waiting for the database to respond. Always write tools as `async def` functions so Uvicorn can handle other requests concurrently.</p>
+      </div>
+    </div>
+
+    <div class="callout success">
+      <div class="icon">✅</div>
+      <div class="callout-content">
+        <h4>Best Practice: State Persistence (Thread IDs)</h4>
+        <p>REST APIs are stateless, but Agents need memory to have a multi-turn conversation. Always require the client to pass a `thread_id` in the JSON payload, and use a Checkpointer in LangGraph (like Postgres or Redis) to save and load the state graph for that specific user.</p>
+      </div>
+    </div>
+
+    <h2>8. Interview Insights</h2>
+    <div class="callout info">
+      <div class="icon">🎯</div>
+      <div class="callout-content">
+        <h4>How to answer: "What is the architectural difference between deploying a standard LLM API and an Agent API?"</h4>
+        <p><strong>Perfect Answer:</strong> "A standard LLM API is a linear, stateless wrapper around a single network call. An Agent API manages a cyclic state machine. The primary architectural difference is <strong>State Persistence</strong> and <strong>Execution Time</strong>. Because an Agent might loop 5 times through different tools before finishing, the endpoint execution time is highly variable. Therefore, I deploy Agent APIs using asynchronous streaming (SSE) or WebSockets so the client receives real-time updates of the agent's thought process (e.g., 'Searching the web...'), preventing the client from dropping the connection due to an HTTP timeout."</p>
+      </div>
+    </div>
+
+    <h2>9. Summary Infographic</h2>
+    <div class="infographic">
+      <div class="info-step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>Embeddings & Ingestion</h4>
+          <p>Provide APIs to convert user documents into vectors and store them in FAISS or Pinecone.</p>
+        </div>
+      </div>
+      <div class="info-step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>Retrieval (RAG)</h4>
+          <p>Query the Vector DB, inject the raw text into the system prompt, and return grounded answers.</p>
+        </div>
+      </div>
+      <div class="info-step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>Agent State Machines</h4>
+          <p>Build cyclic workflows using LangGraph where the LLM can decide to use tools autonomously.</p>
+        </div>
+      </div>
+      <div class="info-step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h4>Thread Persistence</h4>
+          <p>Link HTTP requests together using a <code>thread_id</code> so the Agent remembers past interactions.</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        primaryColor: '#05b59a',
+        primaryTextColor: '#fff',
+        primaryBorderColor: '#05b59a',
+        lineColor: '#3b82f6',
+        secondaryColor: '#162232',
+        tertiaryColor: '#111a27'
+      }
+    });
+  </script>
+</body>
+
+</html>
