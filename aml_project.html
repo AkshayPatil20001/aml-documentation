@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"/>
 <meta name="theme-color" content="#060913"/>
 <title>AML Detection System — Mobile First Book</title>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
@@ -111,7 +111,108 @@
     .sidebar { width: 280px; }
   }
 </style>
+
+<!-- Mobile Optimization Styles -->
+<style>
+@media screen and (max-width: 768px) {
+  /* Typography & Layout */
+  body {
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+    overflow-x: hidden !important;
+  }
+  
+  .container, .wrapper, .article-container, .main-content, .chapter, .content-area, .master-layout {
+    padding-left: 1.2rem !important;
+    padding-right: 1.2rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  
+  /* Headings */
+  h1 { font-size: clamp(1.8rem, 8vw, 2.2rem) !important; line-height: 1.2 !important; margin-bottom: 1rem !important; }
+  h2 { font-size: 1.4rem !important; margin-top: 1.8rem !important; margin-bottom: 1rem !important; }
+  h3 { font-size: 1.2rem !important; }
+  
+  /* Full-bleed Code Blocks & Tables */
+  pre, .code-wrapper, .table-wrapper, .mermaid, .table-responsive {
+    margin-left: -1.2rem !important;
+    margin-right: -1.2rem !important;
+    width: calc(100% + 2.4rem) !important;
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+    padding: 1rem 1.2rem !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  pre[class*="language-"] { padding: 1rem 1.2rem !important; }
+  table { display: block !important; overflow-x: auto !important; white-space: nowrap !important; width: 100% !important; }
+  th, td { padding: 0.8rem !important; font-size: 0.9rem !important; }
+  
+  /* Callouts & Cards */
+  .callout, .problem-card, .prod-card, .small-card, .big-card, .infographic {
+    padding: 1.2rem !important;
+    margin: 1.5rem 0 !important;
+    border-radius: 12px !important;
+  }
+  .callout, .info-step {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.8rem !important;
+  }
+  .info-step::after { display: none !important; }
+  
+  /* Navigation */
+  nav .nav-content, nav .nav-inner {
+    padding: 0 1.2rem !important;
+  }
+  .nav-links {
+    display: flex !important;
+    overflow-x: auto !important;
+    gap: 1rem !important;
+    white-space: nowrap !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+  }
+  .nav-links::-webkit-scrollbar { display: none; }
+  
+  /* Images & Media */
+  img, video, iframe {
+    max-width: 100% !important;
+    height: auto !important;
+    border-radius: 8px !important;
+  }
+  
+  /* Hero Sections */
+  .hero, .title-page, .chapter-hero {
+    padding-top: 6rem !important;
+    padding-bottom: 3rem !important;
+    min-height: auto !important;
+  }
+  .hero-stats { gap: 1.5rem !important; justify-content: center !important; }
+  .stat-n { font-size: 2rem !important; }
+  
+  /* Sidebar handling on mobile */
+  .sidebar {
+    width: 100% !important;
+    position: relative !important;
+    height: auto !important;
+    padding: 1.5rem 1.2rem !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border) !important;
+  }
+  .master-layout {
+    flex-direction: column !important;
+    margin-top: 60px !important;
+  }
+}
+</style>
 </head>
+
 <body>
 
 <div class="mobile-topbar">
